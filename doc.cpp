@@ -1,4 +1,12 @@
 //================================================
+//Idm Firefox Interdiction
+Telechargement
+Options
+Intégration aux navigateurs suivants
+Decocher
+Mozilla Firefox
+Ok
+//================================================
 //Notepad++ Plugins Telechargement
 https://sourceforge.net/projects/npp-plugins/files/
 TextFX
@@ -66,7 +74,16 @@ https://cmake.org/
 https://cmake.org/download/
 //================================================
 // CMake GLM Construction
-
+Where is the source code
+C:\Users\sabine\Downloads\Gerard\glm-master\glm-master
+Where to build the binaries
+C:\Users\sabine\Downloads\Gerard\glm-master\build
+Configure
+Specify the generator for this project
+MinGW Makefiles
+Cocher
+Use default native compilers
+Finish
 //================================================
 // GitHub Depot Creation
 New repository
@@ -119,6 +136,9 @@ git fetch origin
 // Git Depot Distant Merger
 git merge origin/master
 //================================================
+// SDL Telechargement
+https://www.libsdl.org/
+https://www.libsdl.org/download-2.0.php
 
 //================================================
 
