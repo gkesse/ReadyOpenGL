@@ -1,9 +1,16 @@
 //================================================
+#ifdef WIN32
+#include <GL/glew.h>
+#else
+#define GL3_PROTOTYPES 1
+#include <GL3/gl3.h>
+#endif
 #include <SDL2/SDL.h>
 #include <iostream>
 //================================================
 int main(int argc, char **argv)
 {
+	/* *** Création de la fenêtre SDL *** */
 	// Notre fenêtre
 	SDL_Window* fenetre(0);
 	SDL_GLContext contexteOpenGL(0);
@@ -48,12 +55,34 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	
+#ifdef WIN32
+	// On initialise GLEW
+	GLenum initialisationGLEW( glewInit() );
+	// Si l'initialisation a échouée :
+	if(initialisationGLEW != GLEW_OK)
+	{
+		// On affiche l'erreur grâce à la fonction :
+		// glewGetErrorString(GLenum code)
+		std::cout << "Erreur d'initialisation de GLEW : " <<
+		glewGetErrorString(initialisationGLEW) << std::endl;
+		// On quitte la SDL
+		SDL_GL_DeleteContext(contexteOpenGL);
+		SDL_DestroyWindow(fenetre);
+		SDL_Quit();
+		return -1;
+	}
+#endif
 	// Boucle principale
 	while(!terminer)
 	{
+		// Gestion des évènements
 		SDL_WaitEvent(&evenements);
 		if(evenements.window.event == SDL_WINDOWEVENT_CLOSE)
 		terminer = true;
+		// Nettoyage de l'écran
+		glClear(GL_COLOR_BUFFER_BIT);
+		// Actualisation de la fenêtre
+		SDL_GL_SwapWindow(fenetre);
 	}
 	// On quitte la SDL
 	SDL_GL_DeleteContext(contexteOpenGL);
