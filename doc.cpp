@@ -98,20 +98,26 @@ git config --global core.editor "'C:/Program Files (x86)/Notepad++/notepad++.exe
 // Git Depot Initialisation
 git init
 //================================================
-// Git Depot Commit
+// Git Depot Document Ajout
 git add --all
 //================================================
-// Git Depot Commit
-git add --all
+// Git Depot Document Etat
+git status
 //================================================
-// Git Depot Commit
-git add --all
+// Git Depot Document Commiter
+git commit -m "Initial Commit"
 //================================================
-// Git Depot Commit
-https://github.com/gkesse/ReadyOpenGL.git
+// Git Depot Distant Ajout
+git remote add origin https://github.com/gkesse/ReadyOpenGL.git
+//================================================
+// Git Depot Local Pousser
 git push -u origin master
 //================================================
-
+// Git Depot Distant Recuperation
+git fetch origin
+//================================================
+// Git Depot Distant Merger
+git merge origin/master
 //================================================
 
 //================================================
