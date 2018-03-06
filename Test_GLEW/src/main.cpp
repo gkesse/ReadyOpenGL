@@ -1,8 +1,6 @@
 //================================================
 #include <iostream>
-#ifdef WIN32
 #include <GL/glew.h>
-#endif
 #include <GL/gl.h>
 #include <GL/glu.h>
 //================================================
@@ -11,7 +9,7 @@ using namespace std;
 int main(int argc, char** argv) {
 	cout << "GLEW Welcome\n";
 	// On initialise GLEW
-	GLenum m_ok( glewInit() );
+	GLenum m_ok = glewInit();
 	
 	if (m_ok == GLEW_OK) {
 		cout << "SUCCESS: GLEW_OK\n";

@@ -5,7 +5,7 @@ GTARGET = $(GBIN)\GProject.exe
 
 GLIBS = \
 	-L"C:\Users\sabine\Downloads\Gerard\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32" \
-	-lmingw32 -lglew32
+	-lopengl32 -lglu32 -lmingw32 -lglew32
 
 GINCS = \
 	-I"C:\Users\sabine\Downloads\Gerard\glew-2.1.0-win32\glew-2.1.0\include"
