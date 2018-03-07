@@ -16,10 +16,14 @@ public:
 	
 public:
 	static GWindow* Instance();
-	void print();
+	void init();
+	void attribute();
 	void create();
 	void context();
+	void glew();
+	void draw();
 	void run();
+	void release();
 	
 private:
 	static GWindow* m_instance;
@@ -30,6 +34,7 @@ private:
 	int m_w;
 	int m_h;
 	Uint32 m_flags;
+	SDL_GLContext m_context;
 	SDL_Event m_events;
 	bool m_run;
 };
