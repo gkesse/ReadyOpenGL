@@ -2,7 +2,4 @@
 
 set PATH=C:\MinGW\bin
 
-echo.
-bin\GProject
-echo.
-pause
+mingw32-make clean

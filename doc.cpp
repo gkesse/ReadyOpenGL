@@ -1,4 +1,15 @@
 //================================================
+//Google Url Indexation
+https://www.google.com/webmasters/tools/submit-url?hl=fr
+URL
+http://readydev.freeboxos.fr/
+Envoyer la demande
+//================================================
+//Google Search Console Adresse Changement
+http://31.32.247.170:8855/
+Paramétres
+Changement d'adresse
+//================================================
 //Idm Firefox Interdiction
 Telechargement
 Options
@@ -35,9 +46,21 @@ Autocomplétion
 Cocher
 Activer la complétion automatique
 //================================================
+// Notepad++ Lien Cliquable Interdiction
+Paramétrage
+Préférences
+Divers
+Paramétrage de lien cliquable
+Cocher
+Activer 
+Ne pas souligner
+//================================================
 // MinGW Telechargement
 http://www.mingw.org/
 https://sourceforge.net/projects/mingw/files/
+//================================================
+// MinGW Tutoriel
+http://nliautaud.developpez.com/tutoriels/web/notepadplusplus-guide-pratique/options/
 //================================================
 // MinGW Base Installation
 Basic Setup
@@ -136,10 +159,13 @@ git fetch origin
 // Git Depot Distant Merger
 git merge origin/master
 //================================================
+// Git Depot Distant Clonage
+git clone https://github.com/gkesse/ReadyOpenGL ReadyOpenGL
+git clone https://github.com/gkesse/ReadyDev ReadyDev
+//================================================
 // SDL Telechargement
 https://www.libsdl.org/
 https://www.libsdl.org/download-2.0.php
-
 //================================================
 
 //================================================
