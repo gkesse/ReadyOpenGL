@@ -81,15 +81,17 @@ void GWindow::glew() {
 }
 //===============================================
 void GWindow::draw() {
-	float m_vertices[] = {
-		0.0, 0.0, 0.5, 0.0, 0.0, 0.5, // Triangle 1
-		-0.8, -0.8, -0.3, -0.8, -0.8, -0.3 // Triangle 2
-	};
+	int N = 10;
+	float m_step = (float)1/N;
 	
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, m_vertices);
-	glEnableVertexAttribArray(0);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glDisableVertexAttribArray(0);
+	for(int i = 0; i < 2*N; i++) {
+		float m_xi = -1 + i*m_step;
+		float m_vertices[] = {m_xi, -1.0, m_xi, 1.0};
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, m_vertices);
+		glEnableVertexAttribArray(0);
+		glDrawArrays(GL_LINES, 0, 4);
+		glDisableVertexAttribArray(0);
+	}	
 }
 //===============================================
 void GWindow::run() {
