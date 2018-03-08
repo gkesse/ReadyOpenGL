@@ -8,6 +8,7 @@ GWindow::GWindow() {
 	m_w = 640;
 	m_h = 480;
 	m_window = 0;
+	m_run = true;
 }
 //================================================
 GWindow::~GWindow() {
@@ -37,14 +38,17 @@ void GWindow::initGl3w() {
 	gl3wInit();
 }
 //================================================
-
+void GWindow::run() {
+	while(m_run) {
+		bool m_res = glfwWindowShouldClose(m_window);
+		if(m_res == true) m_run = false;
+		glfwSwapBuffers(m_window);
+		glfwPollEvents();
+	}
+}
 //================================================
-
+void GWindow::release() {
+	glfwDestroyWindow(m_window);
+	glfwTerminate();
+}
 //================================================
-
-//================================================
-
-//================================================
-
-//================================================
-

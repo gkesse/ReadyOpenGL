@@ -21,6 +21,8 @@ public:
 	void createWindow();
 	void createContext();
 	void initGl3w();
+	void run();
+	void release();
 	
 private:
 	static GWindow* m_instance;
@@ -30,6 +32,7 @@ private:
 	int m_w;
 	int m_h;
 	GLFWwindow* m_window;
+	bool m_run;
 };
 //================================================
 #endif
