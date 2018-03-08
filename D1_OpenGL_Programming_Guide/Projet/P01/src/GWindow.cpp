@@ -1,5 +1,6 @@
 //================================================
 #include "GWindow.h"
+#include "GDraw.h"
 //================================================
 GWindow* GWindow::m_instance = 0;
 //================================================
@@ -42,6 +43,7 @@ void GWindow::run() {
 	while(m_run) {
 		bool m_res = glfwWindowShouldClose(m_window);
 		if(m_res == true) m_run = false;
+		GDraw::Instance()->draw();
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
 	}
