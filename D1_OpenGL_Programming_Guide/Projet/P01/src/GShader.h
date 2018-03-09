@@ -12,7 +12,7 @@ using namespace std;
 //================================================
 typedef struct {
     GLenum type;
-    string filename;
+    const char* filename;
     GLuint shader;
 } GShaderInfo;
 //================================================
@@ -24,7 +24,6 @@ public:
 public:
 	static GShader* Instance();
 	GLuint loadShader(GShaderInfo* shaderInfo);
-	GLchar* readShader(const string& filename);
 	
 private:
 	static GShader* m_instance;

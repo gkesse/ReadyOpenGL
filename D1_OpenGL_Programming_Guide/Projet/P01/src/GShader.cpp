@@ -1,5 +1,6 @@
 //================================================
 #include "GShader.h"
+#include "GFile.h"
 //================================================
 GShader* GShader::m_instance = 0;
 //================================================
@@ -19,19 +20,27 @@ GShader* GShader::Instance() {
 }
 //================================================
 GLuint GShader::loadShader(GShaderInfo* shaderInfo) {
-	if(shaderInfo == 0) return 0;
+	if(shaderInfo == NULL) return 0;
 	
 	GLuint m_program = glCreateProgram();
+	GShaderInfo* m_shaderInfo = shaderInfo;
 	
-	while(shaderInfo->type != GL_NONE) {
-		GLuint m_shader = glCreateShader(shaderInfo->type);
-		shaderInfo->shader = m_shader;
-		GLchar* m_source = readShader(shaderInfo->filename);
-		
+	while(m_shaderInfo->type != GL_NONE) {
+		GLuint m_shader = glCreateShader(m_shaderInfo->type);
+		m_shaderInfo->shader = m_shader;
+		GLchar* m_source = GFile::Instance()->getFileContent(m_shaderInfo->filename);
+		glShaderSource(m_shader, 1, &m_source, NULL);
+		delete[] m_source;
+		glCompileShader(m_shader);
+		GLint m_compiled;
+		glGetShaderiv(m_shader, GL_COMPILE_STATUS, &m_compiled);
+		glAttachShader(m_program, m_shader);
+		m_shaderInfo++;
 	}
-}
-//================================================
-GLchar* GShader::readShader(const string& filename) {
 	
+	glLinkProgram(m_program);
+	GLint m_linked;
+	glGetProgramiv(m_program, GL_LINK_STATUS, &m_linked);
+	return m_program;
 }
 //================================================

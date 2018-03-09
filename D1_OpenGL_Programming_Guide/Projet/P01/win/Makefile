@@ -18,6 +18,7 @@ GOBJS = \
 	$(GBUILD)\GWindow.o \
 	$(GBUILD)\GDraw.o \
 	$(GBUILD)\GShader.o \
+	$(GBUILD)\GFile.o \
 	$(GBUILD)\gl3w.o
 	
 all: $(GOBJS)
@@ -30,6 +31,8 @@ $(GBUILD)\GDraw.o: $(GSRC)\GDraw.cpp
 	g++ -c $(GSRC)\GDraw.cpp -o $(GBUILD)\GDraw.o $(GINCS)
 $(GBUILD)\GShader.o: $(GSRC)\GShader.cpp
 	g++ -c $(GSRC)\GShader.cpp -o $(GBUILD)\GShader.o $(GINCS)
+$(GBUILD)\GFile.o: $(GSRC)\GFile.cpp
+	g++ -c $(GSRC)\GFile.cpp -o $(GBUILD)\GFile.o $(GINCS)
 $(GBUILD)\gl3w.o: $(GGL3W)\src\gl3w.c
 	gcc -c $(GGL3W)\src\gl3w.c -o $(GBUILD)\gl3w.o $(GINCS)
 clean:

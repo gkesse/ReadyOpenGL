@@ -200,6 +200,7 @@ git clone https://github.com/gkesse/ReadyDev ReadyDev
 https://www.libsdl.org/
 https://www.libsdl.org/download-2.0.php
 //================================================
+git clone https://github.com/gkesse/ReadyCpp Cpp
 
 //================================================
 

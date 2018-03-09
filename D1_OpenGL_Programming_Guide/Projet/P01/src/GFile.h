@@ -1,28 +1,23 @@
 //================================================
-#ifndef _GDraw_
-#define _GDraw_
+#ifndef _GFile_
+#define _GFile_
 //================================================
 #include <iostream>
 #include <string>
 //================================================
-#include <GL/gl3w.h>
-#include <GLFW/glfw3.h>
-//================================================
 using namespace std;
 //================================================
-class GDraw {
+class GFile {
 public:
-	GDraw();
-	~GDraw();
+	GFile();
+	~GFile();
 	
 public:
-	static GDraw* Instance();
-	void draw(const int& index = 0);
-	void drawBackground();
-	void drawTriangle();
+	static GFile* Instance();
+	char* getFileContent(const string& filename);
 	
 private:
-	static GDraw* m_instance;
+	static GFile* m_instance;
 };
 //================================================
 #endif
