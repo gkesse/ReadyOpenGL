@@ -38,9 +38,8 @@ void GDraw::drawTriangle() {
 	glGenVertexArrays(1, m_vertexArray);
     glBindVertexArray(m_vertexArray[0]);
 	
-	GLfloat m_vertices[6][2] = {
-		{ -0.90f, -0.90f }, {  0.85f, -0.90f }, { -0.90f,  0.85f },  // Triangle 1
-		{  0.90f, -0.85f }, {  0.90f,  0.90f }, { -0.85f,  0.90f }   // Triangle 2
+	GLfloat m_vertices[3][2] = {
+		{-0.5f, -0.5f}, {0.0f, 0.5f}, {0.5f, -0.5f}
 	};
 
 	GLuint m_buffers[1];
@@ -62,6 +61,6 @@ void GDraw::drawTriangle() {
 	glEnableVertexAttribArray(0);	
 	
 	glBindVertexArray(m_vertexArray[0]);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 //================================================
