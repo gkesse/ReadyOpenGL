@@ -1,0 +1,25 @@
+GSRC = ..\src
+GBIN = bin
+GBUILD = build
+GTARGET = $(GBIN)\GProject.exe
+
+GLIBS = \
+	-L"C:\Users\gerar\Downloads\OpenGL\glfw-3.2.1\glfw-3.2.1\build\src" \
+	-L"..\..\manager\win\bin" \
+	-lglfw3 -lgdi32 -lmanager
+
+GINCS = \
+	-I"..\..\manager\src"
+	
+GOBJS = \
+	$(GBUILD)\main.o \
+	$(GBUILD)\GWindowDraw.o \
+	
+all: $(GOBJS)
+	g++ -o $(GTARGET) $(GOBJS) $(GLIBS)
+$(GBUILD)\main.o: $(GSRC)\main.cpp
+	g++ -c $(GSRC)\main.cpp -o $(GBUILD)\main.o $(GINCS)
+$(GBUILD)\GWindowDraw.o: $(GSRC)\GWindowDraw.cpp
+	g++ -c $(GSRC)\GWindowDraw.cpp -o $(GBUILD)\GWindowDraw.o $(GINCS)
+clean:
+	del /q $(GBIN)\* $(GBUILD)\*
