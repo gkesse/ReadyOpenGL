@@ -17,23 +17,18 @@ GINCS = \
 	
 GOBJS = \
 	$(GBUILD)\main.o \
+	$(GBUILD)\GWindowDraw.o \
 	$(GBUILD)\GWindow.o \
-	$(GBUILD)\GDraw.o \
-	$(GBUILD)\GShader.o \
-	$(GBUILD)\GFile.o \
 	$(GBUILD)\gl3w.o
 	
 all: $(GOBJS)
 	g++ -o $(GTARGET) $(GOBJS) $(GLIBS)
 $(GBUILD)\main.o: $(GSRC)\main.cpp
 	g++ -c $(GSRC)\main.cpp -o $(GBUILD)\main.o $(GINCS)
+$(GBUILD)\GWindowDraw.o: $(GSRC)\GWindowDraw.cpp
+	g++ -c $(GSRC)\GWindowDraw.cpp -o $(GBUILD)\GWindowDraw.o $(GINCS)
 $(GBUILD)\GWindow.o: $(GMGR)\GWindow.cpp
 	g++ -c $(GMGR)\GWindow.cpp -o $(GBUILD)\GWindow.o $(GINCS)
-$(GBUILD)\GDraw.o: $(GMGR)\GDraw.cpp
-	g++ -c $(GMGR)\GDraw.cpp -o $(GBUILD)\GDraw.o $(GINCS)
-$(GBUILD)\GShader.o: $(GMGR)\GShader.cpp
-	g++ -c $(GMGR)\GShader.cpp -o $(GBUILD)\GShader.o $(GINCS)
-$(GBUILD)\GFile.o: $(GMGR)\GFile.cpp
 	g++ -c $(GMGR)\GFile.cpp -o $(GBUILD)\GFile.o $(GINCS)
 $(GBUILD)\gl3w.o: $(GGL3W)\src\gl3w.c
 	gcc -c $(GGL3W)\src\gl3w.c -o $(GBUILD)\gl3w.o $(GINCS)

@@ -28,7 +28,7 @@ void GDraw::draw(const int& index) {
 }
 //================================================
 void GDraw::drawBackground() {
-	float m_bgColor[] = {0.0f, 0.2f, 0.0f, 0.0f};
+	float m_bgColor[] = {0.0f, 0.0f, 0.0f, 1.0f};
 	glClearBufferfv(GL_COLOR, 0, m_bgColor);
 }
 //================================================
@@ -57,9 +57,8 @@ void GDraw::drawTriangle() {
 	GLuint m_program =  GShader::Instance()->loadShader(m_shaders);
 	
 	glUseProgram(m_program);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);	
-	
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(1);	
 	glBindVertexArray(m_vertexArray[0]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }

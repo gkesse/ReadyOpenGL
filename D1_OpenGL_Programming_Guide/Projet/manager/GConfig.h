@@ -1,37 +1,26 @@
 //================================================
-#ifndef _GWindow_
-#define _GWindow_
+#ifndef _GConfig_
+#define _GConfig_
 //================================================
 #include <iostream>
 #include <string>
-//================================================
-#include <GL/gl3w.h>
-#include <GLFW/glfw3.h>
+#include <map>
 //================================================
 using namespace std;
 //================================================
-class GWindow {
+class GConfig {
 public:
-	GWindow();
-	~GWindow();
+	GConfig();
+	~GConfig();
 	
 public:
-	void initGlfw();
-	void createWindow();
-	void createContext();
-	void initGl3w();
-	void run();
-	virtual void draw() = 0;
-	void release();
+	static GConfig* Instance();
+	void setData(const string& key, const string& data);
+	string getData(const string& key);
 	
 private:
-	string m_title;
-	int m_x;
-	int m_y;
-	int m_w;
-	int m_h;
-	GLFWwindow* m_window;
-	bool m_run;
+	static GConfig* m_instance;
+	map<string, string> m_data;
 };
 //================================================
 #endif
