@@ -3,7 +3,7 @@
 //================================================
 GWindow::GWindow() {
 	m_title = "OpenGL - Rendu de Scene 3D";
-	m_w = 640;
+	m_w = 480;
 	m_h = 480;
 	m_window = 0;
 	m_run = true;
