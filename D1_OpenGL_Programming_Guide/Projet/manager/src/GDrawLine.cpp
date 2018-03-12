@@ -26,8 +26,8 @@ void GDrawLine::drawShape() {
 	glGenVertexArrays(1, m_vertexArray);
     glBindVertexArray(m_vertexArray[0]);
 	
-	GLfloat m_vertices[40][2];
-	GVertex::Instance()->loadVertexGrid(m_vertices, 40);
+	GLfloat m_vertices[80][2];
+	GVertex::Instance()->loadVertexGrid(m_vertices, 80);
 	
 	GLuint m_buffers[1];
 	
@@ -47,6 +47,6 @@ void GDrawLine::drawShape() {
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(1);	
 	glBindVertexArray(m_vertexArray[0]);
-	glDrawArrays(GL_LINES, 0, 80);
+	glDrawArrays(GL_LINES, 0, 160);
 }
 //================================================
