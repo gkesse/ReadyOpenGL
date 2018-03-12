@@ -1,7 +1,6 @@
 //================================================
 #include "GWindow.h"
-//================================================
-GWindow* GWindow::m_instance = 0;
+#include "GDraw.h"
 //================================================
 GWindow::GWindow() {
 	m_title = "OpenGL Window";
@@ -15,13 +14,6 @@ GWindow::GWindow() {
 //================================================
 GWindow::~GWindow() {
 	
-}
-//================================================
-GWindow* GWindow::Instance() {
-	if(m_instance == 0) {
-		m_instance = new GWindow;
-	}
-	return m_instance;
 }
 //================================================
 void GWindow::initSdl() {
@@ -54,19 +46,13 @@ void GWindow::createContext() {
 	if(m_context == 0) {cout << "ERROR: SDL_GL_CreateContext\n"; exit(0);}
 }
 //================================================
-void GWindow::run() {
-	float m_vertices[3][2] = {
-		{-0.5, -0.5}, {0.0, 0.5}, {0.5, -0.5}
-	};
-	
+void GWindow::run() {	
+	GDraw::Instance()->initDraw();
 	while(m_run) {
 		SDL_WaitEvent(&m_events);
 		if(m_events.window.event == SDL_WINDOWEVENT_CLOSE) m_run = false;
 		glClear(GL_COLOR_BUFFER_BIT);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, m_vertices);
-		glEnableVertexAttribArray(0);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDisableVertexAttribArray(0);
+		draw();
 		SDL_GL_SwapWindow(m_window);
 	}
 }

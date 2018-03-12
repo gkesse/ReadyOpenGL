@@ -5,8 +5,7 @@
 #include <iostream>
 #include <string>
 //================================================
-#include <GL/gl3w.h>
-#include <GLFW/glfw3.h>
+#include <GL/glew.h>
 //================================================
 using namespace std;
 //================================================
@@ -20,7 +19,7 @@ public:
 public:
 	static GDraw* Instance();
 	void draw();
-	void drawBackground();
+	virtual void initDraw() = 0;
 	virtual void drawShape() = 0;
 	
 private:

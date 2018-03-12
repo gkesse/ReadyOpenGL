@@ -1,21 +1,21 @@
 //================================================
-#ifndef _GDrawTriangle_
-#define _GDrawTriangle_
+#ifndef _GDrawTriangleDouble_
+#define _GDrawTriangleDouble_
 //================================================
 #include "GDraw.h"
 //================================================
-class GDrawTriangle : public GDraw {
+class GDrawTriangleDouble : public GDraw {
 public:
-	GDrawTriangle();
-	~GDrawTriangle();
+	GDrawTriangleDouble();
+	~GDrawTriangleDouble();
 	
 public:
-	static GDrawTriangle* Instance();
+	static GDrawTriangleDouble* Instance();
 	void initDraw();
 	void drawShape();
 	
 private:
-	static GDrawTriangle* m_instance;
+	static GDrawTriangleDouble* m_instance;
 };
 //================================================
 #endif

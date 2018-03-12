@@ -1,31 +1,31 @@
 //================================================
-#include "GDrawTriangle.h"
+#include "GDrawTriangleDouble.h"
 //================================================
-GDrawTriangle* GDrawTriangle::m_instance = 0;
+GDrawTriangleDouble* GDrawTriangleDouble::m_instance = 0;
 //================================================
-GDrawTriangle::GDrawTriangle() {
+GDrawTriangleDouble::GDrawTriangleDouble() {
 
 }
 //================================================
-GDrawTriangle::~GDrawTriangle() {
+GDrawTriangleDouble::~GDrawTriangleDouble() {
 	
 }
 //================================================
-GDrawTriangle* GDrawTriangle::Instance() {
+GDrawTriangleDouble* GDrawTriangleDouble::Instance() {
 	if(m_instance == 0) {
-		m_instance = new GDrawTriangle;
+		m_instance = new GDrawTriangleDouble;
 	}
 	return m_instance;
 }
 //================================================
-void GDrawTriangle::initDraw() {
+void GDrawTriangleDouble::initDraw() {
 	float m_vertices[3][2] = {
 		{-0.5, -0.5}, {0.0, 0.5}, {0.5, -0.5}
 	};
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, m_vertices);
 }
 //================================================
-void GDrawTriangle::drawShape() {
+void GDrawTriangleDouble::drawShape() {
 	glEnableVertexAttribArray(0);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glDisableVertexAttribArray(0);

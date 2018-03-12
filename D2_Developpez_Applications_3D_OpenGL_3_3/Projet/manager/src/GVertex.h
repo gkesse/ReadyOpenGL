@@ -16,6 +16,7 @@ public:
 	
 public:
 	static GVertex* Instance();
+	void loadVertex2D(float vertex[][2], float data[][2], const int& row);
 	void loadVertexGrid(GLfloat vertex[][2], const int& row);
 	
 private:

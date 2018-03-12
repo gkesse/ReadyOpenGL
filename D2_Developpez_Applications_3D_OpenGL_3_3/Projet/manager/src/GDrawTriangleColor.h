@@ -1,21 +1,23 @@
 //================================================
-#ifndef _GDrawTriangle_
-#define _GDrawTriangle_
+#ifndef _GDrawTriangleColor_
+#define _GDrawTriangleColor_
 //================================================
 #include "GDraw.h"
 //================================================
-class GDrawTriangle : public GDraw {
+class GDrawTriangleColor : public GDraw {
 public:
-	GDrawTriangle();
-	~GDrawTriangle();
+	GDrawTriangleColor();
+	~GDrawTriangleColor();
 	
 public:
-	static GDrawTriangle* Instance();
+	static GDrawTriangleColor* Instance();
 	void initDraw();
 	void drawShape();
 	
 private:
-	static GDrawTriangle* m_instance;
+	static GDrawTriangleColor* m_instance;
+	float m_vertices[3][2];
+	GLuint m_program;
 };
 //================================================
 #endif

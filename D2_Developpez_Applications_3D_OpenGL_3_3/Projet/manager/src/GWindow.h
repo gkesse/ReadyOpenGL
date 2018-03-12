@@ -16,17 +16,16 @@ public:
 	~GWindow();
 	
 public:
-	static GWindow* Instance();
 	void initSdl();
 	void initGlew();
 	void initAttribute();
 	void createWindow();
 	void createContext();
 	void run();
+	virtual void draw() = 0;
 	void release();
 	
-private:
-	static GWindow* m_instance;
+protected:
 	string m_title;
 	int m_x;
 	int m_y;

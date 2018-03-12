@@ -18,7 +18,14 @@ GVertex* GVertex::Instance() {
 	return m_instance;
 }
 //================================================
-void GVertex::loadVertexGrid(GLfloat vertex[][2], const int& row) {
+void GVertex::loadVertex2D(float vertex[][2], float data[][2], const int& row) {
+	for(int i = 0; i < row; i++) {
+		vertex[i][0] = data[i][0];
+		vertex[i][1] = data[i][1];
+	}
+}
+//================================================
+void GVertex::loadVertexGrid(float vertex[][2], const int& row) {
 	int N = row/2;
 	for(int i = 0; i < N; i += 2) {
 		float dx = -1.0 + (i*2.0)/N;
