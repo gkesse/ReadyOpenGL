@@ -3,11 +3,10 @@
 //================================================
 int main(int argc, char **argv) {
 	cout << "### Start GProject\n";
-	GWindow::Instance()->init();
-	GWindow::Instance()->attribute();
-	GWindow::Instance()->create();
-	GWindow::Instance()->context();
-	GWindow::Instance()->glew();
+	GWindow::Instance()->initSdl();
+	GWindow::Instance()->initGlew();
+	GWindow::Instance()->createWindow();
+	GWindow::Instance()->createContext();
 	GWindow::Instance()->run();
 	GWindow::Instance()->release();
 	cout << "### End GProject\n";
