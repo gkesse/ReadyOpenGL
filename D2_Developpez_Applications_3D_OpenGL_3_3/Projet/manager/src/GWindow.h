@@ -7,8 +7,6 @@
 //================================================
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
-#define GL3_PROTOTYPES 1
-//#include <GL3/gl3.h>
 //================================================
 using namespace std;
 //================================================
@@ -21,6 +19,7 @@ public:
 	static GWindow* Instance();
 	void initSdl();
 	void initGlew();
+	void initAttribute();
 	void createWindow();
 	void createContext();
 	void run();

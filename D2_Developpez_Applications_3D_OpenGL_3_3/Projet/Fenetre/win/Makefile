@@ -7,12 +7,12 @@ GLIBS = \
 	-L"C:\Users\gerar\Downloads\SDL\SDL2-devel-2.0.8-mingw\SDL2-2.0.8\i686-w64-mingw32\lib" \
 	-L"C:\Users\gerar\Downloads\OpenGL\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32" \
 	-L"..\..\manager\win\bin" \
-	-lmanager -lopengl32 -lmingw32 -lSDL2main -lSDL2 -lglew32
+	-lmanager -lopengl32 -lmingw32 -lglew32 -lSDL2main -lSDL2 \
 
 GINCS = \
 	-I"C:\Users\gerar\Downloads\SDL\SDL2-devel-2.0.8-mingw\SDL2-2.0.8\i686-w64-mingw32\include" \
 	-I"C:\Users\gerar\Downloads\OpenGL\glew-2.1.0-win32\glew-2.1.0\include" \
-	-I"..\..\manager\src"
+	-I"..\..\manager\src" \
 	
 GOBJS = \
 	$(GBUILD)\main.o \
