@@ -5,6 +5,9 @@
 #include <GL/freeglut.h>
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 //===============================================
+#define RADIANS_PER_DEGREE 0.01745329
+#define CAMERA_STEP_SIZE 5.0
+//===============================================
 class GCamera {
 public:
     GCamera();
@@ -14,6 +17,9 @@ public:
     static GCamera* Instance();
     void setWindowSize(int w, int h);
     void update();
+    void zoom(const float& distance);
+    void rotatePitch(const float& angle);
+    void rotateYaw(const float& angle);
 
 private:
     static GCamera* m_instance;
@@ -24,7 +30,7 @@ private:
     btVector3 m_upVec;
     float m_near;
     float m_far;
-    float m_cameraDist;
+    float m_cameraDis;
     float m_cameraPitch;
     float m_cameraYaw;
 };

@@ -61,7 +61,14 @@ void GWindow::setBackground() {
 }
 //===============================================
 void GWindow::KeyboardFunc(unsigned char key, int w, int h) {
-
+    switch(key) {
+    case 'z':
+        GCamera::Instance()->zoom(+CAMERA_STEP_SIZE);
+        break;
+    case 'x':
+        GCamera::Instance()->zoom(-CAMERA_STEP_SIZE);
+        break;
+    }
 }
 //===============================================
 void GWindow::KeyboardUpFunc(unsigned char key, int w, int h) {
@@ -69,7 +76,20 @@ void GWindow::KeyboardUpFunc(unsigned char key, int w, int h) {
 }
 //===============================================
 void GWindow::SpecialFunc(int key, int w, int h) {
-
+    switch(key) {
+    case GLUT_KEY_LEFT:
+        GCamera::Instance()->rotateYaw(+CAMERA_STEP_SIZE);
+        break;
+    case GLUT_KEY_RIGHT:
+        GCamera::Instance()->rotateYaw(-CAMERA_STEP_SIZE);
+        break;
+    case GLUT_KEY_UP:
+        GCamera::Instance()->rotatePitch(+CAMERA_STEP_SIZE);
+        break;
+    case GLUT_KEY_DOWN:
+        GCamera::Instance()->rotatePitch(-CAMERA_STEP_SIZE);
+        break;
+    }
 }
 //===============================================
 void GWindow::SpecialUpFunc(int key, int w, int h) {
