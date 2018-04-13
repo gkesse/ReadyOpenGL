@@ -7,4 +7,3 @@ set PATH=C:\Users\gerar\Downloads\OpenGL\freeglut-3.0.0\freeglut-3.0.0\build\bin
 echo.
 bin\GProject.exe
 echo.
-pause
