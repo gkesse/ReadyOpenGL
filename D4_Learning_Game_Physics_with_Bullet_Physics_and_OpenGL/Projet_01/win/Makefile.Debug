@@ -244,7 +244,34 @@ build/GCamera.o: ../src/GCamera.cpp ../src/GCamera.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtANGLE/KHR/khrplatform.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtANGLE/GLES2/gl2.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtANGLE/GLES2/gl2platform.h \
-		C:/Users/gerar/Downloads/OpenGL/freeglut-3.0.0/freeglut-3.0.0/include/GL/freeglut_ext.h
+		C:/Users/gerar/Downloads/OpenGL/freeglut-3.0.0/freeglut-3.0.0/include/GL/freeglut_ext.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletDynamics/Dynamics/btDynamicsWorld.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/CollisionDispatch/btCollisionWorld.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btVector3.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btScalar.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btMinMax.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btAlignedAllocator.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btTransform.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btMatrix3x3.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btQuaternion.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btQuadWord.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/CollisionDispatch/btCollisionObject.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btMotionState.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btAlignedObjectArray.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/CollisionDispatch/btCollisionDispatcher.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/BroadphaseCollision/btDispatcher.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/NarrowPhaseCollision/btPersistentManifold.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/NarrowPhaseCollision/btManifoldPoint.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/LinearMath/btTransformUtil.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/CollisionDispatch/btManifoldResult.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/NarrowPhaseCollision/btDiscreteCollisionDetectorInterface.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/CollisionDispatch/btCollisionObjectWrapper.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/BroadphaseCollision/btBroadphaseProxy.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/CollisionDispatch/btCollisionCreateFunc.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/BroadphaseCollision/btOverlappingPairCache.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/BroadphaseCollision/btBroadphaseInterface.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletCollision/BroadphaseCollision/btOverlappingPairCallback.h \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/src/BulletDynamics/ConstraintSolver/btContactSolverInfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build\GCamera.o ..\src\GCamera.cpp
 
 build/GDraw.o: ../src/GDraw.cpp ../src/GDraw.h \

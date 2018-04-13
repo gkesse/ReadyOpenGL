@@ -3,9 +3,7 @@
 #define _GCamera_
 //===============================================
 #include <GL/freeglut.h>
-#include <iostream>
-//===============================================
-using namespace std;
+#include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 //===============================================
 class GCamera {
 public:
@@ -19,8 +17,16 @@ public:
 
 private:
     static GCamera* m_instance;
-    int m_w;
-    int m_h;
+    int m_screenW;
+    int m_screenH;
+    btVector3 m_cameraPos;
+    btVector3 m_targetPos;
+    btVector3 m_upVec;
+    float m_near;
+    float m_far;
+    float m_cameraDist;
+    float m_cameraPitch;
+    float m_cameraYaw;
 };
 //===============================================
 #endif
