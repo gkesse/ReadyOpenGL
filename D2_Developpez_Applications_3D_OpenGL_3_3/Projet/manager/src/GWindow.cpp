@@ -10,6 +10,7 @@ GWindow::GWindow() {
 	m_h = 480;
 	m_window = 0;
 	m_run = true;
+	GDraw::Instance()->setWindowSize(m_w, m_h);
 }
 //================================================
 GWindow::~GWindow() {
