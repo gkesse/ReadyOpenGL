@@ -13,6 +13,7 @@ public:
 public:
     static GWindow* Instance();
     void show(int* argc, char** argv);
+    void setLight();
     void setBackground();
     static void KeyboardFunc(unsigned char key, int w, int h);
     static void KeyboardUpFunc(unsigned char key, int w, int h);

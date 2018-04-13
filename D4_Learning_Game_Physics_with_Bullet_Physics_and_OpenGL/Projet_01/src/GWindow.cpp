@@ -1,6 +1,8 @@
 //===============================================
 #include "GWindow.h"
+#include "GDraw.h"
 #include "GCamera.h"
+#include "GLight.h"
 //===============================================
 GWindow* GWindow::m_instance = 0;
 //===============================================
@@ -30,18 +32,23 @@ void GWindow::show(int* argc, char** argv) {
     glutInitWindowSize(m_w, m_h);
     glutCreateWindow(m_title.toStdString().c_str());
     glutSetOption (GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+    setLight();
     setBackground();
     glutKeyboardFunc(KeyboardFunc);
     glutKeyboardUpFunc(KeyboardUpFunc);
     glutSpecialFunc(SpecialFunc);
     glutSpecialUpFunc(SpecialUpFunc);
-    //glutReshapeFunc(ReshapeFunc);
+    glutReshapeFunc(ReshapeFunc);
     glutIdleFunc(IdleFunc);
     glutMouseFunc(MouseFunc);
     glutPassiveMotionFunc(MotionFunc);
     glutMotionFunc(MotionFunc);
     glutDisplayFunc(DisplayFunc);
     glutMainLoop();
+}
+//===============================================
+void GWindow::setLight() {
+    GLight::Instance()->initLight();
 }
 //===============================================
 void GWindow::setBackground() {
@@ -77,7 +84,8 @@ void GWindow::ReshapeFunc(int w, int h) {
 //===============================================
 void GWindow::IdleFunc() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //GCamera::Instance()->update();
+    GDraw::Instance()->draw();
+    GCamera::Instance()->update();
     glutSwapBuffers();
 }
 //===============================================

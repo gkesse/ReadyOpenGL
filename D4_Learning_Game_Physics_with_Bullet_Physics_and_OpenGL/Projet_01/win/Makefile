@@ -201,6 +201,7 @@ Makefile: GProject.pro C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/win32-g++/qmake.conf
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/default_pre.prf \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/win32/default_pre.prf \
 		C:/Users/gerar/Downloads/OpenGL/freeglut-3.0.0/freeglut-3.0.0/GFreeGLUT.pri \
+		C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/GBullet.pri \
 		../src/GMain.pri \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/resolve_config.prf \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/exclusive_builds_post.prf \
@@ -365,6 +366,7 @@ C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/toolchain.prf:
 C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/default_pre.prf:
 C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/win32/default_pre.prf:
 C:/Users/gerar/Downloads/OpenGL/freeglut-3.0.0/freeglut-3.0.0/GFreeGLUT.pri:
+C:/Users/gerar/Downloads/OpenGL/bullet3-master/bullet3-master/GBullet.pri:
 ../src/GMain.pri:
 C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/resolve_config.prf:
 C:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/exclusive_builds_post.prf:
