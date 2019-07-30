@@ -1,19 +1,17 @@
 #================================================
-# Directory
+# Makefile
 #================================================
 
+/**/bin/
 /**/build/
-/**/debug/
-/**/release/
-/**/extract/
 
 #================================================
-# File
+# Eclipse
 #================================================
 
-/**/views.json
-/**/messages.json
-/**/qmake/Makefile*
-/**/*user
-/**/*pyc
-/data/sitemaps/*xml
+/**/Release/
+/**/Debug/
+/**/.metadata/
+/**/.settings/
+/**/.project
+/**/.cproject
