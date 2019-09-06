@@ -1,26 +1,26 @@
 //===============================================
-#include "GProcessTriangle.h"
+#include "GProcessTestTriangle.h"
 #include "GGLfw.h"
 #include "GOpenGL.h"
 //===============================================
-GProcessTriangle* GProcessTriangle::m_instance = 0;
+GProcessTestTriangle* GProcessTestTriangle::m_instance = 0;
 //===============================================
-GProcessTriangle::GProcessTriangle() {
+GProcessTestTriangle::GProcessTestTriangle() {
 
 }
 //===============================================
-GProcessTriangle::~GProcessTriangle() {
+GProcessTestTriangle::~GProcessTestTriangle() {
 
 }
 //===============================================
-GProcessTriangle* GProcessTriangle::Instance() {
+GProcessTestTriangle* GProcessTestTriangle::Instance() {
 	if(m_instance == 0) {
-		m_instance = new GProcessTriangle;
+		m_instance = new GProcessTestTriangle;
 	}
 	return m_instance;
 }
 //===============================================
-void GProcessTriangle::run(int argc, char **argv) {
+void GProcessTestTriangle::run(int argc, char **argv) {
 	GGLfw::Instance()->init();
 	GGLfw::Instance()->createWindow("WINDOW", "OpenGL | ReadyDev", 400, 400);
 	GGLfw::Instance()->makeContext("WINDOW");
@@ -31,11 +31,15 @@ void GProcessTriangle::run(int argc, char **argv) {
 		GOpenGL::Instance()->clear(GL_COLOR_BUFFER_BIT);
 		GOpenGL::Instance()->ortho("WINDOW");
 		sGVertex lVertex[] = {
-				{-0.6, -0.4, 0.0},
-				{0.6, -0.4, 0.0},
-				{0.0, 0.6, 0.0}
+            {-0.6, -0.4, 0.0},
+            {0.6, -0.4, 0.0},
+            {0.0, 0.6, 0.0}
 		};
-		sGColor lColor = {1.0, 0.0, 0.0, 1.0};
+		sGColor lColor[] = {
+            {1.0, 0.0, 0.0, 1.0},
+            {0.0, 1.0, 0.0, 1.0},
+            {0.0, 0.0, 1.0, 1.0}
+        };
 		double lAngle = GGLfw::Instance()->getTime() * 50;
 		GOpenGL::Instance()->rotate(lAngle, 0.0, 0.0, 1.0);
 		GOpenGL::Instance()->drawTriangle(lVertex, lColor);

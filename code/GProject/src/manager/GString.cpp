@@ -50,4 +50,24 @@ vector<string> GString::split(const string& str, const string& delimiter) {
     lSplit.push_back (str.substr (lPosStart));
     return lSplit;
 }
+//================================================
+string GString::toUpper(const string& str) {
+	string lUpper = str;
+	int lLength = str.length();
+	locale lLocal;
+	for(int i = 0; i < lLength; i++) {
+		lUpper[i] = toupper(str[i], lLocal);
+	}
+	return lUpper;
+}
+//================================================
+string GString::toLower(const string& str) {
+	string lLower = str;
+	int lLength = str.length();
+	locale lLocal;
+	for(int i = 0; i < lLength; i++) {
+		lLower[i] = tolower(str[i], lLocal);
+	}
+	return lLower;
+}
 //===============================================

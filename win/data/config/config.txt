@@ -1,2 +1,9 @@
-PROCESS = TRIANGLE
-CONFIG_SHOW = TRUE
+#================================================
+CONFIG_SHOW = FALSE
+#================================================
+CURRENT_DATABASE_SQLITE_ID = SHAPE
+CURRENT_DATABASE_SQLITE_PATH = data/sqlite/db/shape.dat
+CURRENT_SCRIPT_SQLITE_PATH = data/sqlite/script/triangle.sql
+#================================================
+CURRENT_SHAPE_TRIANGLE_ID = 1
+#================================================

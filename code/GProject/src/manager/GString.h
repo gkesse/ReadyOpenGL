@@ -15,6 +15,8 @@ public:
     string trimRight(const string& str, const string& chars = "\t\n\v\f\r ");
     string trim(const string& str, const string& chars = "\t\n\v\f\r ");
     vector<string> split(const string& str, const string& delimiter);
+    string toUpper(const string& str);
+    string toLower(const string& str);
 
 private:
 	static GString* m_instance;

@@ -15,14 +15,18 @@ GOBJS = \
     $(patsubst $(GSRC)/%.cpp, $(GBUILD)/%.o, $(wildcard $(GSRC)/*.cpp)) \
     $(patsubst $(GSRC)/manager/%.cpp, $(GBUILD)/%.o, $(wildcard $(GSRC)/manager/*.cpp))
 
+GCFLAGS = \
+    -std=c++17 \
+    -Wall \
+    
 all: $(GOBJS)
 	@if not exist "$(GBIN)" @mkdir $(GBIN)
-	g++ -o $(GTARGET) $(GOBJS) $(GLIBS) 
+	g++ $(GCFLAGS) -o $(GTARGET) $(GOBJS) $(GLIBS) 
 $(GBUILD)/%.o: $(GSRC)/%.cpp
 	@if not exist "$(GBUILD)" @mkdir $(GBUILD)
-	g++ -Wall -c $< -o $@ $(GINCS)
+	g++ $(GCFLAGS) -c $< -o $@ $(GINCS)
 $(GBUILD)/%.o: $(GSRC)/manager/%.cpp
 	@if not exist "$(GBUILD)" @mkdir $(GBUILD)
-	g++ -Wall -c $< -o $@ $(GINCS)
+	g++ $(GCFLAGS) -c $< -o $@ $(GINCS)
 clean:
 	del /q $(GBUILD)\*.o $(GBIN)\*.exe

@@ -1,20 +1,20 @@
 //===============================================
-#ifndef _GProcessTriangle_
-#define _GProcessTriangle_
+#ifndef _GProcessCreateDatabaseSQLite_
+#define _GProcessCreateDatabaseSQLite_
 //===============================================
 #include "GProcess.h"
 //===============================================
-class GProcessTriangle : public GProcess {
+class GProcessCreateDatabaseSQLite : public GProcess {
 public:
-    GProcessTriangle();
-    ~GProcessTriangle();
+    GProcessCreateDatabaseSQLite();
+    ~GProcessCreateDatabaseSQLite();
 
 public:
-    static GProcessTriangle* Instance();
+    static GProcessCreateDatabaseSQLite* Instance();
     void run(int argc, char** argv);
 
 private:
-    static GProcessTriangle* m_instance;
+    static GProcessCreateDatabaseSQLite* m_instance;
 };
 //===============================================
 #endif
