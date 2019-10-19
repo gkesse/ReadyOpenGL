@@ -13,7 +13,7 @@ struct _GEventO {
     void (*MouseCallBack)(GGLFW_WINDOW* window, int button, int action, int mods);
     void (*CursorCallBack)(GGLFW_WINDOW* window,  double x, double y);
     void (*ScrollCallBack)(GGLFW_WINDOW* window, double x, double y);
-    sGEvent (*GetEvent)();
+    sGEvent* (*GetEvent)();
     sGEvent m_event;
 };
 //===============================================

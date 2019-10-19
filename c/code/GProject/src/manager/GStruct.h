@@ -25,6 +25,10 @@ typedef struct _sGMouse sGMouse;
 typedef struct _sGCursor sGCursor;
 typedef struct _sGScroll sGScroll;
 typedef struct _sGEvent sGEvent;
+typedef struct _sGTranslate sGTranslate;
+typedef struct _sGRotate sGRotate;
+typedef struct _sGDirection sGDirection;
+typedef struct _sGCamera sGCamera;
 //===============================================
 struct _sGWindow {
 	char* name;
@@ -207,27 +211,32 @@ struct _sGKey {
 	int scancode;
 	int action;
 	int mods;
+	int onFlag;
 };
 //===============================================
 struct _sGFrame {
 	int width;
 	int height;
+	int onFlag;
 };
 //===============================================
 struct _sGMouse {
 	int button;
 	int action;
 	int mods;
+	int onFlag;
 };
 //===============================================
 struct _sGCursor {
-	double x;
-	double y;
+	int x;
+	int y;
+	int onFlag;
 };
 //===============================================
 struct _sGScroll {
 	double x;
 	double y;
+	int onFlag;
 };
 //===============================================
 struct _sGEvent {
@@ -236,6 +245,29 @@ struct _sGEvent {
 	sGMouse mouse;
 	sGCursor cursor;
 	sGScroll scroll;
+};
+//===============================================
+struct _sGTranslate {
+	double x;
+	double y;
+	double z;
+};
+//===============================================
+struct _sGRotate {
+	double x;
+	double y;
+	double z;
+};
+//===============================================
+struct _sGDirection {
+	sGTranslate tra;
+	sGRotate rot;
+};
+//===============================================
+struct _sGCamera {
+	double fovY;
+	double zNear;
+	double zFar;
 };
 //===============================================
 #endif

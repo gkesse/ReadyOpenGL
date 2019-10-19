@@ -9,11 +9,18 @@ static void GEvent_FrameCallBack(GGLFW_WINDOW* window, int width, int height);
 static void GEvent_MouseCallBack(GGLFW_WINDOW* window, int button, int action, int mods);
 static void GEvent_CursorCallBack(GGLFW_WINDOW* window,  double x, double y);
 static void GEvent_ScrollCallBack(GGLFW_WINDOW* window, double x, double y);
-static sGEvent GEvent_GetEvent();
+static sGEvent* GEvent_GetEvent();
 //===============================================
 GEventO* GEvent_New() {
 	GEventO* lObj = (GEventO*)malloc(sizeof(GEventO));
 	lObj->Delete = GEvent_Delete;
+
+	lObj->m_event.key.onFlag = FALSE;
+	lObj->m_event.frame.onFlag = TRUE;
+	lObj->m_event.mouse.onFlag = FALSE;
+	lObj->m_event.cursor.onFlag = FALSE;
+	lObj->m_event.scroll.onFlag = FALSE;
+
 	lObj->KeyCallBack = GEvent_KeyCallBack;
 	lObj->FrameCallBack = GEvent_FrameCallBack;
 	lObj->MouseCallBack = GEvent_MouseCallBack;
@@ -44,12 +51,14 @@ static void GEvent_KeyCallBack(GGLFW_WINDOW* window, int key, int scancode, int 
 	lEvent->key.scancode = scancode;
 	lEvent->key.action = action;
 	lEvent->key.mods = mods;
+	lEvent->key.onFlag = TRUE;
 }
 //===============================================
 static void GEvent_FrameCallBack(GGLFW_WINDOW* window, int width, int height) {
 	sGEvent* lEvent = &m_GEventO->m_event;
 	lEvent->frame.width = width;
 	lEvent->frame.height = height;
+	lEvent->frame.onFlag = TRUE;
 }
 //===============================================
 static void GEvent_MouseCallBack(GGLFW_WINDOW* window, int button, int action, int mods) {
@@ -57,21 +66,24 @@ static void GEvent_MouseCallBack(GGLFW_WINDOW* window, int button, int action, i
 	lEvent->mouse.button = button;
 	lEvent->mouse.action = action;
 	lEvent->mouse.mods = mods;
+	lEvent->mouse.onFlag = TRUE;
 }
 //===============================================
 static void GEvent_CursorCallBack(GGLFW_WINDOW* window,  double x, double y) {
 	sGEvent* lEvent = &m_GEventO->m_event;
-	lEvent->cursor.x = x;
-	lEvent->cursor.y = y;
+	lEvent->cursor.x = (int)x;
+	lEvent->cursor.y = (int)y;
+	lEvent->cursor.onFlag = TRUE;
 }
 //===============================================
 static void GEvent_ScrollCallBack(GGLFW_WINDOW* window, double x, double y) {
 	sGEvent* lEvent = &m_GEventO->m_event;
 	lEvent->scroll.x = x;
 	lEvent->scroll.y = y;
+	lEvent->scroll.onFlag = TRUE;
 }
 //===============================================
-static sGEvent GEvent_GetEvent() {
-	return m_GEventO->m_event;
+static sGEvent* GEvent_GetEvent() {
+	return &m_GEventO->m_event;
 }
 //===============================================

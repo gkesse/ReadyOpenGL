@@ -12,12 +12,18 @@ static void GOpenGL_Hint(int target, int mode);
 static void GOpenGL_BlendFunc(int sfactor, int dfactor);
 static void GOpenGL_Viewport(char* windowName);
 static void GOpenGL_Clear(int mask);
+static void GOpenGL_ClearColor(double r, double g, double b, double a);
 static void GOpenGL_Projection(char* windowName);
+static void GOpenGL_Ortho(char* windowName);
+static void GOpenGL_Frustum(char* windowName, sGCamera camera);
+static void GOpenGL_ModelView();
 static void GOpenGL_Rotate(double angle, double x, double y, double z);
+static void GOpenGL_Translate(double x, double y, double z);
 static void GOpenGL_DrawPoint(sGPoint obj);
 static void GOpenGL_DrawPoints(sGData obj);
 static void GOpenGL_DrawDataTab(sGDataTab obj);
 static void GOpenGL_DrawHeatMap(sGData2D obj);
+static void GOpenGL_DrawHeatMapPoints(sGData2D obj);
 static void GOpenGL_DrawLine(sGLine obj);
 static void GOpenGL_DrawLines(sGData obj);
 static void GOpenGL_DrawTriangle(sGTriangle obj);
@@ -36,12 +42,18 @@ GOpenGLO* GOpenGL_New() {
 	lObj->BlendFunc = GOpenGL_BlendFunc;
 	lObj->Viewport = GOpenGL_Viewport;
 	lObj->Clear = GOpenGL_Clear;
+	lObj->ClearColor = GOpenGL_ClearColor;
 	lObj->Projection = GOpenGL_Projection;
+	lObj->Ortho = GOpenGL_Ortho;
+	lObj->Frustum = GOpenGL_Frustum;
+	lObj->ModelView = GOpenGL_ModelView;
 	lObj->Rotate = GOpenGL_Rotate;
+	lObj->Translate = GOpenGL_Translate;
 	lObj->DrawPoint = GOpenGL_DrawPoint;
 	lObj->DrawPoints = GOpenGL_DrawPoints;
 	lObj->DrawDataTab = GOpenGL_DrawDataTab;
 	lObj->DrawHeatMap = GOpenGL_DrawHeatMap;
+	lObj->DrawHeatMapPoints = GOpenGL_DrawHeatMapPoints;
 	lObj->DrawLine = GOpenGL_DrawLine;
 	lObj->DrawLines = GOpenGL_DrawLines;
 	lObj->DrawTriangle = GOpenGL_DrawTriangle;
@@ -101,6 +113,10 @@ static void GOpenGL_Clear(int mask) {
 #endif
 }
 //===============================================
+static void GOpenGL_ClearColor(double r, double g, double b, double a) {
+	glClearColor(r, g, b, a);
+}
+//===============================================
 static void GOpenGL_Projection(char* windowName) {
 #if defined(__WIN32)
 	int lWidth;
@@ -115,9 +131,51 @@ static void GOpenGL_Projection(char* windowName) {
 #endif
 }
 //===============================================
+static void GOpenGL_Ortho(char* windowName) {
+#if defined(__WIN32)
+	int lWidth;
+	int lHeight;
+	GGLFW()->FrameSize(windowName, &lWidth, &lHeight);
+	double lRatio = (double)lWidth/lHeight;
+	glOrtho(-lRatio, lRatio, -1.0, 1.0, 1.0, -1.0);
+#endif
+}
+//===============================================
+static void GOpenGL_Frustum(char* windowName, sGCamera camera) {
+#if defined(__WIN32)
+	int lWidth;
+	int lHeight;
+	GGLFW()->FrameSize(windowName, &lWidth, &lHeight);
+	double lRatio = (double)lWidth/lHeight;
+
+	double lFovY = camera.fovY;
+	double lNear = camera.zNear;
+	double lFar = camera.zFar;
+
+	double lTangent = tan((lFovY/2.0)*(M_PI/180.0));
+	double lHeightF = lTangent*lNear;
+	double lWidthF = lHeight*lRatio;
+
+	glFrustum(-lWidthF, lWidthF, -lHeightF, lHeightF, lNear, lFar);
+#endif
+}
+//===============================================
+static void GOpenGL_ModelView() {
+#if defined(__WIN32)
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+#endif
+}
+//===============================================
 static void GOpenGL_Rotate(double angle, double x, double y, double z) {
 #if defined(__WIN32)
 	glRotated(angle, x, y, z);
+#endif
+}
+//===============================================
+static void GOpenGL_Translate(double x, double y, double z) {
+#if defined(__WIN32)
+	glTranslated(x, y, z);
 #endif
 }
 //===============================================
@@ -206,6 +264,37 @@ static void GOpenGL_DrawHeatMap(sGData2D obj) {
 		sGVertex lVertex = GOpenGL_VertexDiv(lVertexDiv);
 		glColor4d(lRed, lGreen, lBlue, 0.5);
 		glVertex3d(lVertex.x, lVertex.y, 0.0);
+	}
+	glEnd();
+#endif
+}
+//===============================================
+static void GOpenGL_DrawHeatMapPoints(sGData2D obj) {
+#if defined(__WIN32)
+	int lxNmax = obj.xNmax;
+	int lyNmax = obj.yNmax;
+	int lNmax = lxNmax*lyNmax;
+	double lZmin = GFunction()->Min(obj.data, lNmax, 2);
+	double lZmax = GFunction()->Max(obj.data, lNmax, 2);
+	double lZavg = (lZmin + lZmax) / 2;
+
+	double lPointSize = obj.pointSize;
+
+	glPointSize(lPointSize);
+
+	glBegin(GL_POINTS);
+	for(int i = 0; i < lNmax; i++) {
+		double lZ = obj.data[i].z;
+		double lRed = lZ/lZavg - 1.0;
+		double lBlue = 1.0 - lZ/lZavg;
+		if(lRed < 0) lRed = 0;
+		if(lBlue < 0) lBlue = 0;
+		double lGreen = 1.0 - lRed - lBlue;
+
+		sGVertexDiv lVertexDiv = {obj.data[i] , obj.gridDiv, obj.xDiv, obj.yDiv, obj.zDiv};
+		sGVertex lVertex = GOpenGL_VertexDiv(lVertexDiv);
+		glColor4d(lRed, lGreen, lBlue, 0.5);
+		glVertex3d(lVertex.x, lVertex.y, lVertex.z);
 	}
 	glEnd();
 #endif
@@ -356,7 +445,7 @@ static void GOpenGL_DrawFunctionHeatMap(sGFunction2D* obj) {
 			obj->yDiv,
 			obj->zDiv
 	};
-	GOpenGL_DrawHeatMap(lData);
+	GOpenGL_DrawHeatMapPoints(lData);
 	GFunction()->Free(obj->data);
 #endif
 }
