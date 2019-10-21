@@ -6,7 +6,7 @@
 #include "GEvent.h"
 #include "GConsole.h"
 //===============================================
-#define GDIRECTION_INIT (sGDirection){{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
+#define GDIRECTION_0 (sGDirection){{0.0, 0.0, -2.0}, {-70.0, 0.0, 210.0}, {8.0, 8.0, 1.0}};
 //===============================================
 static GProcessO* m_GProcessOpenGLGaussian2DO = 0;
 //===============================================
@@ -18,7 +18,7 @@ GProcessO* GProcessOpenGLGaussian2D_New() {
 	GProcessOpenGLGaussian2DO* lChild = (GProcessOpenGLGaussian2DO*)malloc(sizeof(GProcessOpenGLGaussian2DO));
 
 	lChild->m_parent = lParent;
-	lChild->m_direction = GDIRECTION_INIT;
+	lChild->m_direction = GDIRECTION_0;
 	lChild->m_gaussian2D = (sGGaussian2D){1.0, 1.0, 0.0, 0.0};
 
 	lParent->m_child = lChild;
@@ -67,7 +67,10 @@ static void GProcessOpenGLGaussian2D_Update(sGWindow sWindow) {
 
 	if(lEvent->frame.onFlag == TRUE) {
 		lEvent->frame.onFlag = FALSE;
+		sGCamera lCamera = {45.0, 0.1, 100.0};
 		GOpenGL()->Viewport(sWindow.name);
+		GOpenGL()->Projection();
+		GOpenGL()->Frustum(sWindow.name, lCamera);
 	}
 
 	if(lEvent->key.onFlag == TRUE) {
@@ -107,49 +110,79 @@ static void GProcessOpenGLGaussian2D_Update(sGWindow sWindow) {
 				if(lDirection->rot.z >= 360.0) lDirection->rot.z = 0.0;
 				break;
 				// Translation suivant -x
-			case GLFW_KEY_D:
+			case GLFW_KEY_A:
 				lDirection->tra.x -= 0.02;
 				if(lDirection->tra.x <= -10.0) lDirection->tra.x = -10.0;
 				break;
 				// Translation suivant +x
-			case GLFW_KEY_G:
+			case GLFW_KEY_S:
 				lDirection->tra.x += 0.02;
 				if(lDirection->tra.x >= 10.0) lDirection->tra.x = 10.0;
 				break;
 				// Translation suivant -y
-			case GLFW_KEY_V:
+			case GLFW_KEY_Z:
 				lDirection->tra.y -= 0.02;
 				if(lDirection->tra.y <= -10.0) lDirection->tra.y = -10.0;
 				break;
 				// Translation suivant +y
-			case GLFW_KEY_R:
+			case GLFW_KEY_W:
 				lDirection->tra.y += 0.02;
 				if(lDirection->tra.y >= 10.0) lDirection->tra.y = 10.0;
 				break;
 				// Translation suivant -z
-			case GLFW_KEY_C:
+			case GLFW_KEY_X:
 				lDirection->tra.z -= 1.0;
 				if(lDirection->tra.z <= -100.0) lDirection->tra.z = -100.0;
 				break;
 				// Translation suivant +z
-			case GLFW_KEY_E:
+			case GLFW_KEY_Q:
 				lDirection->tra.z += 1.0;
 				if(lDirection->tra.z >= 100.0) lDirection->tra.z = 100.0;
 				break;
+				// Variation suivant -divX
+			case GLFW_KEY_D:
+				lDirection->div.x -= 0.25;
+				if(lDirection->div.x <= -25.0) lDirection->div.x = -25.0;
+				break;
+				// Variation suivant +divX
+			case GLFW_KEY_F:
+				lDirection->div.x += 0.25;
+				if(lDirection->div.x >= 25.0) lDirection->div.x = -25.0;
+				break;
+				// Variation suivant -divY
+			case GLFW_KEY_C:
+				lDirection->div.y -= 0.25;
+				if(lDirection->div.y <= 25.0) lDirection->div.y = 25.0;
+				break;
+				// Variation suivant +divY
+			case GLFW_KEY_R:
+				lDirection->div.y += 0.25;
+				if(lDirection->div.y >= 25.0) lDirection->div.y = 25.0;
+				break;
+				// Variation suivant -divZ
+			case GLFW_KEY_E:
+				lDirection->div.z -= 0.25;
+				if(lDirection->div.z <= -25.0) lDirection->div.z = -25.0;
+				break;
+				// Variation suivant +divZ
+			case GLFW_KEY_V:
+				lDirection->div.z += 0.25;
+				if(lDirection->div.z >= 25.0) lDirection->div.z = 25.0;
+				break;
 				// Initialisation de la direction
 			case GLFW_KEY_MENU:
-				*lDirection = GDIRECTION_INIT;
+				*lDirection = GDIRECTION_0;
 				break;
 				// Variation suivant -Sigma
 			case GLFW_KEY_T:
-				lGaussian2D->sigmaX -= 0.02;
-				if(lGaussian2D->sigmaX <= -10.0) lGaussian2D->sigmaX = -10.0;
+				lGaussian2D->sigmaX -= 0.05;
+				if(lGaussian2D->sigmaX <= 0.01) lGaussian2D->sigmaX = 0.01;
 				lGaussian2D->sigmaY = lGaussian2D->sigmaX;
 				break;
 				// Variation suivant +Sigma
 			case GLFW_KEY_B:
-				lGaussian2D->sigmaX += 0.02;
-				if(lGaussian2D->sigmaX >= 10.0) lGaussian2D->sigmaX = 10.0;
+				lGaussian2D->sigmaX += 0.05;
+				if(lGaussian2D->sigmaX >= 2.0) lGaussian2D->sigmaX = 2.0;
 				lGaussian2D->sigmaY = lGaussian2D->sigmaX;
 				break;
 			}
@@ -159,16 +192,16 @@ static void GProcessOpenGLGaussian2D_Update(sGWindow sWindow) {
 	sGGrid lGrid = {
 			5.0, 1.0, 1.0/10,
 			1, {0.2, 0.2, 0.2, 1.0},
-			5, {1.0, 1.0, 1.0, 1.0}
+			2, {0.2, 0.2, 0.9, 1.0}
 	};
 	sGFunction2D lFunction = {
-			-5.0, 5.0, -5.0, 5.0, 201, 201,
+			-5.0, 5.0, -5.0, 5.0, 401, 401,
 			{0.0, 0.5, 0.0, 1.0}, {0.5, 0.0, 0.0, 1.0},
 			10, 2, GFunction()->Gaussian2D, lGaussian2D, 0,
-			lGrid.gridDiv, 4.0/1.0, 4.0/1.0, 1.0
+			lGrid.gridDiv, lDirection->div.x, lDirection->div.y, lDirection->div.z
 	};
 
-	GOpenGL()->DrawGrid(lGrid);
+	GOpenGL()->DrawOrigin();
 	GOpenGL()->DrawFunctionHeatMap(&lFunction);
 }
 //===============================================

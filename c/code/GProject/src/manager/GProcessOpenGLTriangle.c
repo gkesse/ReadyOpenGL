@@ -41,7 +41,9 @@ static void GProcessOpenGLTriangle_Run(int argc, char** argv) {
         if(lRes == 1) break;
         GOpenGL()->Viewport("WINDOW");
         GOpenGL()->Clear(GL_COLOR_BUFFER_BIT);
-        GOpenGL()->Projection("WINDOW");
+		GOpenGL()->Projection();
+		GOpenGL()->Ortho("WINDOW");
+		GOpenGL()->ModelView();
 		sGGrid lGrid = {
 				5.0, 1.0, 1.0/10,
 				1, {0.2, 0.2, 0.2, 1.0},

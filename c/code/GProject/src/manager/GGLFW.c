@@ -20,6 +20,7 @@ static void GGLFW_MouseCallback(char* windowName, GGLFW_MOUSE_CALLBACK callback)
 static void GGLFW_CursorCallback(char* windowName, GGLFW_CURSOR_CALLBACK callback);
 static void GGLFW_ScrollCallback(char* windowName, GGLFW_SCROLL_CALLBACK callback);
 static void GGLFW_MakeContext(char* windowName);
+static void GGLFW_SwapInterval(int interval);
 static int GGLFW_WindowClose(char* windowName);
 static void GGLFW_FrameSize(char* windowName, int* w, int* h);
 static double GGLFW_Ratio(char* windowName);
@@ -44,6 +45,7 @@ GGLFWO* GGLFW_New() {
 	lObj->CursorCallback = GGLFW_CursorCallback;
 	lObj->ScrollCallback = GGLFW_ScrollCallback;
 	lObj->MakeContext = GGLFW_MakeContext;
+	lObj->SwapInterval = GGLFW_SwapInterval;
 	lObj->WindowClose = GGLFW_WindowClose;
 	lObj->FrameSize = GGLFW_FrameSize;
 	lObj->Ratio = GGLFW_Ratio;
@@ -134,6 +136,12 @@ static void GGLFW_MakeContext(char* windowName) {
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwMakeContextCurrent(lWindow);
+#endif
+}
+//===============================================
+static void GGLFW_SwapInterval(int interval) {
+#if defined(__WIN32)
+    glfwSwapInterval(interval);
 #endif
 }
 //===============================================

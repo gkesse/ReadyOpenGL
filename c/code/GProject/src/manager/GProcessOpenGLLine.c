@@ -47,7 +47,9 @@ static void GProcessOpenGLLine_Run(int argc, char** argv) {
 		if(lRes == 1) break;
 		GOpenGL()->Viewport("WINDOW");
 		GOpenGL()->Clear(GL_COLOR_BUFFER_BIT);
-		GOpenGL()->Projection("WINDOW");
+		GOpenGL()->Projection();
+		GOpenGL()->Ortho("WINDOW");
+		GOpenGL()->ModelView();
 		GOpenGL()->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		sGGrid lGrid = {
 				5.0, 1.0, 1.0/10,

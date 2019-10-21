@@ -27,6 +27,7 @@ typedef struct _sGScroll sGScroll;
 typedef struct _sGEvent sGEvent;
 typedef struct _sGTranslate sGTranslate;
 typedef struct _sGRotate sGRotate;
+typedef struct _sGDiv sGDiv;
 typedef struct _sGDirection sGDirection;
 typedef struct _sGCamera sGCamera;
 //===============================================
@@ -259,9 +260,16 @@ struct _sGRotate {
 	double z;
 };
 //===============================================
+struct _sGDiv {
+	double x;
+	double y;
+	double z;
+};
+//===============================================
 struct _sGDirection {
 	sGTranslate tra;
 	sGRotate rot;
+	sGDiv div;
 };
 //===============================================
 struct _sGCamera {

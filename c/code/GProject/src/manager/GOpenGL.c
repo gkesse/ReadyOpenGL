@@ -13,7 +13,7 @@ static void GOpenGL_BlendFunc(int sfactor, int dfactor);
 static void GOpenGL_Viewport(char* windowName);
 static void GOpenGL_Clear(int mask);
 static void GOpenGL_ClearColor(double r, double g, double b, double a);
-static void GOpenGL_Projection(char* windowName);
+static void GOpenGL_Projection();
 static void GOpenGL_Ortho(char* windowName);
 static void GOpenGL_Frustum(char* windowName, sGCamera camera);
 static void GOpenGL_ModelView();
@@ -28,6 +28,7 @@ static void GOpenGL_DrawLine(sGLine obj);
 static void GOpenGL_DrawLines(sGData obj);
 static void GOpenGL_DrawTriangle(sGTriangle obj);
 static void GOpenGL_DrawGrid(sGGrid obj);
+static void GOpenGL_DrawOrigin();
 static void GOpenGL_DrawFunction(sGFunction* obj);
 static void GOpenGL_DrawFunction2D(sGFunction2D* obj);
 static void GOpenGL_DrawFunctionHeatMap(sGFunction2D* obj);
@@ -58,6 +59,7 @@ GOpenGLO* GOpenGL_New() {
 	lObj->DrawLines = GOpenGL_DrawLines;
 	lObj->DrawTriangle = GOpenGL_DrawTriangle;
 	lObj->DrawGrid = GOpenGL_DrawGrid;
+	lObj->DrawOrigin = GOpenGL_DrawOrigin;
 	lObj->DrawFunction = GOpenGL_DrawFunction;
 	lObj->DrawFunction2D = GOpenGL_DrawFunction2D;
 	lObj->DrawFunctionHeatMap = GOpenGL_DrawFunctionHeatMap;
@@ -117,16 +119,9 @@ static void GOpenGL_ClearColor(double r, double g, double b, double a) {
 	glClearColor(r, g, b, a);
 }
 //===============================================
-static void GOpenGL_Projection(char* windowName) {
+static void GOpenGL_Projection() {
 #if defined(__WIN32)
-	int lWidth;
-	int lHeight;
-	GGLFW()->FrameSize(windowName, &lWidth, &lHeight);
-	double lRatio = (double)lWidth/lHeight;
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(-lRatio, lRatio, -1.0, 1.0, 1.0, -1.0);
-	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 #endif
 }
@@ -154,7 +149,7 @@ static void GOpenGL_Frustum(char* windowName, sGCamera camera) {
 
 	double lTangent = tan((lFovY/2.0)*(M_PI/180.0));
 	double lHeightF = lTangent*lNear;
-	double lWidthF = lHeight*lRatio;
+	double lWidthF = lHeightF*lRatio;
 
 	glFrustum(-lWidthF, lWidthF, -lHeightF, lHeightF, lNear, lFar);
 #endif
@@ -365,7 +360,7 @@ static void GOpenGL_DrawGrid(sGGrid obj) {
 		sGLine lLine = {
 				{{-lWidth, y, 0.0}, {lWidth, y, 0.0}},
 				lGridColor, lGridLine,
-				1.0, 1.0, 1.0, 0.0
+				1.0, 1.0, 1.0, 1.0
 		};
 		GOpenGL_DrawLine(lLine);
 	}
@@ -373,23 +368,54 @@ static void GOpenGL_DrawGrid(sGGrid obj) {
 		sGLine lLine = {
 				{{x, -lHeight, 0.0}, {x, lHeight, 0.0}},
 				lGridColor,	lGridLine,
-				1.0, 1.0, 1.0, 0.0
+				1.0, 1.0, 1.0, 1.0
 		};
 		GOpenGL_DrawLine(lLine);
 	}
+
 	sGLine lAxisX = {
 			{{-lWidth, 0.0, 0.0}, {lWidth, 0.0, 0.0}},
 			lAxisColor, lAxisLine,
-			1.0, 1.0, 1.0, 0.0
+			1.0, 1.0, 1.0, 1.0
 	};
 	GOpenGL_DrawLine(lAxisX);
 
 	sGLine lAxisY = {
 			{{0.0, -lHeight, 0.0}, {0.0, lHeight, 0.0}},
 			lAxisColor,	lAxisLine,
-			1.0, 1.0, 1.0, 0.0
+			1.0, 1.0, 1.0, 1.0
 	};
 	GOpenGL_DrawLine(lAxisY);
+#endif
+}
+//===============================================
+static void GOpenGL_DrawOrigin() {
+#if defined(__WIN32)
+	double lLineWidth = 5.0;
+	double lAxisWidth = 5.0;
+	double lTransparency = 0.5;
+
+	sGLine lAxisX = {
+			{{0.0, 0.0, 0.0}, {lAxisWidth, 0.0, 0.0}},
+			{1.0, 0.0, 0.0, lTransparency}, lLineWidth,
+			1.0, 1.0, 1.0, 1.0
+	};
+	GOpenGL_DrawLine(lAxisX);
+
+	sGLine lAxisY = {
+			{{0.0, 0.0, 0.0}, {0.0, lAxisWidth, 0.0}},
+			{0.0, 1.0, 0.0, lTransparency}, lLineWidth,
+			1.0, 1.0, 1.0, 1.0
+	};
+	GOpenGL_DrawLine(lAxisY);
+
+	sGLine lAxisZ = {
+			{{0.0, 0.0, 0.0}, {0.0, 0.0, lAxisWidth}},
+			{0.0, 0.0, 1.0, lTransparency}, lLineWidth,
+			1.0, 1.0, 1.0, 1.0
+	};
+	GOpenGL_DrawLine(lAxisZ);
+
 #endif
 }
 //===============================================
@@ -478,12 +504,15 @@ static void GOpenGL_MainLoop(sGWindow sWindow) {
 	GGLFW()->ScrollCallback(lWindowName, GEvent()->ScrollCallBack);
 
 	GGLFW()->MakeContext(lWindowName);
+	GGLFW()->SwapInterval(1);
 
-	GOpenGL()->Enable(GL_LINE_SMOOTH);
-	GOpenGL()->Hint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-	GOpenGL()->Enable(GL_POINT_SMOOTH);
-	GOpenGL()->Hint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	GOpenGL()->Enable(GL_BLEND);
+	GOpenGL()->Enable(GL_LINE_SMOOTH);
+	GOpenGL()->Enable(GL_POINT_SMOOTH);
+	GOpenGL()->Enable(GL_ALPHA_TEST);
+
+	GOpenGL()->Hint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	GOpenGL()->Hint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	GOpenGL()->BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	while(1) {

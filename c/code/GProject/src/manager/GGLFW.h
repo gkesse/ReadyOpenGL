@@ -24,6 +24,7 @@ struct _GGLFWO {
     void (*CursorCallback)(char* windowName, GGLFW_CURSOR_CALLBACK callback);
     void (*ScrollCallback)(char* windowName, GGLFW_SCROLL_CALLBACK callback);
     void (*MakeContext)(char* windowName);
+    void (*SwapInterval)(int interval);
     int (*WindowClose)(char* windowName);
     void (*FrameSize)(char* windowName, int* w, int* h);
     double (*Ratio)(char* windowName);

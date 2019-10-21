@@ -14,7 +14,7 @@ struct _GOpenGLO {
 	void (*Viewport)(char* windowName);
 	void (*Clear)(int mask);
 	void (*ClearColor)(double r, double g, double b, double a);
-	void (*Projection)(char* windowName);
+	void (*Projection)();
 	void (*Ortho)(char* windowName);
 	void (*Frustum)(char* windowName, sGCamera camera);
 	void (*ModelView)();
@@ -29,6 +29,7 @@ struct _GOpenGLO {
 	void (*DrawLines)(sGData obj);
 	void (*DrawTriangle)(sGTriangle obj);
 	void (*DrawGrid)(sGGrid obj);
+	void (*DrawOrigin)();
 	void (*DrawFunction)(sGFunction* obj);
 	void (*DrawFunction2D)(sGFunction2D* obj);
 	void (*DrawFunctionHeatMap)(sGFunction2D* obj);
