@@ -6,19 +6,17 @@
 #include "GEvent.h"
 #include "GConsole.h"
 //===============================================
-#define GDIRECTION_0 (sGDirection){{0.0, 0.0, -2.0}, {-70.0, 0.0, 210.0}, {8.0, 8.0, 1.0}};
-//===============================================
 static GProcessO* m_GProcessOpenGLGaussian2DO = 0;
 //===============================================
 static void GProcessOpenGLGaussian2D_Run(int argc, char** argv);
-static void GProcessOpenGLGaussian2D_Update(sGWindow sWindow);
+//===============================================
+static void GProcessOpenGLGaussian2D_Update(sGWindow* sWindow);
 //===============================================
 GProcessO* GProcessOpenGLGaussian2D_New() {
 	GProcessO* lParent = GProcess_New();
 	GProcessOpenGLGaussian2DO* lChild = (GProcessOpenGLGaussian2DO*)malloc(sizeof(GProcessOpenGLGaussian2DO));
 
 	lChild->m_parent = lParent;
-	lChild->m_direction = GDIRECTION_0;
 	lChild->m_gaussian2D = (sGGaussian2D){1.0, 1.0, 0.0, 0.0};
 
 	lParent->m_child = lChild;
@@ -46,135 +44,35 @@ static void GProcessOpenGLGaussian2D_Run(int argc, char** argv) {
 			400, 400,
 			GProcessOpenGLGaussian2D_Update
 	};
-	GOpenGL()->MainLoop(lWindow);
+	GOpenGL()->MainLoop(&lWindow);
 }
 //===============================================
-static void GProcessOpenGLGaussian2D_Update(sGWindow sWindow) {
+static void GProcessOpenGLGaussian2D_Update(sGWindow* sWindow) {
 	GOpenGL()->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	GOpenGL()->ClearColor(0.0, 0.0, 0.0, 1.0);
 	GOpenGL()->ModelView();
 
 	GProcessOpenGLGaussian2DO* lProcess = m_GProcessOpenGLGaussian2DO->m_child;
-	sGDirection* lDirection = &lProcess->m_direction;
 	sGGaussian2D* lGaussian2D = &lProcess->m_gaussian2D;
-
-	GOpenGL()->Translate(lDirection->tra.x, lDirection->tra.y, lDirection->tra.z);
-	GOpenGL()->Rotate(lDirection->rot.x, 1.0, 0.0, 0.0);
-	GOpenGL()->Rotate(lDirection->rot.y, 0.0, 1.0, 0.0);
-	GOpenGL()->Rotate(lDirection->rot.z, 0.0, 0.0, 1.0);
-
 	sGEvent* lEvent = GEvent()->GetEvent();
+	sGDirection* lDirection = GOpenGL()->GetDirection();
+
+	GOpenGL()->InitDirection();
 
 	if(lEvent->frame.onFlag == TRUE) {
-		lEvent->frame.onFlag = FALSE;
 		sGCamera lCamera = {45.0, 0.1, 100.0};
-		GOpenGL()->Viewport(sWindow.name);
+		GOpenGL()->Viewport(sWindow->name);
 		GOpenGL()->Projection();
-		GOpenGL()->Frustum(sWindow.name, lCamera);
+		GOpenGL()->Frustum(sWindow->name, lCamera);
 	}
 
 	if(lEvent->key.onFlag == TRUE) {
-		lEvent->key.onFlag = FALSE;
 		//GConsole()->Print("[ KEY ] : %d\n", lEvent->key.key);
 
 		if(lEvent->key.action == GLFW_PRESS) {
 			switch(lEvent->key.key ) {
-			// Rotation suivant -x
-			case GLFW_KEY_UP:
-				lDirection->rot.x -= 10.0;
-				if(lDirection->rot.x <= -360.0) lDirection->rot.x = 0.0;
-				break;
-				// Rotation suivant +x
-			case GLFW_KEY_DOWN:
-				lDirection->rot.x += 10.0;
-				if(lDirection->rot.x >= 360.0) lDirection->rot.x = 0.0;
-				break;
-				// Rotation suivant -y
-			case GLFW_KEY_LEFT:
-				lDirection->rot.y -= 10.0;
-				if(lDirection->rot.y >= 360.0) lDirection->rot.y = 0.0;
-				break;
-				// Rotation suivant +y
-			case GLFW_KEY_RIGHT:
-				lDirection->rot.y += 10.0;
-				if(lDirection->rot.y >= 360.0) lDirection->rot.y = 0.0;
-				break;
-				// Rotation suivant -z
-			case GLFW_KEY_RIGHT_CONTROL:
-				lDirection->rot.z -= 10.0;
-				if(lDirection->rot.z >= 360.0) lDirection->rot.z = 0.0;
-				break;
-				// Rotation suivant +z
-			case GLFW_KEY_RIGHT_ALT:
-				lDirection->rot.z += 10.0;
-				if(lDirection->rot.z >= 360.0) lDirection->rot.z = 0.0;
-				break;
-				// Translation suivant -x
-			case GLFW_KEY_A:
-				lDirection->tra.x -= 0.02;
-				if(lDirection->tra.x <= -10.0) lDirection->tra.x = -10.0;
-				break;
-				// Translation suivant +x
-			case GLFW_KEY_S:
-				lDirection->tra.x += 0.02;
-				if(lDirection->tra.x >= 10.0) lDirection->tra.x = 10.0;
-				break;
-				// Translation suivant -y
-			case GLFW_KEY_Z:
-				lDirection->tra.y -= 0.02;
-				if(lDirection->tra.y <= -10.0) lDirection->tra.y = -10.0;
-				break;
-				// Translation suivant +y
-			case GLFW_KEY_W:
-				lDirection->tra.y += 0.02;
-				if(lDirection->tra.y >= 10.0) lDirection->tra.y = 10.0;
-				break;
-				// Translation suivant -z
-			case GLFW_KEY_X:
-				lDirection->tra.z -= 1.0;
-				if(lDirection->tra.z <= -100.0) lDirection->tra.z = -100.0;
-				break;
-				// Translation suivant +z
-			case GLFW_KEY_Q:
-				lDirection->tra.z += 1.0;
-				if(lDirection->tra.z >= 100.0) lDirection->tra.z = 100.0;
-				break;
-				// Variation suivant -divX
-			case GLFW_KEY_D:
-				lDirection->div.x -= 0.25;
-				if(lDirection->div.x <= -25.0) lDirection->div.x = -25.0;
-				break;
-				// Variation suivant +divX
-			case GLFW_KEY_F:
-				lDirection->div.x += 0.25;
-				if(lDirection->div.x >= 25.0) lDirection->div.x = -25.0;
-				break;
-				// Variation suivant -divY
-			case GLFW_KEY_C:
-				lDirection->div.y -= 0.25;
-				if(lDirection->div.y <= 25.0) lDirection->div.y = 25.0;
-				break;
-				// Variation suivant +divY
-			case GLFW_KEY_R:
-				lDirection->div.y += 0.25;
-				if(lDirection->div.y >= 25.0) lDirection->div.y = 25.0;
-				break;
-				// Variation suivant -divZ
-			case GLFW_KEY_E:
-				lDirection->div.z -= 0.25;
-				if(lDirection->div.z <= -25.0) lDirection->div.z = -25.0;
-				break;
-				// Variation suivant +divZ
-			case GLFW_KEY_V:
-				lDirection->div.z += 0.25;
-				if(lDirection->div.z >= 25.0) lDirection->div.z = 25.0;
-				break;
-				// Initialisation de la direction
-			case GLFW_KEY_MENU:
-				*lDirection = GDIRECTION_0;
-				break;
 				// Variation suivant -Sigma
-			case GLFW_KEY_T:
+			case GLFW_KEY_Y:
 				lGaussian2D->sigmaX -= 0.05;
 				if(lGaussian2D->sigmaX <= 0.01) lGaussian2D->sigmaX = 0.01;
 				lGaussian2D->sigmaY = lGaussian2D->sigmaX;

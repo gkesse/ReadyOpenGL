@@ -1,19 +1,21 @@
 //===============================================
-#ifndef _GProcessOpenGLGaussian2D_
-#define _GProcessOpenGLGaussian2D_
+#ifndef _GProcessOpenGLMCML_
+#define _GProcessOpenGLMCML_
 //===============================================
 #include "GProcess.h"
 //===============================================
-typedef struct _GProcessOpenGLGaussian2DO GProcessOpenGLGaussian2DO;
+typedef struct _GProcessOpenGLMCMLO GProcessOpenGLMCMLO;
 //===============================================
-struct _GProcessOpenGLGaussian2DO {
+struct _GProcessOpenGLMCMLO {
     GProcessO* m_parent;
-    sGGaussian2D m_gaussian2D;
+	double m_mcmlData[GMCML_BUFFER_MAX];
+	sGVertex m_mcmlVertex[GMCML_BUFFER_MAX];
+	sGColor m_mcmlColor[GMCML_BUFFER_MAX];
 };
 //===============================================
-GProcessO* GProcessOpenGLGaussian2D_New();
-void GProcessOpenGLGaussian2D_Delete();
-GProcessO* GProcessOpenGLGaussian2D();
+GProcessO* GProcessOpenGLMCML_New();
+void GProcessOpenGLMCML_Delete();
+GProcessO* GProcessOpenGLMCML();
 //===============================================
 #endif
 //===============================================

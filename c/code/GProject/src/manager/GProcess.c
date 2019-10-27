@@ -11,6 +11,7 @@
 #include "GProcessOpenGLGaussian2D.h"
 #include "GProcessOpenGLHeatMap.h"
 #include "GProcessOpenGLEcgData.h"
+#include "GProcessOpenGLMCML.h"
 #include "GString2.h"
 #include "GConfig.h"
 //===============================================
@@ -42,6 +43,7 @@ GProcessO* GProcess() {
     if(GString2()->IsEqual(lKey, "OPENGL_GAUSSIAN_2D")) return GProcessOpenGLGaussian2D();
     if(GString2()->IsEqual(lKey, "OPENGL_HEATMAP")) return GProcessOpenGLHeatMap();
     if(GString2()->IsEqual(lKey, "OPENGL_ECG")) return GProcessOpenGLEcgData();
+    if(GString2()->IsEqual(lKey, "OPENGL_MCML")) return GProcessOpenGLMCML();
     return GProcessHelp();
 }
 //===============================================

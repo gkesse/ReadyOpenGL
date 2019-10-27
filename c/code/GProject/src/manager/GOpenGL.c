@@ -3,7 +3,10 @@
 #include "GGLFW.h"
 #include "GEvent.h"
 #include "GFunction.h"
+#include "GHeat.h"
 #include "GConsole.h"
+//===============================================
+#define GDIRECTION_0 (sGDirection){{0.0, 0.0, -2.0}, {-70.0, 0.0, 210.0}, {1.0, 1.0, 1.0}};
 //===============================================
 static GOpenGLO* m_GOpenGLO = 0;
 //===============================================
@@ -24,6 +27,8 @@ static void GOpenGL_DrawPoints(sGData obj);
 static void GOpenGL_DrawDataTab(sGDataTab obj);
 static void GOpenGL_DrawHeatMap(sGData2D obj);
 static void GOpenGL_DrawHeatMapPoints(sGData2D obj);
+static void GOpenGL_DrawMcml(sGMCML mcml);
+static void GOpenGL_DrawMcmlSlice(sGMCML obj);
 static void GOpenGL_DrawLine(sGLine obj);
 static void GOpenGL_DrawLines(sGData obj);
 static void GOpenGL_DrawTriangle(sGTriangle obj);
@@ -32,11 +37,20 @@ static void GOpenGL_DrawOrigin();
 static void GOpenGL_DrawFunction(sGFunction* obj);
 static void GOpenGL_DrawFunction2D(sGFunction2D* obj);
 static void GOpenGL_DrawFunctionHeatMap(sGFunction2D* obj);
-static void GOpenGL_MainLoop(sGWindow sWindow);
+static sGDirection* GOpenGL_GetDirection();
+static void GOpenGL_SetDirection(sGDirection direction);
+static void GOpenGL_InitDirection();
+static void GOpenGL_CleanEvent();
+static void GOpenGL_MainLoop(sGWindow* sWindow);
+//===============================================
 static sGVertex GOpenGL_VertexDiv(sGVertexDiv vertex);
 //===============================================
 GOpenGLO* GOpenGL_New() {
 	GOpenGLO* lObj = (GOpenGLO*)malloc(sizeof(GOpenGLO));
+
+	lObj->m_direction0 = GDIRECTION_0;
+	lObj->m_direction = lObj->m_direction0;
+
 	lObj->Delete = GOpenGL_Delete;
 	lObj->Enable = GOpenGL_Enable;
 	lObj->Hint = GOpenGL_Hint;
@@ -55,6 +69,8 @@ GOpenGLO* GOpenGL_New() {
 	lObj->DrawDataTab = GOpenGL_DrawDataTab;
 	lObj->DrawHeatMap = GOpenGL_DrawHeatMap;
 	lObj->DrawHeatMapPoints = GOpenGL_DrawHeatMapPoints;
+	lObj->DrawMcml = GOpenGL_DrawMcml;
+	lObj->DrawMcmlSlice = GOpenGL_DrawMcmlSlice;
 	lObj->DrawLine = GOpenGL_DrawLine;
 	lObj->DrawLines = GOpenGL_DrawLines;
 	lObj->DrawTriangle = GOpenGL_DrawTriangle;
@@ -63,6 +79,10 @@ GOpenGLO* GOpenGL_New() {
 	lObj->DrawFunction = GOpenGL_DrawFunction;
 	lObj->DrawFunction2D = GOpenGL_DrawFunction2D;
 	lObj->DrawFunctionHeatMap = GOpenGL_DrawFunctionHeatMap;
+	lObj->GetDirection = GOpenGL_GetDirection;
+	lObj->SetDirection = GOpenGL_SetDirection;
+	lObj->InitDirection = GOpenGL_InitDirection;
+	lObj->CleanEvent = GOpenGL_CleanEvent;
 	lObj->MainLoop = GOpenGL_MainLoop;
 	return lObj;
 }
@@ -240,7 +260,6 @@ static void GOpenGL_DrawHeatMap(sGData2D obj) {
 	int lNmax = lxNmax*lyNmax;
 	double lZmin = GFunction()->Min(obj.data, lNmax, 2);
 	double lZmax = GFunction()->Max(obj.data, lNmax, 2);
-	double lZavg = (lZmin + lZmax) / 2;
 
 	double lPointSize = obj.pointSize;
 
@@ -248,16 +267,14 @@ static void GOpenGL_DrawHeatMap(sGData2D obj) {
 
 	glBegin(GL_POINTS);
 	for(int i = 0; i < lNmax; i++) {
-		double lZ = obj.data[i].z;
-		double lRed = lZ/lZavg - 1.0;
-		double lBlue = 1.0 - lZ/lZavg;
-		if(lRed < 0) lRed = 0;
-		if(lBlue < 0) lBlue = 0;
-		double lGreen = 1.0 - lRed - lBlue;
+		sGHeat lHeat = {
+				obj.data[i].z, lZmin, lZmax, {0}, 0.5
+		};
+		GHeat()->HeatColor(&lHeat);
 
 		sGVertexDiv lVertexDiv = {obj.data[i] , obj.gridDiv, obj.xDiv, obj.yDiv, obj.zDiv};
 		sGVertex lVertex = GOpenGL_VertexDiv(lVertexDiv);
-		glColor4d(lRed, lGreen, lBlue, 0.5);
+		glColor4d(lHeat.iColor.r, lHeat.iColor.g, lHeat.iColor.b, lHeat.iColor.a);
 		glVertex3d(lVertex.x, lVertex.y, 0.0);
 	}
 	glEnd();
@@ -271,7 +288,6 @@ static void GOpenGL_DrawHeatMapPoints(sGData2D obj) {
 	int lNmax = lxNmax*lyNmax;
 	double lZmin = GFunction()->Min(obj.data, lNmax, 2);
 	double lZmax = GFunction()->Max(obj.data, lNmax, 2);
-	double lZavg = (lZmin + lZmax) / 2;
 
 	double lPointSize = obj.pointSize;
 
@@ -279,17 +295,86 @@ static void GOpenGL_DrawHeatMapPoints(sGData2D obj) {
 
 	glBegin(GL_POINTS);
 	for(int i = 0; i < lNmax; i++) {
-		double lZ = obj.data[i].z;
-		double lRed = lZ/lZavg - 1.0;
-		double lBlue = 1.0 - lZ/lZavg;
-		if(lRed < 0) lRed = 0;
-		if(lBlue < 0) lBlue = 0;
-		double lGreen = 1.0 - lRed - lBlue;
+		sGHeat lHeat = {
+				obj.data[i].z, lZmin, lZmax, {0}, 0.5
+		};
+		GHeat()->HeatColor(&lHeat);
 
 		sGVertexDiv lVertexDiv = {obj.data[i] , obj.gridDiv, obj.xDiv, obj.yDiv, obj.zDiv};
 		sGVertex lVertex = GOpenGL_VertexDiv(lVertexDiv);
-		glColor4d(lRed, lGreen, lBlue, 0.5);
+		glColor4d(lHeat.iColor.r, lHeat.iColor.g, lHeat.iColor.b, lHeat.iColor.a);
 		glVertex3d(lVertex.x, lVertex.y, lVertex.z);
+	}
+	glEnd();
+#endif
+}
+//===============================================
+static void GOpenGL_DrawMcml(sGMCML obj) {
+#if defined(__WIN32)
+	glPointSize(obj.pointSize);
+
+	glBegin(GL_POINTS);
+	for(int z = 0; z < obj.zNmax; z++) {
+		for(int x = 0; x < obj.xNmax; x++) {
+			for(int y = 0; y < obj.yNmax; y++) {
+				int k = z;
+				k += y*GMCML_BUFFER_Z;
+				k += x*(GMCML_BUFFER_Y + GMCML_BUFFER_Z);
+
+				sGVertexDiv lVertexDiv = {obj.vertex[k] , obj.gridDiv, obj.xDiv, obj.yDiv, obj.zDiv};
+				sGVertex lVertex = GOpenGL_VertexDiv(lVertexDiv);
+				glColor4d(obj.color[k].r, obj.color[k].g, obj.color[k].b, obj.color[k].a);
+				glVertex3d(lVertex.x, lVertex.y, lVertex.z);
+			}
+		}
+	}
+	glEnd();
+#endif
+}
+//===============================================
+static void GOpenGL_DrawMcmlSlice(sGMCML obj) {
+#if defined(__WIN32)
+	glPointSize(obj.sliceSize);
+
+	glBegin(GL_POINTS);
+	for(int x = 0; x < obj.xNmax; x++) {
+		for(int y = 0; y < obj.yNmax; y++) {
+			int z = obj.sliceZ;
+			int k = z;
+			k += y*GMCML_BUFFER_Z;
+			k += x*(GMCML_BUFFER_Y + GMCML_BUFFER_Z);
+
+			sGVertexDiv lVertexDiv = {obj.vertex[k] , obj.gridDiv, obj.xDiv, obj.yDiv, obj.zDiv};
+			sGVertex lVertex = GOpenGL_VertexDiv(lVertexDiv);
+			glColor4d(obj.color[k].r, obj.color[k].g, obj.color[k].b, obj.color[k].a);
+			glVertex3d(lVertex.x, lVertex.y, lVertex.z);
+		}
+	}
+	for(int z = 0; z < obj.xNmax; z++) {
+		for(int y = 0; y < obj.yNmax; y++) {
+			int x = obj.sliceX;
+			int k = z;
+			k += y*GMCML_BUFFER_Z;
+			k += x*(GMCML_BUFFER_Y + GMCML_BUFFER_Z);
+
+			sGVertexDiv lVertexDiv = {obj.vertex[k] , obj.gridDiv, obj.xDiv, obj.yDiv, obj.zDiv};
+			sGVertex lVertex = GOpenGL_VertexDiv(lVertexDiv);
+			glColor4d(obj.color[k].r, obj.color[k].g, obj.color[k].b, obj.color[k].a);
+			glVertex3d(lVertex.x, lVertex.y, lVertex.z);
+		}
+	}
+	for(int z = 0; z < obj.yNmax; z++) {
+		for(int x = 0; x < obj.xNmax; x++) {
+			int y = obj.sliceY;
+			int k = z;
+			k += y*GMCML_BUFFER_Z;
+			k += x*(GMCML_BUFFER_Y + GMCML_BUFFER_Z);
+
+			sGVertexDiv lVertexDiv = {obj.vertex[k] , obj.gridDiv, obj.xDiv, obj.yDiv, obj.zDiv};
+			sGVertex lVertex = GOpenGL_VertexDiv(lVertexDiv);
+			glColor4d(obj.color[k].r, obj.color[k].g, obj.color[k].b, obj.color[k].a);
+			glVertex3d(lVertex.x, lVertex.y, lVertex.z);
+		}
 	}
 	glEnd();
 #endif
@@ -476,23 +561,152 @@ static void GOpenGL_DrawFunctionHeatMap(sGFunction2D* obj) {
 #endif
 }
 //===============================================
-static sGVertex GOpenGL_VertexDiv(sGVertexDiv vertex) {
+static sGDirection* GOpenGL_GetDirection() {
 #if defined(__WIN32)
-	sGVertex lVertex = {
-			vertex.vertex.x * vertex.divGrid * vertex.xDiv,
-			vertex.vertex.y * vertex.divGrid * vertex.yDiv,
-			vertex.vertex.z * vertex.divGrid * vertex.zDiv
-	};
-	return lVertex;
+	return &m_GOpenGLO->m_direction;
 #endif
 }
 //===============================================
-static void GOpenGL_MainLoop(sGWindow sWindow) {
+static void GOpenGL_SetDirection(sGDirection direction) {
 #if defined(__WIN32)
-	char* lWindowName = sWindow.name;
-	int lWidth = sWindow.width;
-	int lHeight = sWindow.height;
-	char* lTitle = sWindow.title;
+	m_GOpenGLO->m_direction0 = direction;
+	m_GOpenGLO->m_direction = m_GOpenGLO->m_direction0;
+#endif
+}
+//===============================================
+static void GOpenGL_InitDirection() {
+#if defined(__WIN32)
+	sGDirection* lDirection = GOpenGL_GetDirection();
+	sGEvent* lEvent = GEvent()->GetEvent();
+
+	GOpenGL()->Translate(lDirection->tra.x, lDirection->tra.y, lDirection->tra.z);
+	GOpenGL()->Rotate(lDirection->rot.x, 1.0, 0.0, 0.0);
+	GOpenGL()->Rotate(lDirection->rot.y, 0.0, 1.0, 0.0);
+	GOpenGL()->Rotate(lDirection->rot.z, 0.0, 0.0, 1.0);
+
+	if(lEvent->key.onFlag == TRUE) {
+		//GConsole()->Print("[ KEY ] : %d\n", lEvent->key.key);
+
+		if(lEvent->key.action == GLFW_PRESS) {
+			switch(lEvent->key.key ) {
+			// Rotation suivant -x
+			case GLFW_KEY_UP:
+				lDirection->rot.x -= 10.0;
+				if(lDirection->rot.x <= -360.0) lDirection->rot.x = 0.0;
+				break;
+				// Rotation suivant +x
+			case GLFW_KEY_DOWN:
+				lDirection->rot.x += 10.0;
+				if(lDirection->rot.x >= 360.0) lDirection->rot.x = 0.0;
+				break;
+				// Rotation suivant -y
+			case GLFW_KEY_LEFT:
+				lDirection->rot.y -= 10.0;
+				if(lDirection->rot.y <= -360.0) lDirection->rot.y = 0.0;
+				break;
+				// Rotation suivant +y
+			case GLFW_KEY_RIGHT:
+				lDirection->rot.y += 10.0;
+				if(lDirection->rot.y >= 360.0) lDirection->rot.y = 0.0;
+				break;
+				// Rotation suivant -z
+			case GLFW_KEY_RIGHT_ALT:
+				lDirection->rot.z -= 10.0;
+				if(lDirection->rot.z <= -360.0) lDirection->rot.z = 0.0;
+				break;
+				// Rotation suivant +z
+			case GLFW_KEY_RIGHT_CONTROL:
+				lDirection->rot.z += 10.0;
+				if(lDirection->rot.z >= 360.0) lDirection->rot.z = 0.0;
+				break;
+				// Translation suivant -x
+			case GLFW_KEY_A:
+				lDirection->tra.x -= 0.02;
+				if(lDirection->tra.x <= -10.0) lDirection->tra.x = -10.0;
+				break;
+				// Translation suivant +x
+			case GLFW_KEY_S:
+				lDirection->tra.x += 0.02;
+				if(lDirection->tra.x >= 10.0) lDirection->tra.x = 10.0;
+				break;
+				// Translation suivant -y
+			case GLFW_KEY_Z:
+				lDirection->tra.y -= 0.02;
+				if(lDirection->tra.y <= -10.0) lDirection->tra.y = -10.0;
+				break;
+				// Translation suivant +y
+			case GLFW_KEY_W:
+				lDirection->tra.y += 0.02;
+				if(lDirection->tra.y >= 10.0) lDirection->tra.y = 10.0;
+				break;
+				// Translation suivant -z
+			case GLFW_KEY_X:
+				lDirection->tra.z -= 1.0;
+				if(lDirection->tra.z <= -100.0) lDirection->tra.z = -100.0;
+				break;
+				// Translation suivant +z
+			case GLFW_KEY_Q:
+				lDirection->tra.z += 1.0;
+				if(lDirection->tra.z >= 100.0) lDirection->tra.z = 100.0;
+				break;
+				// Variation suivant -divX
+			case GLFW_KEY_D:
+				lDirection->div.x -= 0.25;
+				if(lDirection->div.x <= -25.0) lDirection->div.x = -25.0;
+				break;
+				// Variation suivant +divX
+			case GLFW_KEY_F:
+				lDirection->div.x += 0.25;
+				if(lDirection->div.x >= 25.0) lDirection->div.x = 25.0;
+				break;
+				// Variation suivant -divY
+			case GLFW_KEY_C:
+				lDirection->div.y -= 0.25;
+				if(lDirection->div.y <= -25.0) lDirection->div.y = -25.0;
+				break;
+				// Variation suivant +divY
+			case GLFW_KEY_R:
+				lDirection->div.y += 0.25;
+				if(lDirection->div.y >= 25.0) lDirection->div.y = 25.0;
+				break;
+				// Variation suivant -divZ
+			case GLFW_KEY_E:
+				lDirection->div.z -= 0.25;
+				if(lDirection->div.z <= -25.0) lDirection->div.z = -25.0;
+				break;
+				// Variation suivant +divZ
+			case GLFW_KEY_V:
+				lDirection->div.z += 0.25;
+				if(lDirection->div.z >= 25.0) lDirection->div.z = 25.0;
+				break;
+				// Initialisation de la direction
+			case GLFW_KEY_MENU:
+				*lDirection = m_GOpenGLO->m_direction0;
+				break;
+			}
+		}
+	}
+#endif
+}
+//===============================================
+static void GOpenGL_CleanEvent() {
+#if defined(__WIN32)
+	sGEvent* lEvent = GEvent()->GetEvent();
+
+	lEvent->key.onFlag = FALSE;
+	lEvent->frame.onFlag = FALSE;
+	lEvent->mouse.onFlag = FALSE;
+	lEvent->cursor.onFlag = FALSE;
+	lEvent->scroll.onFlag = FALSE;
+#endif
+}
+//===============================================
+static void GOpenGL_MainLoop(sGWindow* sWindow) {
+#if defined(__WIN32)
+	char* lWindowName = sWindow->name;
+	int lWidth = sWindow->width;
+	int lHeight = sWindow->height;
+	char* lTitle = sWindow->title;
 
 	GGLFW()->Init();
 	GGLFW()->CreateWindow(lWindowName, lWidth, lHeight, lTitle);
@@ -519,7 +733,8 @@ static void GOpenGL_MainLoop(sGWindow sWindow) {
 		int lRes = GGLFW()->WindowClose(lWindowName);
 		if(lRes == 1) break;
 
-		sWindow.update(sWindow);
+		sWindow->update(sWindow);
+		GOpenGL()->CleanEvent();
 
 		GGLFW()->SwapBuffers(lWindowName);
 		GGLFW()->PollEvents();
@@ -527,6 +742,17 @@ static void GOpenGL_MainLoop(sGWindow sWindow) {
 
 	GGLFW()->DestroyWindow(lWindowName);
 	GGLFW()->Terminate();
+#endif
+}
+//===============================================
+static sGVertex GOpenGL_VertexDiv(sGVertexDiv vertex) {
+#if defined(__WIN32)
+	sGVertex lVertex = {
+			vertex.vertex.x * vertex.divGrid * vertex.xDiv,
+			vertex.vertex.y * vertex.divGrid * vertex.yDiv,
+			vertex.vertex.z * vertex.divGrid * vertex.zDiv
+	};
+	return lVertex;
 #endif
 }
 //===============================================

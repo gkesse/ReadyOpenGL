@@ -12,6 +12,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include <stdarg.h>
 //===============================================
 #include <GLFW/glfw3.h>
 //===============================================

@@ -25,6 +25,8 @@ struct _GOpenGLO {
 	void (*DrawDataTab)(sGDataTab obj);
 	void (*DrawHeatMap)(sGData2D obj);
 	void (*DrawHeatMapPoints)(sGData2D obj);
+	void (*DrawMcml)(sGMCML obj);
+	void (*DrawMcmlSlice)(sGMCML obj);
 	void (*DrawLine)(sGLine obj);
 	void (*DrawLines)(sGData obj);
 	void (*DrawTriangle)(sGTriangle obj);
@@ -33,7 +35,13 @@ struct _GOpenGLO {
 	void (*DrawFunction)(sGFunction* obj);
 	void (*DrawFunction2D)(sGFunction2D* obj);
 	void (*DrawFunctionHeatMap)(sGFunction2D* obj);
-	void (*MainLoop)(sGWindow sWindow);
+	sGDirection* (*GetDirection)();
+	void (*SetDirection)(sGDirection direction);
+	void (*InitDirection)();
+	void (*CleanEvent)();
+	void (*MainLoop)(sGWindow* sWindow);
+    sGDirection m_direction;
+    sGDirection m_direction0;
 };
 //===============================================
 GOpenGLO* GOpenGL_New();

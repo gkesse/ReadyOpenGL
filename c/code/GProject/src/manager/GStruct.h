@@ -30,6 +30,8 @@ typedef struct _sGRotate sGRotate;
 typedef struct _sGDiv sGDiv;
 typedef struct _sGDirection sGDirection;
 typedef struct _sGCamera sGCamera;
+typedef struct _sGMCML sGMCML;
+typedef struct _sGHeat sGHeat;
 //===============================================
 struct _sGWindow {
 	char* name;
@@ -276,6 +278,35 @@ struct _sGCamera {
 	double fovY;
 	double zNear;
 	double zFar;
+};
+//===============================================
+struct _sGMCML {
+	double* data;
+	sGVertex* vertex;
+	sGColor* color;
+	double dMin;
+	double dMax;
+	int xNmax;
+	int yNmax;
+	int zNmax;
+	double alpha;
+	double pointSize;
+	int sliceX;
+	int sliceY;
+	int sliceZ;
+	double sliceSize;
+    double gridDiv;
+    double xDiv;
+    double yDiv;
+    double zDiv;
+};
+//===============================================
+struct _sGHeat {
+	double iVal;
+	double iMin;
+	double iMax;
+	sGColor iColor;
+	double iAlpha;
 };
 //===============================================
 #endif
