@@ -5,12 +5,14 @@ GBUILD = build
 GTARGET = $(GBIN)/GProject.exe
 
 GINCS = \
-    -I$(GSRC)/manager \
-    -I$(GREADYLIB)/glfw/c/include \
+    -I$(GSRC)\manager \
+    -I$(GREADYLIB)\glfw\c\3.3.0\include \
+    -I$(GREADYLIB)\glew\c\2.1.0\include \
 
 GLIBS = \
-    -L$(GREADYLIB)\glfw\c\mingw64\lib \
-    -lglfw3 -lopengl32 -lgdi32 \
+    -L$(GREADYLIB)\glfw\c\3.3.0\mingw64\lib \
+    -L$(GREADYLIB)\glew\c\2.1.0\mingw64\lib \
+    -lglfw3 -lglew32 -lglu32 -lopengl32 -lgdi32 \
     
 GOBJS = \
     $(patsubst $(GSRC)/%.c, $(GBUILD)/%.o, $(wildcard $(GSRC)/*.c)) \

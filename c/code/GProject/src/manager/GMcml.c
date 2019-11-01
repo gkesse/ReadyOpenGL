@@ -39,17 +39,15 @@ static void GMcml_Load(char* filename, sGMCML* mcml) {
 	GFile2()->Exist(filename);
 	GFile2()->Open("MCML", filename, "r");
 
-	int lBreak = 0;
-	for(int x = 0; x < mcml->xNmax && !lBreak; x++) {
-		for(int z = 0; z < mcml->zNmax && !lBreak; z++) {
-			for(int y = 0; y < mcml->yNmax && !lBreak; y++) {
+	for(int x = 0; x < mcml->xNmax; x++) {
+		for(int z = 0; z < mcml->zNmax; z++) {
+			for(int y = 0; y < mcml->yNmax; y++) {
 				int k = z;
 				k += y*GMCML_BUFFER_Z;
-				k += x*(GMCML_BUFFER_Y + GMCML_BUFFER_Z);
+				k += x*GMCML_BUFFER_Y*GMCML_BUFFER_Z;
 
 				double lData;
 				GFile2()->fScanf("MCML", "%lf", &lData);
-				if(y == 10) lBreak = 1;
 				lData = log(lData + 1);
 				mcml->data[k] = lData;
 
@@ -81,13 +79,13 @@ static void GMcml_JetColor(sGMCML* mcml) {
 			for(int y = 0; y < mcml->yNmax; y++) {
 				int k = z;
 				k += y*GMCML_BUFFER_Z;
-				k += x*(GMCML_BUFFER_Y + GMCML_BUFFER_Z);
+				k += x*GMCML_BUFFER_Y*GMCML_BUFFER_Z;
 
 				sGHeat lHeat = {
 						mcml->data[k],
 						mcml->dMin,
 						mcml->dMax,
-						{0}, mcml->alpha
+						{0}
 				};
 				GHeat()->JetColor(&lHeat);
 				mcml->color[k] = lHeat.iColor;

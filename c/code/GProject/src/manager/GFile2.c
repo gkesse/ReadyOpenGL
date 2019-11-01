@@ -15,6 +15,8 @@ static void GFile2_Exist(char* filename);
 static void GFile2_Open(char* pFileName, char* filename, char* mode);
 static void GFile2_fPrintf(char* pFileName, char* format, ...);
 static void GFile2_fScanf(char* pFileName, char* format, ...);
+static int GFile2_fSize(char* pFileName);
+static void GFile2_fRead(char* pFileName, char* data, int size);
 static void GFile2_Close(char* pFileName);
 //===============================================
 #if defined(__WIN32)
@@ -31,6 +33,8 @@ GFile2O* GFile2_New() {
 	lObj->Open = GFile2_Open;
 	lObj->fPrintf = GFile2_fPrintf;
 	lObj->fScanf = GFile2_fScanf;
+	lObj->fSize = GFile2_fSize;
+	lObj->fRead = GFile2_fRead;
 	lObj->Close = GFile2_Close;
 	return lObj;
 }
@@ -81,6 +85,21 @@ static void GFile2_fScanf(char* pFileName, char* format, ...) {
 	int lRes = vfscanf(lpFile, format, args);
 	if(lRes < 0) {GConsole()->Print("[ GFile2 ] Error GFile2_fScanf\n"); exit(0);}
 	va_end(args);
+}
+//===============================================
+static int GFile2_fSize(char* pFileName) {
+	GMapO(GFile2, GCHAR_PTR, GFILE_PTR)* lpFileMap = m_GFile2O->m_pFileMap;
+	FILE* lpFile = lpFileMap->GetData(lpFileMap, pFileName, GFile_MapEqual);
+	fseek(lpFile, 0, SEEK_END);
+	int lSize = (int)ftell(lpFile);
+	return lSize;
+}
+//===============================================
+static void GFile2_fRead(char* pFileName, char* data, int size) {
+	GMapO(GFile2, GCHAR_PTR, GFILE_PTR)* lpFileMap = m_GFile2O->m_pFileMap;
+	FILE* lpFile = lpFileMap->GetData(lpFileMap, pFileName, GFile_MapEqual);
+	int lRes = fread(data, sizeof(char), size, lpFile);
+	if(lRes < 0) {GConsole()->Print("[ GFile2 ] Error GFile2_fRead\n"); exit(0);}
 }
 //===============================================
 static void GFile2_Close(char* pFileName) {

@@ -18,9 +18,9 @@ GProcessO* GProcessOpenGLMCML_New() {
 
 	sGDirection* lDirection = GOpenGL()->GetDirection();
 	*lDirection = (sGDirection){
-		{0.0, 0.0, -2.0},
-		{-70.0, 0.0, 210.0},
-		{1.0, 1.0, 1.0}
+		{0.0, 0.0, -2.5},
+		{-60.0, 0.0, 220.0},
+		{10.0, 10.0, 10.0}
 	};
 
 	GOpenGL()->SetDirection(*lDirection);
@@ -67,7 +67,7 @@ static void GProcessOpenGLMCML_Update(sGWindow* sWindow) {
 	GOpenGL()->InitDirection();
 
 	if(lEvent->frame.onFlag == TRUE) {
-		sGCamera lCamera = {45.0, 0.1, 100.0};
+		sGCamera lCamera = {55.0, 0.1, 128.0};
 		GOpenGL()->Viewport(sWindow->name);
 		GOpenGL()->Projection();
 		GOpenGL()->Frustum(sWindow->name, lCamera);
@@ -99,16 +99,16 @@ static void GProcessOpenGLMCML_Update(sGWindow* sWindow) {
 			0.0, 0.0,
 			GMCML_BUFFER_X, GMCML_BUFFER_Y, GMCML_BUFFER_Z,
 			0.15, 5.0,
-			0.0, 0.0, 0.0, 10.0,
+			0, 0, 0, 0.9, 10.0,
 			lGrid.gridDiv, lDirection->div.x, lDirection->div.y, lDirection->div.z
 	};
 
 	GMcml()->Load("../data/mcml/MCML_output.txt", &lMcml);
 	GMcml()->JetColor(&lMcml);
 
-	GOpenGL()->DrawGrid(lGrid);
 	GOpenGL()->DrawMcml(lMcml);
 	GOpenGL()->DrawMcmlSlice(lMcml);
+	GOpenGL()->DrawGrid(lGrid);
 	GOpenGL()->DrawOrigin();
 }
 //===============================================

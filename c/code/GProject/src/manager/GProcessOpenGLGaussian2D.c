@@ -93,13 +93,14 @@ static void GProcessOpenGLGaussian2D_Update(sGWindow* sWindow) {
 			2, {0.2, 0.2, 0.9, 1.0}
 	};
 	sGFunction2D lFunction = {
-			-5.0, 5.0, -5.0, 5.0, 401, 401,
+			-5.0, 5.0, -5.0, 5.0, 151, 151, 0.5,
 			{0.0, 0.5, 0.0, 1.0}, {0.5, 0.0, 0.0, 1.0},
 			10, 2, GFunction()->Gaussian2D, lGaussian2D, 0,
 			lGrid.gridDiv, lDirection->div.x, lDirection->div.y, lDirection->div.z
 	};
 
-	GOpenGL()->DrawOrigin();
 	GOpenGL()->DrawFunctionHeatMap(&lFunction);
+	GOpenGL()->DrawGrid(lGrid);
+	GOpenGL()->DrawOrigin();
 }
 //===============================================

@@ -63,7 +63,7 @@ static void GProcessOpenGLHeatMap_Run(int argc, char** argv) {
 				1.0, 1.0, 0.0, 0.0
 		};
 		sGFunction2D lFunction = {
-				-5.0, 5.0, -5.0, 5.0, 401, 401,
+				-5.0, 5.0, -5.0, 5.0, 401, 401, 0.5,
 				{0.0, 0.5, 0.0, 1.0}, {0.5, 0.0, 0.0, 1.0},
 				10, 2, GFunction()->Gaussian2D, &lGaussian2D, 0,
 				lGrid.gridDiv, 4.0/1.0, 4.0/1.0, 1.0

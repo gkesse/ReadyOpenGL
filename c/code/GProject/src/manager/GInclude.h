@@ -6,6 +6,7 @@
 #define G_PLATEFORM_OS "WINDOWS"
 //===============================================
 #define _USE_MATH_DEFINES
+#define GLEW_STATIC
 //===============================================
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,7 @@
 #include <math.h>
 #include <stdarg.h>
 //===============================================
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 //===============================================
 #elif defined(__unix)

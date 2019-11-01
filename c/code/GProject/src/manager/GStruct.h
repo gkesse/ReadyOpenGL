@@ -32,6 +32,8 @@ typedef struct _sGDirection sGDirection;
 typedef struct _sGCamera sGCamera;
 typedef struct _sGMCML sGMCML;
 typedef struct _sGHeat sGHeat;
+typedef struct _sGShaderItem sGShaderItem;
+typedef struct _sGShader sGShader;
 //===============================================
 struct _sGWindow {
 	char* name;
@@ -130,6 +132,7 @@ struct _sGFunction2D {
     double yMax;
     int xNmax;
     int yNmax;
+    double alpha;
     sGColor pointColor;
     sGColor lineColor;
     double pointSize;
@@ -193,6 +196,7 @@ struct _sGDataTab {
 struct _sGData2D {
     sGVertex* data;
     double pointSize;
+    double alpha;
     int xNmax;
     int yNmax;
     double gridDiv;
@@ -294,6 +298,7 @@ struct _sGMCML {
 	int sliceX;
 	int sliceY;
 	int sliceZ;
+	double sliceAlpha;
 	double sliceSize;
     double gridDiv;
     double xDiv;
@@ -306,7 +311,18 @@ struct _sGHeat {
 	double iMin;
 	double iMax;
 	sGColor iColor;
-	double iAlpha;
+};
+//===============================================
+struct _sGShaderItem {
+	char* filename;
+	char* shaderCode;
+	int shaderId;
+};
+//===============================================
+struct _sGShader {
+	int programId;
+	sGShaderItem vertex;
+	sGShaderItem fragment;
 };
 //===============================================
 #endif

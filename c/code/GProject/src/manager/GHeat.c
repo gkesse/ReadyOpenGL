@@ -39,7 +39,7 @@ static sGColor GHeat_HeatColor(sGHeat* heat) {
 	heat->iColor.r = lRed;
 	heat->iColor.g = lGreen;
 	heat->iColor.b = lBlue;
-	heat->iColor.a = heat->iAlpha;
+	heat->iColor.a = 1.0;
 	return heat->iColor;
 }
 //===============================================
@@ -48,14 +48,13 @@ static sGColor GHeat_JetColor(sGHeat* heat) {
 	if(heat->iVal > heat->iMax) heat->iVal = heat->iMax;
 
 	double lDiff = heat->iMax - heat->iMin;
-	heat->iColor.r = heat->iColor.g = heat->iColor.b = 1.0;
-	heat->iColor.a = heat->iAlpha;
+	heat->iColor = (sGColor){1.0, 1.0, 1.0, 1.0};
 
 	if(heat->iVal < (heat->iMin + 0.25*lDiff)) {
 		heat->iColor.r = 0.0;
 		heat->iColor.g = 4.0*(heat->iVal - heat->iMin)/lDiff;
 	}
-	else if(heat->iVal < (heat->iMin + 0.4*lDiff)) {
+	else if(heat->iVal < (heat->iMin + 0.5*lDiff)) {
 		heat->iColor.r = 0.0;
 		heat->iColor.b = 1.0 + 4.0*(heat->iMin + 0.25*lDiff - heat->iVal) / lDiff;
 	}

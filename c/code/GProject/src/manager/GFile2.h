@@ -14,6 +14,8 @@ struct _GFile2O {
 	void (*Open)(char* pFileName, char* filename, char* mode);
 	void (*fPrintf)(char* pFileName, char* format, ...);
 	void (*fScanf)(char* pFileName, char* format, ...);
+	int (*fSize)(char* pFileName);
+	void (*fRead)(char* pFileName, char* data, int size);
 	void (*Close)(char* pFileName);
 	GMapO(GFile2, GCHAR_PTR, GFILE_PTR)* m_pFileMap;
 };
