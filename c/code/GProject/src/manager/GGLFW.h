@@ -17,6 +17,7 @@ typedef void (*GGLFW_SCROLL_CALLBACK)(GGLFW_WINDOW* window, double x, double y);
 struct _GGLFWO {
     void (*Delete)();
     void (*Init)();
+    void (*WindowHint)(int hint, int value);
     void (*CreateWindow)(char* windowName, int w, int h, char* title);
     void (*KeyCallback)(char* windowName, GGLFW_KEY_CALLBACK callback);
     void (*FrameCallback)(char* windowName, GGLFW_FRAME_CALLBACK callback);

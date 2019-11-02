@@ -92,14 +92,16 @@ static int GFile2_fSize(char* pFileName) {
 	FILE* lpFile = lpFileMap->GetData(lpFileMap, pFileName, GFile_MapEqual);
 	fseek(lpFile, 0, SEEK_END);
 	int lSize = (int)ftell(lpFile);
+	rewind(lpFile);
 	return lSize;
 }
 //===============================================
 static void GFile2_fRead(char* pFileName, char* data, int size) {
 	GMapO(GFile2, GCHAR_PTR, GFILE_PTR)* lpFileMap = m_GFile2O->m_pFileMap;
 	FILE* lpFile = lpFileMap->GetData(lpFileMap, pFileName, GFile_MapEqual);
-	int lRes = fread(data, sizeof(char), size, lpFile);
-	if(lRes < 0) {GConsole()->Print("[ GFile2 ] Error GFile2_fRead\n"); exit(0);}
+	int lBytes = fread(data, sizeof(char), size, lpFile);
+	if(lBytes < 0) {GConsole()->Print("[ GFile2 ] Error GFile2_fRead\n"); exit(0);}
+	data[lBytes] = 0;
 }
 //===============================================
 static void GFile2_Close(char* pFileName) {

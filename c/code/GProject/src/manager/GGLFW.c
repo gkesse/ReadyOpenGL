@@ -13,6 +13,7 @@ GDEFINE_MAP(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)
 static GGLFWO* m_GGLFWO = 0;
 //===============================================
 static void GGLFW_Init();
+static void GGLFW_WindowHint(int hint, int value);
 static void GGLFW_CreateWindow(char* windowName, int w, int h, char* title);
 static void GGLFW_KeyCallback(char* windowName, GGLFW_KEY_CALLBACK callback);
 static void GGLFW_FrameCallback(char* windowName, GGLFW_FRAME_CALLBACK callback);
@@ -38,6 +39,7 @@ GGLFWO* GGLFW_New() {
 	GGLFWO* lObj = (GGLFWO*)malloc(sizeof(GGLFWO));
 	lObj->Delete = GGLFW_Delete;
 	lObj->Init = GGLFW_Init;
+	lObj->WindowHint = GGLFW_WindowHint;
 	lObj->CreateWindow = GGLFW_CreateWindow;
 	lObj->KeyCallback = GGLFW_KeyCallback;
 	lObj->FrameCallback = GGLFW_FrameCallback;
@@ -79,6 +81,12 @@ static void GGLFW_Init() {
 #if defined(__WIN32)
     int lRes = glfwInit();
     if(lRes == 0) {GConsole()->Print("Error GGLFW_Init\n"); exit(0);}
+#endif
+}
+//===============================================
+static void GGLFW_WindowHint(int hint, int value) {
+#if defined(__WIN32)
+	glfwWindowHint(hint, value);
 #endif
 }
 //===============================================

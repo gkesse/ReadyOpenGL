@@ -8,6 +8,7 @@ typedef struct _GOpenGLO GOpenGLO;
 //===============================================
 struct _GOpenGLO {
 	void (*Delete)();
+	void (*Version)();
 	void (*Enable)(int cap);
 	void (*Hint)(int target, int mode);
 	void (*BlendFunc)(int sfactor, int dfactor);

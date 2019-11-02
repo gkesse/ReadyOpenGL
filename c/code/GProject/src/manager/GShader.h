@@ -3,25 +3,23 @@
 #define _GShader_
 //===============================================
 #include "GInclude.h"
-#include "GMap.h"
 //===============================================
 typedef struct _GShaderO GShaderO;
-typedef struct _GMapO_GShader_GCHAR_PTR_GSHADERITEM_PTR GMapO_GShader_GCHAR_PTR_GSHADERITEM_PTR;
 //===============================================
 struct _GShaderO {
 	void (*Delete)();
-	void (*SetShader)(char* shaderName, sGShaderItem* shader);
-	void (*SetProgramId)(int* programId);
-	void (*LoadCode)(char* shaderName);
-	void (*CompileCode)(char* shaderName);
-	void (*CheckCompileCode)(char* shaderName);
-	void (*CreateProgram)();
-	void (*LinkProgram)(char* vertexName, char* fragmentName);
-	void (*CheckLinkProgram)();
-	void (*DeleteShader)(char* shaderName);
-	void (*LoadShader)(char* vertexName, char* fragmentName);
-	GMapO(GShader, GCHAR_PTR, GSHADERITEM_PTR)* m_shaderMap;
-	int* m_programId;
+	void (*LoadCode)(sGShader* shader);
+	void (*CreateShader)(sGShader* shader);
+	void (*CompileCode)(sGShader* shader);
+	void (*CheckCompileCode)(sGShader* shader);
+	void (*CreateProgram)(sGShader* shader);
+	void (*LinkProgram)(sGShader* shader);
+	void (*CheckLinkProgram)(sGShader* shader);
+	void (*DeleteShader)(sGShader* shader);
+	void (*UseProgram)(sGShader* shader);
+	void (*BindVertexArray)(sGShader* shader);
+	void (*GenBuffers)(sGShader* shader);
+	void (*LoadShader)(sGShader* shader);
 };
 //===============================================
 GShaderO* GShader_New();

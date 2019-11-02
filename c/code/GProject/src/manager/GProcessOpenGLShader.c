@@ -8,6 +8,7 @@
 static GProcessO* m_GProcessOpenGLShaderO = 0;
 //===============================================
 static void GProcessOpenGLShader_Run(int argc, char** argv);
+static void GProcessOpenGLShader_Init(sGWindow* sWindow);
 static void GProcessOpenGLShader_Update(sGWindow* sWindow);
 //===============================================
 GProcessO* GProcessOpenGLShader_New() {
@@ -48,9 +49,39 @@ static void GProcessOpenGLShader_Run(int argc, char** argv) {
 			"WINDOW",
 			"OpenGL | ReadyDev",
 			400, 400,
-			GProcessOpenGLShader_Update
+			GProcessOpenGLShader_Update,
+			GProcessOpenGLShader_Init
 	};
 	GOpenGL()->MainLoop(&lWindow);
+}
+//===============================================
+static void GProcessOpenGLShader_Init(sGWindow* sWindow) {
+	sGShaderItem lShaderMap[] = {
+			{TRUE, "VERTEX", "../data/shader/simple.vert", 0, 0, GL_VERTEX_SHADER},
+			{TRUE, "FRAGMENT", "../data/shader/simple.frag", 0, 0, GL_FRAGMENT_SHADER},
+			{FALSE, 0, 0, 0, 0}
+	};
+	sGFragData lFragData[] = {
+			{TRUE, 0, "color_out"},
+			{FALSE, 0, 0}
+	};
+	sGVertexArray lVertexArray[] = {
+			{TRUE, 1},
+			{FALSE, 0}
+	};
+	sGGenBuffer lGenBuffer[] = {
+			{TRUE, 1},
+			{TRUE, 1},
+			{FALSE, 0}
+	};
+	sGShader lShader = {
+			0,
+			lShaderMap,
+			lFragData,
+			lVertexArray,
+			lGenBuffer
+	};
+	GShader()->LoadShader(&lShader);
 }
 //===============================================
 static void GProcessOpenGLShader_Update(sGWindow* sWindow) {
@@ -74,17 +105,6 @@ static void GProcessOpenGLShader_Update(sGWindow* sWindow) {
 			1, {0.2, 0.2, 0.2, 1.0},
 			2, {0.9, 0.9, 0.9, 1.0}
 	};
-
-	sGShader lShader = {
-			0,
-			{0, 0, 0},
-			{0, 0, 0}
-	};
-
-	GShader()->SetShader("VERTEX", &lShader.vertex);
-	GShader()->SetShader("FRAGMENT", &lShader.fragment);
-	GShader()->SetProgramId(&lShader.programId);
-	GShader()->LoadShader("VERTEX", "FRAGMENT");
 
 	GOpenGL()->DrawGrid(lGrid);
 	GOpenGL()->DrawOrigin();

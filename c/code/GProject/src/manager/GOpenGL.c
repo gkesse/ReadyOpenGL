@@ -1,15 +1,17 @@
 //===============================================
 #include "GOpenGL.h"
 #include "GGLFW.h"
+#include "GGLew.h"
 #include "GEvent.h"
-#include "GFunction.h"
 #include "GHeat.h"
+#include "GFunction.h"
 #include "GConsole.h"
 //===============================================
 #define GDIRECTION_0 (sGDirection){{0.0, 0.0, -2.0}, {-70.0, 0.0, 210.0}, {1.0, 1.0, 1.0}};
 //===============================================
 static GOpenGLO* m_GOpenGLO = 0;
 //===============================================
+static void GOpenGL_Version();
 static void GOpenGL_Enable(int cap);
 static void GOpenGL_Hint(int target, int mode);
 static void GOpenGL_BlendFunc(int sfactor, int dfactor);
@@ -52,6 +54,7 @@ GOpenGLO* GOpenGL_New() {
     lObj->m_direction = lObj->m_direction0;
 
     lObj->Delete = GOpenGL_Delete;
+    lObj->Version = GOpenGL_Version;
     lObj->Enable = GOpenGL_Enable;
     lObj->Hint = GOpenGL_Hint;
     lObj->BlendFunc = GOpenGL_BlendFunc;
@@ -100,6 +103,13 @@ GOpenGLO* GOpenGL() {
         m_GOpenGLO = GOpenGL_New();
     }
     return m_GOpenGLO;
+}
+//===============================================
+static void GOpenGL_Version() {
+#if defined(__WIN32)
+    const uchar* lVersion = glGetString(GL_VERSION);
+    GConsole()->Print("GL_VERSION: %s\n", lVersion);
+#endif
 }
 //===============================================
 static void GOpenGL_Enable(int cap) {
@@ -713,6 +723,13 @@ static void GOpenGL_MainLoop(sGWindow* sWindow) {
     char* lTitle = sWindow->title;
 
     GGLFW()->Init();
+
+    //GGLFW()->WindowHint(GLFW_SAMPLES, 4);
+    //GGLFW()->WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    //GGLFW()->WindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    //GGLFW()->WindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+    //GGLFW()->WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     GGLFW()->CreateWindow(lWindowName, lWidth, lHeight, lTitle);
 
     GGLFW()->KeyCallback(lWindowName, GEvent()->KeyCallBack);
@@ -723,6 +740,9 @@ static void GOpenGL_MainLoop(sGWindow* sWindow) {
 
     GGLFW()->MakeContext(lWindowName);
     GGLFW()->SwapInterval(1);
+    GGLew()->Experimental(TRUE);
+
+    GGLew()->Init();
 
     GOpenGL()->Enable(GL_BLEND);
     GOpenGL()->Enable(GL_LINE_SMOOTH);
@@ -733,7 +753,11 @@ static void GOpenGL_MainLoop(sGWindow* sWindow) {
     GOpenGL()->Hint(GL_POINT_SMOOTH_HINT, GL_NICEST);
     GOpenGL()->BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    while(1) {
+	GOpenGL()->Version();
+
+	if(sWindow->init != 0) sWindow->init(sWindow);
+
+	while(1) {
         int lRes = GGLFW()->WindowClose(lWindowName);
         if(lRes == 1) break;
 

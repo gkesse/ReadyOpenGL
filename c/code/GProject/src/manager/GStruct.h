@@ -33,7 +33,13 @@ typedef struct _sGCamera sGCamera;
 typedef struct _sGMCML sGMCML;
 typedef struct _sGHeat sGHeat;
 typedef struct _sGShaderItem sGShaderItem;
+typedef struct _sGFragData sGFragData;
+typedef struct _sGVertexArray sGVertexArray;
+typedef struct _sGGenBuffer sGGenBuffer;
 typedef struct _sGShader sGShader;
+//===============================================
+typedef void (*GOPENGL_UPDATE_CALLBACK)(sGWindow* sWindow);
+typedef void (*GOPENGL_INIT_CALLBACK)(sGWindow* sWindow);
 //===============================================
 struct _sGWindow {
 	char* name;
@@ -41,6 +47,7 @@ struct _sGWindow {
     int width;
     int height;
     GOPENGL_UPDATE_CALLBACK update;
+    GOPENGL_UPDATE_CALLBACK init;
 };
 //===============================================
 struct _sGVertex {
@@ -314,15 +321,36 @@ struct _sGHeat {
 };
 //===============================================
 struct _sGShaderItem {
+	int onFlag;
+	char* shaderName;
 	char* filename;
 	char* shaderCode;
-	int shaderId;
+	uint shaderId;
+	int shaderType;
+};
+//===============================================
+struct _sGFragData {
+	int onFlag;
+	int colorNumber;
+	char* colorName;
+};
+//===============================================
+struct _sGVertexArray {
+	int onFlag;
+	int nVertex;
+};
+//===============================================
+struct _sGGenBuffer {
+	int onFlag;
+	int nBuffer;
 };
 //===============================================
 struct _sGShader {
-	int programId;
-	sGShaderItem vertex;
-	sGShaderItem fragment;
+	uint programId;
+	sGShaderItem* shaderItem;
+	sGFragData* fragData;
+	sGVertexArray* vertexArray;
+	sGGenBuffer* genBuffer;
 };
 //===============================================
 #endif
