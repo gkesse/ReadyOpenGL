@@ -34,6 +34,7 @@ static void GOpenGL_DrawMcmlSlice(sGMCML obj);
 static void GOpenGL_DrawLine(sGLine obj);
 static void GOpenGL_DrawLines(sGData obj);
 static void GOpenGL_DrawTriangle(sGTriangle obj);
+static void GOpenGL_DrawArray(sGShaderArray obj);
 static void GOpenGL_DrawGrid(sGGrid obj);
 static void GOpenGL_DrawOrigin();
 static void GOpenGL_DrawFunction(sGFunction* obj);
@@ -77,6 +78,7 @@ GOpenGLO* GOpenGL_New() {
     lObj->DrawLine = GOpenGL_DrawLine;
     lObj->DrawLines = GOpenGL_DrawLines;
     lObj->DrawTriangle = GOpenGL_DrawTriangle;
+    lObj->DrawArray = GOpenGL_DrawArray;
     lObj->DrawGrid = GOpenGL_DrawGrid;
     lObj->DrawOrigin = GOpenGL_DrawOrigin;
     lObj->DrawFunction = GOpenGL_DrawFunction;
@@ -444,6 +446,12 @@ static void GOpenGL_DrawTriangle(sGTriangle obj) {
 #endif
 }
 //===============================================
+static void GOpenGL_DrawArray(sGShaderArray obj) {
+#if defined(__WIN32)
+    glDrawArrays(obj.arrayMode, obj.arrayFirst, obj.arrayCount);
+#endif
+}
+//===============================================
 static void GOpenGL_DrawGrid(sGGrid obj) {
 #if defined(__WIN32)
     double lWidth = obj.width;
@@ -724,9 +732,9 @@ static void GOpenGL_MainLoop(sGWindow* sWindow) {
 
     GGLFW()->Init();
 
-    //GGLFW()->WindowHint(GLFW_SAMPLES, 4);
-    //GGLFW()->WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    //GGLFW()->WindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    GGLFW()->WindowHint(GLFW_SAMPLES, 4);
+    GGLFW()->WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    GGLFW()->WindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     //GGLFW()->WindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     //GGLFW()->WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 

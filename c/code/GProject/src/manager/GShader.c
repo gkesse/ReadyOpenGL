@@ -15,7 +15,8 @@ static void GShader_CheckLinkProgram(sGShader* shader);
 static void GShader_DeleteShader(sGShader* shader);
 static void GShader_UseProgram(sGShader* shader);
 static void GShader_BindVertexArray(sGShader* shader);
-static void GShader_GenBuffers(sGShader* shader);
+static void GShader_BindBuffer(sGShader* shader);
+static void GShader_AttribPointer(sGShader* shader);
 static void GShader_LoadShader(sGShader* shader);
 //===============================================
 GShaderO* GShader_New() {
@@ -31,7 +32,8 @@ GShaderO* GShader_New() {
 	lObj->DeleteShader = GShader_DeleteShader;
 	lObj->UseProgram = GShader_UseProgram;
 	lObj->BindVertexArray = GShader_BindVertexArray;
-	lObj->GenBuffers = GShader_GenBuffers;
+	lObj->BindBuffer = GShader_BindBuffer;
+	lObj->AttribPointer = GShader_AttribPointer;
 	lObj->LoadShader = GShader_LoadShader;
 	return lObj;
 }
@@ -147,9 +149,9 @@ static void GShader_DeleteShader(sGShader* shader) {
 static void GShader_UseProgram(sGShader* shader) {
 	int i = 0;
 	while(1) {
-		sGFragData* lFragData = &shader->fragData[i++];
-		if(lFragData->onFlag == FALSE) break;
-		glBindFragDataLocation(shader->programId, lFragData->colorNumber, lFragData->colorName);
+		sGShaderFrag* lShaderFrag = &shader->shaderFrag[i++];
+		if(lShaderFrag->onFlag == FALSE) break;
+		glBindFragDataLocation(shader->programId, lShaderFrag->colorNumber, lShaderFrag->colorName);
 	}
 	glUseProgram(shader->programId);
 }
@@ -157,21 +159,34 @@ static void GShader_UseProgram(sGShader* shader) {
 static void GShader_BindVertexArray(sGShader* shader) {
 	int i = 0;
 	while(1) {
-		sGVertexArray* lVertexArray = &shader->vertexArray[i++];
-		if(lVertexArray->onFlag == FALSE) break;
+		sGShaderVAO* lShaderVAO = &shader->shaderVAO[i++];
+		if(lShaderVAO->onFlag == FALSE) break;
 		uint lArray;
-		glGenVertexArrays(lVertexArray->nVertex, &lArray);
+		glGenVertexArrays(lShaderVAO->nVertex, &lArray);
 		glBindVertexArray(lArray);
 	}
 }
 //===============================================
-static void GShader_GenBuffers(sGShader* shader) {
+static void GShader_BindBuffer(sGShader* shader) {
 	int i = 0;
 	while(1) {
-		sGGenBuffer* lGenBuffer = &shader->genBuffer[i++];
-		if(lGenBuffer->onFlag == FALSE) break;
-		uint lBuffer;
-		glGenBuffers(lGenBuffer->nBuffer, &lBuffer);
+		sGShaderVBO* lShaderVBO = &shader->shaderVBO[i++];
+		if(lShaderVBO->onFlag == FALSE) break;
+		glGenBuffers(lShaderVBO->nBuffer, &lShaderVBO->bufferId);
+		glBindBuffer(GL_ARRAY_BUFFER, lShaderVBO->bufferId);
+		glBufferData(GL_ARRAY_BUFFER, lShaderVBO->bufferSize, lShaderVBO->bufferData, GL_STATIC_DRAW);
+	}
+}
+//===============================================
+static void GShader_AttribPointer(sGShader* shader) {
+	int i = 0;
+	while(1) {
+		sGShaderAttrib* lShaderAttrib = &shader->shaderAttrib[i++];
+		if(lShaderAttrib->onFlag == FALSE) break;
+	    lShaderAttrib->attribId = glGetAttribLocation(shader->programId, lShaderAttrib->attribName);
+	    glEnableVertexAttribArray(lShaderAttrib->attribId);
+		glBindBuffer(GL_ARRAY_BUFFER, *lShaderAttrib->bufferId);
+		glVertexAttribPointer(lShaderAttrib->attribId, lShaderAttrib->attribSize, GL_DOUBLE, GL_FALSE, 0, GPOINTER_NULL);
 	}
 }
 //===============================================
@@ -185,7 +200,8 @@ static void GShader_LoadShader(sGShader* shader) {
 	GShader()->CheckLinkProgram(shader);
 	GShader()->DeleteShader(shader);
 	GShader()->UseProgram(shader);
-	//GShader()->BindVertexArray(shader);
-	//GShader()->GenBuffers(shader);
+	GShader()->BindVertexArray(shader);
+	GShader()->BindBuffer(shader);
+	GShader()->AttribPointer(shader);
 }
 //===============================================

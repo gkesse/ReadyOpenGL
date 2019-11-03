@@ -33,9 +33,11 @@ typedef struct _sGCamera sGCamera;
 typedef struct _sGMCML sGMCML;
 typedef struct _sGHeat sGHeat;
 typedef struct _sGShaderItem sGShaderItem;
-typedef struct _sGFragData sGFragData;
-typedef struct _sGVertexArray sGVertexArray;
-typedef struct _sGGenBuffer sGGenBuffer;
+typedef struct _sGShaderFrag sGShaderFrag;
+typedef struct _sGShaderVAO sGShaderVAO;
+typedef struct _sGShaderVBO sGShaderVBO;
+typedef struct _sGShaderAttrib sGShaderAttrib;
+typedef struct _sGShaderArray sGShaderArray;
 typedef struct _sGShader sGShader;
 //===============================================
 typedef void (*GOPENGL_UPDATE_CALLBACK)(sGWindow* sWindow);
@@ -329,28 +331,47 @@ struct _sGShaderItem {
 	int shaderType;
 };
 //===============================================
-struct _sGFragData {
+struct _sGShaderFrag {
 	int onFlag;
 	int colorNumber;
 	char* colorName;
 };
 //===============================================
-struct _sGVertexArray {
+struct _sGShaderVAO {
 	int onFlag;
 	int nVertex;
 };
 //===============================================
-struct _sGGenBuffer {
+struct _sGShaderVBO {
 	int onFlag;
+	char* bufferName;
 	int nBuffer;
+	uint bufferId;
+	double* bufferData;
+	int bufferSize;
+};
+//===============================================
+struct _sGShaderAttrib {
+	int onFlag;
+	char* attribName;
+	uint attribId;
+	int attribSize;
+	uint* bufferId;
+};
+//===============================================
+struct _sGShaderArray {
+	int arrayMode;
+	int arrayFirst;
+	int arrayCount;
 };
 //===============================================
 struct _sGShader {
 	uint programId;
 	sGShaderItem* shaderItem;
-	sGFragData* fragData;
-	sGVertexArray* vertexArray;
-	sGGenBuffer* genBuffer;
+	sGShaderFrag* shaderFrag;
+	sGShaderVAO* shaderVAO;
+	sGShaderVBO* shaderVBO;
+	sGShaderAttrib* shaderAttrib;
 };
 //===============================================
 #endif

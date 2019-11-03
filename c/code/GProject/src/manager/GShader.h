@@ -18,7 +18,8 @@ struct _GShaderO {
 	void (*DeleteShader)(sGShader* shader);
 	void (*UseProgram)(sGShader* shader);
 	void (*BindVertexArray)(sGShader* shader);
-	void (*GenBuffers)(sGShader* shader);
+	void (*BindBuffer)(sGShader* shader);
+	void (*AttribPointer)(sGShader* shader);
 	void (*LoadShader)(sGShader* shader);
 };
 //===============================================

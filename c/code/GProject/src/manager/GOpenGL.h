@@ -31,6 +31,7 @@ struct _GOpenGLO {
 	void (*DrawLine)(sGLine obj);
 	void (*DrawLines)(sGData obj);
 	void (*DrawTriangle)(sGTriangle obj);
+	void (*DrawArray)(sGShaderArray obj);
 	void (*DrawGrid)(sGGrid obj);
 	void (*DrawOrigin)();
 	void (*DrawFunction)(sGFunction* obj);

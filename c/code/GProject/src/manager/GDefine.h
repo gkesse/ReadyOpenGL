@@ -2,6 +2,8 @@
 #ifndef _GDefine_
 #define _GDefine_
 //===============================================
+#define GPOINTER_NULL (void*)0
+//===============================================
 #define GMCML_BUFFER_X 50
 #define GMCML_BUFFER_Y 50
 #define GMCML_BUFFER_Z 200
