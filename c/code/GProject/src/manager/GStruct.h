@@ -39,6 +39,9 @@ typedef struct _sGShaderVBO sGShaderVBO;
 typedef struct _sGShaderAttrib sGShaderAttrib;
 typedef struct _sGShaderArray sGShaderArray;
 typedef struct _sGShader sGShader;
+typedef struct _sGTextureImage sGTextureImage;
+typedef struct _sGTextureItem sGTextureItem;
+typedef struct _sGTexture sGTexture;
 //===============================================
 typedef void (*GOPENGL_UPDATE_CALLBACK)(sGWindow* sWindow);
 typedef void (*GOPENGL_INIT_CALLBACK)(sGWindow* sWindow);
@@ -372,6 +375,25 @@ struct _sGShader {
 	sGShaderVAO* shaderVAO;
 	sGShaderVBO* shaderVBO;
 	sGShaderAttrib* shaderAttrib;
+};
+//===============================================
+struct _sGTextureImage {
+	char* imageFile;
+	uchar* imageData;
+	int imageWidth;
+	int imageHeight;
+	int imageChannel;
+};
+//===============================================
+struct _sGTextureItem {
+	int nTexture;
+	uint textureId;
+	int textureFormat;
+};
+//===============================================
+struct _sGTexture {
+	sGTextureImage textureImage;
+	sGTextureItem textureItem;
 };
 //===============================================
 #endif

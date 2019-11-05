@@ -2,14 +2,15 @@
 #include "GProcessOpenGLShader.h"
 #include "GOpenGL.h"
 #include "GGLFW.h"
+#include "GGLew.h"
 #include "GEvent.h"
 #include "GShader.h"
 //===============================================
 static GProcessO* m_GProcessOpenGLShaderO = 0;
 //===============================================
 static void GProcessOpenGLShader_Run(int argc, char** argv);
-static void GProcessOpenGLShader_Init(sGWindow* sWindow);
-static void GProcessOpenGLShader_Update(sGWindow* sWindow);
+static void GProcessOpenGLShader_Init();
+static void GProcessOpenGLShader_Update();
 //===============================================
 GProcessO* GProcessOpenGLShader_New() {
 	GProcessO* lParent = GProcess_New();
@@ -45,17 +46,37 @@ GProcessO* GProcessOpenGLShader() {
 }
 //===============================================
 static void GProcessOpenGLShader_Run(int argc, char** argv) {
-	sGWindow lWindow = {
-			"WINDOW",
-			"OpenGL | ReadyDev",
-			400, 400,
-			GProcessOpenGLShader_Update,
-			GProcessOpenGLShader_Init
-	};
-	GOpenGL()->MainLoop(&lWindow);
+	GGLFW()->Init();
+	GGLFW()->CreateWindow("WINDOW", 400, 400, "OpenGL | ReadyDev");
+	GGLFW()->MakeContext("WINDOW");
+
+	GOpenGL()->Enable(GL_LINE_SMOOTH);
+	GOpenGL()->Hint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	GOpenGL()->Enable(GL_POINT_SMOOTH);
+	GOpenGL()->Hint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	GOpenGL()->Enable(GL_BLEND);
+	GOpenGL()->BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	GGLew()->Experimental(TRUE);
+	GGLew()->Init();
+
+	GProcessOpenGLShader_Init();
+
+	while(1) {
+		int lRes = GGLFW()->WindowClose("WINDOW");
+		if(lRes == 1) break;
+
+		GProcessOpenGLShader_Update();
+
+		GGLFW()->SwapBuffers("WINDOW");
+		GGLFW()->PollEvents();
+	}
+
+	GGLFW()->DestroyWindow("WINDOW");
+	GGLFW()->Terminate();
 }
 //===============================================
-static void GProcessOpenGLShader_Init(sGWindow* sWindow) {
+static void GProcessOpenGLShader_Init() {
 	sGShaderItem lShaderMap[] = {
 			{TRUE, "VERTEX", "../data/shader/simple.vert", 0, 0, GL_VERTEX_SHADER},
 			{TRUE, "FRAGMENT", "../data/shader/simple.frag", 0, 0, GL_FRAGMENT_SHADER},
@@ -70,12 +91,12 @@ static void GProcessOpenGLShader_Init(sGWindow* sWindow) {
 			{FALSE, 0}
 	};
 	double lVertexData[] = {
-			-1.0, -1.0, 0.0,
-			1.0, -1.0, 0.0,
-			1.0, 1.0, 0.0,
-			-1.0, -1.0, 0.0,
-			1.0, 1.0, 0.0,
-			-1.0, 1.0, 0.0
+			-0.5, -0.5, 0.0,
+			0.5, -0.5, 0.0,
+			0.5, 0.5, 0.0,
+			-0.5, -0.5, 0.0,
+			0.5, 0.5, 0.0,
+			-0.5, 0.5, 0.0
 	};
 	double lColorsData[]={
 			0.0, 0.0, 1.0,
@@ -106,21 +127,9 @@ static void GProcessOpenGLShader_Init(sGWindow* sWindow) {
 	GShader()->LoadShader(&lShader);
 }
 //===============================================
-static void GProcessOpenGLShader_Update(sGWindow* sWindow) {
-	GOpenGL()->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+static void GProcessOpenGLShader_Update() {
+	GOpenGL()->Clear(GL_COLOR_BUFFER_BIT);
 	GOpenGL()->ClearColor(0.0, 0.0, 0.0, 1.0);
-	GOpenGL()->ModelView();
-
-	GOpenGL()->InitDirection();
-
-	sGEvent* lEvent = GEvent()->GetEvent();
-
-	if(lEvent->frame.onFlag == TRUE) {
-		sGCamera lCamera = {45.0, 0.1, 120.0};
-		GOpenGL()->Viewport(sWindow->name);
-		GOpenGL()->Projection();
-		GOpenGL()->Frustum(sWindow->name, lCamera);
-	}
 
 	sGShaderArray lShaderArray = {
 			GL_TRIANGLES, 0, 6

@@ -16,8 +16,17 @@ GProcessO* GProcessOpenGLGaussian2D_New() {
 	GProcessO* lParent = GProcess_New();
 	GProcessOpenGLGaussian2DO* lChild = (GProcessOpenGLGaussian2DO*)malloc(sizeof(GProcessOpenGLGaussian2DO));
 
+	sGDirection* lDirection = GOpenGL()->GetDirection();
+	*lDirection = (sGDirection){
+		{0.0, 0.0, -0.5},
+		{-70.0, 0.0, 220.0},
+		{1.0, 1.0, 1.0}
+	};
+
+	GOpenGL()->SetDirection(*lDirection);
+
 	lChild->m_parent = lParent;
-	lChild->m_gaussian2D = (sGGaussian2D){1.0, 1.0, 0.0, 0.0};
+	lChild->m_gaussian2D = (sGGaussian2D){0.6, 0.6, 0.0, 0.0};
 
 	lParent->m_child = lChild;
 	lParent->Delete = GProcessOpenGLGaussian2D_Delete;
@@ -84,6 +93,10 @@ static void GProcessOpenGLGaussian2D_Update(sGWindow* sWindow) {
 				lGaussian2D->sigmaY = lGaussian2D->sigmaX;
 				break;
 			}
+			GConsole()->Print("Gaussian 2D...[Sigma, x0, y0] : [%.2lf , %.2lf , %.2lf]\n",
+					lGaussian2D->sigmaY,
+					lGaussian2D->x0,
+					lGaussian2D->y0);
 		}
 	}
 
@@ -100,7 +113,6 @@ static void GProcessOpenGLGaussian2D_Update(sGWindow* sWindow) {
 	};
 
 	GOpenGL()->DrawFunctionHeatMap(&lFunction);
-	GOpenGL()->DrawGrid(lGrid);
 	GOpenGL()->DrawOrigin();
 }
 //===============================================

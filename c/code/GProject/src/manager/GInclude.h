@@ -17,6 +17,7 @@
 //===============================================
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <SOIL.h>
 //===============================================
 #elif defined(__unix)
 #define G_PLATEFORM_OS "UNIX"

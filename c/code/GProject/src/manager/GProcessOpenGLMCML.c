@@ -73,21 +73,6 @@ static void GProcessOpenGLMCML_Update(sGWindow* sWindow) {
 		GOpenGL()->Frustum(sWindow->name, lCamera);
 	}
 
-	if(lEvent->key.onFlag == TRUE) {
-		//GConsole()->Print("[ KEY ] : %d\n", lEvent->key.key);
-
-		if(lEvent->key.action == GLFW_PRESS) {
-			switch(lEvent->key.key ) {
-			// Variation suivant -Sigma
-			case GLFW_KEY_Y:
-				break;
-				// Variation suivant +Sigma
-			case GLFW_KEY_B:
-				break;
-			}
-		}
-	}
-
 	sGGrid lGrid = {
 			5.0, 1.0, 1.0/10,
 			1, {0.2, 0.2, 0.2, 1.0},
