@@ -12,7 +12,9 @@ struct _GTextureO {
     void (*CreateTexture)(sGTexture* texture);
     void (*BindTexture)(sGTexture* texture);
     void (*FreeImage)(sGTexture* texture);
-    void (*UpdateTexture)(sGTexture* texture);};
+    void (*UpdateTexture)(sGTexture* texture);
+    void (*LoadTexture)(sGTexture* texture);
+};
 //===============================================
 GTextureO* GTexture_New();
 void GTexture_Delete();

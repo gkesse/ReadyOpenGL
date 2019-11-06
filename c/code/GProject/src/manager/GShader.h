@@ -8,18 +8,19 @@ typedef struct _GShaderO GShaderO;
 //===============================================
 struct _GShaderO {
 	void (*Delete)();
-	void (*LoadCode)(sGShader* shader);
-	void (*CreateShader)(sGShader* shader);
-	void (*CompileCode)(sGShader* shader);
-	void (*CheckCompileCode)(sGShader* shader);
+	void (*LoadCode)(sGShaderItem* shader);
+	void (*CreateShader)(sGShaderItem* shader);
+	void (*CompileCode)(sGShaderItem* shader);
+	void (*CheckCompileCode)(sGShaderItem* shader);
 	void (*CreateProgram)(sGShader* shader);
 	void (*LinkProgram)(sGShader* shader);
 	void (*CheckLinkProgram)(sGShader* shader);
 	void (*DeleteShader)(sGShader* shader);
 	void (*UseProgram)(sGShader* shader);
-	void (*BindVertexArray)(sGShader* shader);
-	void (*BindBuffer)(sGShader* shader);
-	void (*AttribPointer)(sGShader* shader);
+	void (*BindFragDataLocation)(sGShaderFrag* shaderFrag);
+	void (*BindVertexArray)(sGShaderVAO* shader);
+	void (*BindBuffer)(sGShaderVBO* shader);
+	void (*EnableVertexAttribArray)(sGShaderAttrib* shader);
 	void (*LoadShader)(sGShader* shader);
 };
 //===============================================

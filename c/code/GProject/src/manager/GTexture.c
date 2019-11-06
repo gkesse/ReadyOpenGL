@@ -9,6 +9,7 @@ static void GTexture_CreateTexture(sGTexture* texture);
 static void GTexture_BindTexture(sGTexture* texture);
 static void GTexture_FreeImage(sGTexture* texture);
 static void GTexture_UpdateTexture(sGTexture* texture);
+static void GTexture_LoadTexture(sGTexture* texture);
 //===============================================
 GTextureO* GTexture_New() {
 	GTextureO* lObj = (GTextureO*)malloc(sizeof(GTextureO));
@@ -18,6 +19,7 @@ GTextureO* GTexture_New() {
 	lObj->BindTexture = GTexture_BindTexture;
 	lObj->FreeImage = GTexture_FreeImage;
 	lObj->UpdateTexture = GTexture_UpdateTexture;
+	lObj->LoadTexture = GTexture_LoadTexture;
 	return lObj;
 }
 //===============================================
@@ -86,5 +88,12 @@ static void GTexture_UpdateTexture(sGTexture* texture) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_2D);
+}
+//===============================================
+static void GTexture_LoadTexture(sGTexture* texture) {
+	GTexture()->LoadImage(texture);
+	GTexture()->CreateTexture(texture);
+	GTexture()->BindTexture(texture);
+	GTexture()->FreeImage(texture);
 }
 //===============================================

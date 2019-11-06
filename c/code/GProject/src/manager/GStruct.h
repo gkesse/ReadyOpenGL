@@ -326,8 +326,6 @@ struct _sGHeat {
 };
 //===============================================
 struct _sGShaderItem {
-	int onFlag;
-	char* shaderName;
 	char* filename;
 	char* shaderCode;
 	uint shaderId;
@@ -335,31 +333,29 @@ struct _sGShaderItem {
 };
 //===============================================
 struct _sGShaderFrag {
-	int onFlag;
+	uint programId;
 	int colorNumber;
 	char* colorName;
 };
 //===============================================
 struct _sGShaderVAO {
-	int onFlag;
-	int nVertex;
+	int nVAO;
+	uint vaoId;
 };
 //===============================================
 struct _sGShaderVBO {
-	int onFlag;
-	char* bufferName;
-	int nBuffer;
-	uint bufferId;
-	double* bufferData;
-	int bufferSize;
+	int nVBO;
+	uint vboId;
+	double* vboData;
+	int vboSize;
 };
 //===============================================
 struct _sGShaderAttrib {
-	int onFlag;
+	uint programId;
 	char* attribName;
 	uint attribId;
 	int attribSize;
-	uint* bufferId;
+	uint vboId;
 };
 //===============================================
 struct _sGShaderArray {
@@ -370,11 +366,8 @@ struct _sGShaderArray {
 //===============================================
 struct _sGShader {
 	uint programId;
-	sGShaderItem* shaderItem;
-	sGShaderFrag* shaderFrag;
-	sGShaderVAO* shaderVAO;
-	sGShaderVBO* shaderVBO;
-	sGShaderAttrib* shaderAttrib;
+	sGShaderItem vert;
+	sGShaderItem frag;
 };
 //===============================================
 struct _sGTextureImage {

@@ -13,6 +13,7 @@
 #include "GProcessOpenGLEcgData.h"
 #include "GProcessOpenGLMCML.h"
 #include "GProcessOpenGLShader.h"
+#include "GProcessOpenGLTexture.h"
 #include "GString2.h"
 #include "GConfig.h"
 //===============================================
@@ -46,6 +47,7 @@ GProcessO* GProcess() {
     if(GString2()->IsEqual(lKey, "OPENGL_ECG")) return GProcessOpenGLEcgData();
     if(GString2()->IsEqual(lKey, "OPENGL_MCML")) return GProcessOpenGLMCML();
     if(GString2()->IsEqual(lKey, "OPENGL_SHADER")) return GProcessOpenGLShader();
+    if(GString2()->IsEqual(lKey, "OPENGL_TEXTURE")) return GProcessOpenGLTexture();
     return GProcessHelp();
 }
 //===============================================

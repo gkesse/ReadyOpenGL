@@ -1,20 +1,20 @@
 //===============================================
-#include "GProcessOpenGLShader.h"
+#include "GProcessOpenGLTexture.h"
 #include "GOpenGL.h"
 #include "GGLFW.h"
 #include "GGLew.h"
 #include "GEvent.h"
 #include "GShader.h"
 //===============================================
-static GProcessO* m_GProcessOpenGLShaderO = 0;
+static GProcessO* m_GProcessOpenGLTextureO = 0;
 //===============================================
-static void GProcessOpenGLShader_Run(int argc, char** argv);
-static void GProcessOpenGLShader_Init();
-static void GProcessOpenGLShader_Update();
+static void GProcessOpenGLTexture_Run(int argc, char** argv);
+static void GProcessOpenGLTexture_Init();
+static void GProcessOpenGLTexture_Update();
 //===============================================
-GProcessO* GProcessOpenGLShader_New() {
+GProcessO* GProcessOpenGLTexture_New() {
 	GProcessO* lParent = GProcess_New();
-	GProcessOpenGLShaderO* lChild = (GProcessOpenGLShaderO*)malloc(sizeof(GProcessOpenGLShaderO));
+	GProcessOpenGLTextureO* lChild = (GProcessOpenGLTextureO*)malloc(sizeof(GProcessOpenGLTextureO));
 
 	sGDirection* lDirection = GOpenGL()->GetDirection();
 	*lDirection = (sGDirection){
@@ -28,24 +28,24 @@ GProcessO* GProcessOpenGLShader_New() {
 	lChild->m_parent = lParent;
 
 	lParent->m_child = lChild;
-	lParent->Delete = GProcessOpenGLShader_Delete;
-	lParent->Run = GProcessOpenGLShader_Run;
+	lParent->Delete = GProcessOpenGLTexture_Delete;
+	lParent->Run = GProcessOpenGLTexture_Run;
 	return lParent;
 }
 //===============================================
-void GProcessOpenGLShader_Delete() {
-	GProcess_Delete(m_GProcessOpenGLShaderO);
-	m_GProcessOpenGLShaderO = 0;
+void GProcessOpenGLTexture_Delete() {
+	GProcess_Delete(m_GProcessOpenGLTextureO);
+	m_GProcessOpenGLTextureO = 0;
 }
 //===============================================
-GProcessO* GProcessOpenGLShader() {
-	if(m_GProcessOpenGLShaderO == 0) {
-		m_GProcessOpenGLShaderO = GProcessOpenGLShader_New();
+GProcessO* GProcessOpenGLTexture() {
+	if(m_GProcessOpenGLTextureO == 0) {
+		m_GProcessOpenGLTextureO = GProcessOpenGLTexture_New();
 	}
-	return m_GProcessOpenGLShaderO;
+	return m_GProcessOpenGLTextureO;
 }
 //===============================================
-static void GProcessOpenGLShader_Run(int argc, char** argv) {
+static void GProcessOpenGLTexture_Run(int argc, char** argv) {
 	GGLFW()->Init();
 	GGLFW()->CreateWindow("WINDOW", 400, 400, "OpenGL | ReadyDev");
 	GGLFW()->MakeContext("WINDOW");
@@ -60,13 +60,13 @@ static void GProcessOpenGLShader_Run(int argc, char** argv) {
 	GGLew()->Experimental(TRUE);
 	GGLew()->Init();
 
-	GProcessOpenGLShader_Init();
+	GProcessOpenGLTexture_Init();
 
 	while(1) {
 		int lRes = GGLFW()->WindowClose("WINDOW");
 		if(lRes == 1) break;
 
-		GProcessOpenGLShader_Update();
+		GProcessOpenGLTexture_Update();
 
 		GGLFW()->SwapBuffers("WINDOW");
 		GGLFW()->PollEvents();
@@ -76,7 +76,7 @@ static void GProcessOpenGLShader_Run(int argc, char** argv) {
 	GGLFW()->Terminate();
 }
 //===============================================
-static void GProcessOpenGLShader_Init() {
+static void GProcessOpenGLTexture_Init() {
 	sGShaderItem lVertexShader = {
 			"../data/shader/simple.vert", 0, 0, GL_VERTEX_SHADER
 	};
@@ -122,9 +122,6 @@ static void GProcessOpenGLShader_Init() {
 	sGShaderVBO lColorVBO = {
 			1, 0, lColorData, sizeof(lColorData)
 	};
-	GShader()->BindBuffer(&lVertexVBO);
-	GShader()->BindBuffer(&lColorVBO);
-
 	sGShaderAttrib lPositionAttrib = {
 			lShader.programId,
 			"position",
@@ -140,7 +137,7 @@ static void GProcessOpenGLShader_Init() {
 	GShader()->UseProgram(&lShader);
 }
 //===============================================
-static void GProcessOpenGLShader_Update() {
+static void GProcessOpenGLTexture_Update() {
 	GOpenGL()->Clear(GL_COLOR_BUFFER_BIT);
 	GOpenGL()->ClearColor(0.0, 0.0, 0.0, 1.0);
 
