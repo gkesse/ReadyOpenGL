@@ -14,10 +14,13 @@ static void GShader_LinkProgram(sGShader* shader);
 static void GShader_CheckLinkProgram(sGShader* shader);
 static void GShader_DeleteShader(sGShader* shader);
 static void GShader_UseProgram(sGShader* shader);
+static void GShader_DeleteProgram(sGShader* shader);
 static void GShader_BindFragDataLocation(sGShaderFrag* shaderFrag);
 static void GShader_GetUniformLocation(sGShaderUniform* shader);
 static void GShader_BindVertexArray(sGShaderVAO* shader);
+static void GShader_DeleteVertexArray(sGShaderVAO* shader);
 static void GShader_BindBuffer(sGShaderVBO* shader);
+static void GShader_DeleteBuffer(sGShaderVBO* shader);
 static void GShader_EnableVertexAttribArray(sGShaderAttrib* shader);
 static void GShader_DisableVertexAttribArray(sGShaderAttrib* shader);
 static void GShader_LoadShader(sGShader* shader);
@@ -34,10 +37,13 @@ GShaderO* GShader_New() {
 	lObj->CheckLinkProgram = GShader_CheckLinkProgram;
 	lObj->DeleteShader = GShader_DeleteShader;
 	lObj->UseProgram = GShader_UseProgram;
+	lObj->DeleteProgram = GShader_DeleteProgram;
 	lObj->BindFragDataLocation = GShader_BindFragDataLocation;
 	lObj->GetUniformLocation = GShader_GetUniformLocation;
 	lObj->BindVertexArray = GShader_BindVertexArray;
+	lObj->DeleteVertexArray = GShader_DeleteVertexArray;
 	lObj->BindBuffer = GShader_BindBuffer;
+	lObj->DeleteBuffer = GShader_DeleteBuffer;
 	lObj->EnableVertexAttribArray = GShader_EnableVertexAttribArray;
 	lObj->DisableVertexAttribArray = GShader_DisableVertexAttribArray;
 	lObj->LoadShader = GShader_LoadShader;
@@ -129,6 +135,10 @@ static void GShader_UseProgram(sGShader* shader) {
 	glUseProgram(shader->programId);
 }
 //===============================================
+static void GShader_DeleteProgram(sGShader* shader) {
+	glDeleteProgram(shader->programId);
+}
+//===============================================
 static void GShader_BindFragDataLocation(sGShaderFrag* shaderFrag) {
 	glBindFragDataLocation(*shaderFrag->programId, shaderFrag->colorNumber, shaderFrag->colorName);
 }
@@ -137,15 +147,23 @@ static void GShader_GetUniformLocation(sGShaderUniform* shader) {
 	shader->uniformId = glGetUniformLocation(shader->programId, shader->uniformName);
 }
 //===============================================
-static void GShader_BindVertexArray(sGShaderVAO* shaderVAO) {
-	glGenVertexArrays(shaderVAO->nVAO, &shaderVAO->vaoId);
-	glBindVertexArray(shaderVAO->vaoId);
+static void GShader_BindVertexArray(sGShaderVAO* shader) {
+	glGenVertexArrays(shader->nVAO, &shader->vaoId);
+	glBindVertexArray(shader->vaoId);
 }
 //===============================================
-static void GShader_BindBuffer(sGShaderVBO* shaderVBO) {
-	glGenBuffers(shaderVBO->nVBO, &shaderVBO->vboId);
-	glBindBuffer(GL_ARRAY_BUFFER, shaderVBO->vboId);
-	glBufferData(GL_ARRAY_BUFFER, shaderVBO->vboSize, shaderVBO->vboData, GL_STATIC_DRAW);
+static void GShader_DeleteVertexArray(sGShaderVAO* shader) {
+	glDeleteVertexArrays(shader->nVAO, &shader->vaoId);
+}
+//===============================================
+static void GShader_BindBuffer(sGShaderVBO* shader) {
+	glGenBuffers(shader->nVBO, &shader->vboId);
+	glBindBuffer(GL_ARRAY_BUFFER, shader->vboId);
+	glBufferData(GL_ARRAY_BUFFER, shader->vboSize, shader->vboData, GL_STATIC_DRAW);
+}
+//===============================================
+static void GShader_DeleteBuffer(sGShaderVBO* shader) {
+	glDeleteBuffers(shader->nVBO, &shader->vboId);
 }
 //===============================================
 static void GShader_EnableVertexAttribArray(sGShaderAttrib* shader) {

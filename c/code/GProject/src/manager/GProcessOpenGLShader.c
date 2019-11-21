@@ -16,15 +16,6 @@ GProcessO* GProcessOpenGLShader_New() {
 	GProcessO* lParent = GProcess_New();
 	GProcessOpenGLShaderO* lChild = (GProcessOpenGLShaderO*)malloc(sizeof(GProcessOpenGLShaderO));
 
-	sGDirection* lDirection = GOpenGL()->GetDirection();
-	*lDirection = (sGDirection){
-		{0.0, 0.0, -2.5},
-		{-60.0, 0.0, 220.0},
-		{10.0, 10.0, 10.0}
-	};
-
-	GOpenGL()->SetDirection(*lDirection);
-
 	lChild->m_parent = lParent;
 
 	lParent->m_child = lChild;
@@ -46,6 +37,14 @@ GProcessO* GProcessOpenGLShader() {
 }
 //===============================================
 static void GProcessOpenGLShader_Run(int argc, char** argv) {
+	GProcessOpenGLShaderO* lProcess = m_GProcessOpenGLShaderO->m_child;
+	sGShader* lShader = &lProcess->m_shader;
+	sGShaderVAO* lShaderVAO = &lProcess->m_shaderVAO;
+	sGShaderVBO* lVertexVBO = &lProcess->m_vertexVBO;
+	sGShaderVBO* lColorVBO = &lProcess->m_colorVBO;
+	sGShaderAttrib* lPositionAttrib = &lProcess->m_positionAttrib;
+	sGShaderAttrib* lColorAttrib = &lProcess->m_colorAttrib;
+
 	GGLFW()->Init();
 	GGLFW()->CreateWindow("WINDOW", 400, 400, "OpenGL | ReadyDev");
 	GGLFW()->MakeContext("WINDOW");
@@ -72,26 +71,41 @@ static void GProcessOpenGLShader_Run(int argc, char** argv) {
 		GGLFW()->PollEvents();
 	}
 
+	GShader()->DisableVertexAttribArray(lPositionAttrib);
+	GShader()->DisableVertexAttribArray(lColorAttrib);
+	GShader()->DeleteBuffer(lVertexVBO);
+	GShader()->DeleteBuffer(lColorVBO);
+	GShader()->DeleteVertexArray(lShaderVAO);
+	GShader()->DeleteProgram(lShader);
+
 	GGLFW()->DestroyWindow("WINDOW");
 	GGLFW()->Terminate();
 }
 //===============================================
 static void GProcessOpenGLShader_Init() {
+	GProcessOpenGLShaderO* lProcess = m_GProcessOpenGLShaderO->m_child;
+	sGShader* lShader = &lProcess->m_shader;
+	sGShaderVAO* lShaderVAO = &lProcess->m_shaderVAO;
+	sGShaderVBO* lVertexVBO = &lProcess->m_vertexVBO;
+	sGShaderVBO* lColorVBO = &lProcess->m_colorVBO;
+	sGShaderAttrib* lPositionAttrib = &lProcess->m_positionAttrib;
+	sGShaderAttrib* lColorAttrib = &lProcess->m_colorAttrib;
+
 	sGShaderItem lVertexShader = {
 			"../data/shader/simple.vert", 0, 0, GL_VERTEX_SHADER
 	};
 	sGShaderItem lFragmentShader = {
 			"../data/shader/simple.frag", 0, 0, GL_FRAGMENT_SHADER
 	};
-	sGShader lShader = {
+	*lShader = (sGShader){
 			0,
 			&lVertexShader,
 			&lFragmentShader
 	};
 	sGShaderFrag lColorFrag = {
-			&lShader.programId, 0, "color_out"
+			&lShader->programId, 0, "color_out"
 	};
-	sGShaderVAO lShaderVAO = {
+	*lShaderVAO = (sGShaderVAO){
 			1, 0
 	};
 	double lVertexData[] = {
@@ -110,31 +124,31 @@ static void GProcessOpenGLShader_Init() {
 			1.0, 0.0, 0.0,
 			0.0, 1.0, 0.0
 	};
-	sGShaderVBO lVertexVBO = {
+	*lVertexVBO = (sGShaderVBO){
 			1, 0, lVertexData, sizeof(lVertexData)
 	};
-	sGShaderVBO lColorVBO = {
+	*lColorVBO = (sGShaderVBO){
 			1, 0, lColorData, sizeof(lColorData)
 	};
-	sGShaderAttrib lPositionAttrib = {
-			&lShader.programId,
+	*lPositionAttrib = (sGShaderAttrib){
+			&lShader->programId,
 			"position",
-			0, 3, &lVertexVBO.vboId
+			0, 3, &lVertexVBO->vboId
 	};
-	sGShaderAttrib lColorAttrib = {
-			&lShader.programId,
+	*lColorAttrib = (sGShaderAttrib){
+			&lShader->programId,
 			"color_in",
-			0, 3, &lColorVBO.vboId
+			0, 3, &lColorVBO->vboId
 	};
 
-	GShader()->LoadShader(&lShader);
+	GShader()->LoadShader(lShader);
 	GShader()->BindFragDataLocation(&lColorFrag);
-	GShader()->BindVertexArray(&lShaderVAO);
-	GShader()->BindBuffer(&lVertexVBO);
-	GShader()->BindBuffer(&lColorVBO);
-	GShader()->EnableVertexAttribArray(&lPositionAttrib);
-	GShader()->EnableVertexAttribArray(&lColorAttrib);
-	GShader()->UseProgram(&lShader);
+	GShader()->BindVertexArray(lShaderVAO);
+	GShader()->BindBuffer(lVertexVBO);
+	GShader()->BindBuffer(lColorVBO);
+	GShader()->EnableVertexAttribArray(lPositionAttrib);
+	GShader()->EnableVertexAttribArray(lColorAttrib);
+	GShader()->UseProgram(lShader);
 }
 //===============================================
 static void GProcessOpenGLShader_Update() {

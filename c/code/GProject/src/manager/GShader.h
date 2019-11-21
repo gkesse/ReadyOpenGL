@@ -17,10 +17,13 @@ struct _GShaderO {
 	void (*CheckLinkProgram)(sGShader* shader);
 	void (*DeleteShader)(sGShader* shader);
 	void (*UseProgram)(sGShader* shader);
+	void (*DeleteProgram)(sGShader* shader);
 	void (*BindFragDataLocation)(sGShaderFrag* shaderFrag);
 	void (*GetUniformLocation)(sGShaderUniform* shader);
 	void (*BindVertexArray)(sGShaderVAO* shader);
+	void (*DeleteVertexArray)(sGShaderVAO* shader);
 	void (*BindBuffer)(sGShaderVBO* shader);
+	void (*DeleteBuffer)(sGShaderVBO* shader);
 	void (*EnableVertexAttribArray)(sGShaderAttrib* shader);
 	void (*DisableVertexAttribArray)(sGShaderAttrib* shader);
 	void (*LoadShader)(sGShader* shader);
