@@ -4,12 +4,13 @@
 //===============================================
 static GTextureO* m_GTextureO = 0;
 //===============================================
-static void GTexture_LoadImage(sGTexture* texture);
+static void GTexture_LoadImage(sGTextureImage* texture);
 static void GTexture_CreateTexture(sGTexture* texture);
 static void GTexture_BindTexture(sGTexture* texture);
-static void GTexture_FreeImage(sGTexture* texture);
-static void GTexture_UpdateTexture(sGTexture* texture);
+static void GTexture_FreeImage(sGTextureImage* texture);
 static void GTexture_LoadTexture(sGTexture* texture);
+static void GTexture_UpdateTexture(sGTexture* texture);
+static void GTexture_ActiveTexture(sGTextureActive* texture);
 //===============================================
 GTextureO* GTexture_New() {
 	GTextureO* lObj = (GTextureO*)malloc(sizeof(GTextureO));
@@ -18,8 +19,9 @@ GTextureO* GTexture_New() {
 	lObj->CreateTexture = GTexture_CreateTexture;
 	lObj->BindTexture = GTexture_BindTexture;
 	lObj->FreeImage = GTexture_FreeImage;
-	lObj->UpdateTexture = GTexture_UpdateTexture;
 	lObj->LoadTexture = GTexture_LoadTexture;
+	lObj->UpdateTexture = GTexture_UpdateTexture;
+	lObj->ActiveTexture = GTexture_ActiveTexture;
 	return lObj;
 }
 //===============================================
@@ -38,29 +40,26 @@ GTextureO* GTexture() {
 	return m_GTextureO;
 }
 //===============================================
-static void GTexture_LoadImage(sGTexture* texture) {
-	sGTextureImage* lTextureImage = &texture->textureImage;
-	char* lImageFile = lTextureImage->imageFile;
-	int* lImageWidth = &lTextureImage->imageWidth;
-	int* lImageHeight = &lTextureImage->imageHeight;
-	int* lImageChannel = &lTextureImage->imageChannel;
+static void GTexture_LoadImage(sGTextureImage* texture) {
+	char* lImageFile = texture->imageFile;
+	int* lImageWidth = &texture->imageWidth;
+	int* lImageHeight = &texture->imageHeight;
+	int* lImageChannel = &texture->imageChannel;
 	uchar* lImageData = SOIL_load_image(lImageFile, lImageWidth, lImageHeight, lImageChannel, SOIL_LOAD_RGBA);
 	if(lImageData == 0) {GConsole()->Print("Error GTexture_LoadImage\n"); exit(0);}
-	lTextureImage->imageData = lImageData;
+	texture->imageData = lImageData;
 }
 //===============================================
 static void GTexture_CreateTexture(sGTexture* texture) {
-	sGTextureItem* lTextureItem = &texture->textureItem;
-	glGenTextures(lTextureItem->nTexture, &lTextureItem->textureId);
+	glGenTextures(texture->nTexture, &texture->textureId);
 }
 //===============================================
 static void GTexture_BindTexture(sGTexture* texture) {
 	sGTextureImage* lTextureImage = &texture->textureImage;
-	sGTextureItem* lTextureItem = &texture->textureItem;
 	int lImageWidth = lTextureImage->imageWidth;
 	int lImageHeight = lTextureImage->imageHeight;
-	int lTextureFormat = lTextureItem->textureFormat;
-	glBindTexture(GL_TEXTURE_2D, lTextureItem->textureId);
+	int lTextureFormat = texture->textureFormat;
+	glBindTexture(GL_TEXTURE_2D, texture->textureId);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glTexImage2D(GL_TEXTURE_2D, 0, lTextureFormat, lImageWidth, lImageHeight, 0, lTextureFormat, GL_UNSIGNED_BYTE, lTextureImage->imageData);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -70,18 +69,23 @@ static void GTexture_BindTexture(sGTexture* texture) {
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 //===============================================
-static void GTexture_FreeImage(sGTexture* texture) {
-	sGTextureImage* lTextureImage = &texture->textureImage;
-	SOIL_free_image_data(lTextureImage->imageData);
+static void GTexture_FreeImage(sGTextureImage* texture) {
+	SOIL_free_image_data(texture->imageData);
+}
+//===============================================
+static void GTexture_LoadTexture(sGTexture* texture) {
+	GTexture()->LoadImage(&texture->textureImage);
+	GTexture()->CreateTexture(texture);
+	GTexture()->BindTexture(texture);
+	GTexture()->FreeImage(&texture->textureImage);
 }
 //===============================================
 static void GTexture_UpdateTexture(sGTexture* texture) {
 	sGTextureImage* lTextureImage = &texture->textureImage;
-	sGTextureItem* lTextureItem = &texture->textureItem;
 	int lImageWidth = lTextureImage->imageWidth;
 	int lImageHeight = lTextureImage->imageHeight;
 	uchar* lImageData = lTextureImage->imageData;
-	int lTextureFormat = lTextureItem->textureFormat;
+	int lTextureFormat = texture->textureFormat;
 	glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, lImageWidth, lImageHeight, lTextureFormat, GL_UNSIGNED_BYTE, lImageData);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -90,10 +94,9 @@ static void GTexture_UpdateTexture(sGTexture* texture) {
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 //===============================================
-static void GTexture_LoadTexture(sGTexture* texture) {
-	GTexture()->LoadImage(texture);
-	GTexture()->CreateTexture(texture);
-	GTexture()->BindTexture(texture);
-	GTexture()->FreeImage(texture);
+static void GTexture_ActiveTexture(sGTextureActive* texture) {
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->textureId);
+	glUniform1i(texture->textureId, 0);
 }
 //===============================================

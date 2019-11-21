@@ -1,7 +1,5 @@
 //===============================================
 #include "GProcessOpenGLTest.h"
-#include "GGLFW.h"
-#include "GOpenGL.h"
 #include "GConsole.h"
 //===============================================
 static GProcessO* m_GProcessOpenGLTestO = 0;

@@ -2,6 +2,8 @@
 #include "GProcess.h"
 #include "GProcessHelp.h"
 #include "GProcessOpenGLTest.h"
+#include "GProcessGlmTest.h"
+#include "GProcessGslTest.h"
 #include "GProcessOpenGLPoint.h"
 #include "GProcessOpenGLLine.h"
 #include "GProcessOpenGLTriangle.h"
@@ -36,6 +38,8 @@ GProcessO* GProcess() {
     char* lKey = GConfig()->GetData("PROCESS");
     if(GString2()->IsEqual(lKey, "HELP")) return GProcessHelp();
     if(GString2()->IsEqual(lKey, "OPENGL_TEST")) return GProcessOpenGLTest();
+    if(GString2()->IsEqual(lKey, "GLM_TEST")) return GProcessGlmTest();
+    if(GString2()->IsEqual(lKey, "GSL_TEST")) return GProcessGslTest();
     if(GString2()->IsEqual(lKey, "OPENGL_POINT")) return GProcessOpenGLPoint();
     if(GString2()->IsEqual(lKey, "OPENGL_LINE")) return GProcessOpenGLLine();
     if(GString2()->IsEqual(lKey, "OPENGL_TRIANGLE")) return GProcessOpenGLTriangle();

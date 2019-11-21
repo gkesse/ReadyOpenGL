@@ -30,199 +30,205 @@ typedef struct _sGRotate sGRotate;
 typedef struct _sGDiv sGDiv;
 typedef struct _sGDirection sGDirection;
 typedef struct _sGCamera sGCamera;
+typedef struct _sGCameraView sGCameraView;
 typedef struct _sGMCML sGMCML;
 typedef struct _sGHeat sGHeat;
 typedef struct _sGShaderItem sGShaderItem;
 typedef struct _sGShaderFrag sGShaderFrag;
+typedef struct _sGShaderUniform sGShaderUniform;
 typedef struct _sGShaderVAO sGShaderVAO;
 typedef struct _sGShaderVBO sGShaderVBO;
 typedef struct _sGShaderAttrib sGShaderAttrib;
 typedef struct _sGShaderArray sGShaderArray;
 typedef struct _sGShader sGShader;
 typedef struct _sGTextureImage sGTextureImage;
+typedef struct _sGTextureActive sGTextureActive;
 typedef struct _sGTextureItem sGTextureItem;
 typedef struct _sGTexture sGTexture;
+typedef struct _sGProjection sGProjection;
+typedef struct _sGTime sGTime;
+typedef struct _sGMovement sGMovement;
 //===============================================
 typedef void (*GOPENGL_UPDATE_CALLBACK)(sGWindow* sWindow);
 typedef void (*GOPENGL_INIT_CALLBACK)(sGWindow* sWindow);
 //===============================================
 struct _sGWindow {
 	char* name;
-    char* title;
-    int width;
-    int height;
-    GOPENGL_UPDATE_CALLBACK update;
-    GOPENGL_UPDATE_CALLBACK init;
+	char* title;
+	int width;
+	int height;
+	GOPENGL_UPDATE_CALLBACK update;
+	GOPENGL_UPDATE_CALLBACK init;
 };
 //===============================================
 struct _sGVertex {
-    double x, y, z;
+	double x, y, z;
 };
 //===============================================
 struct _sGColor {
-    double r, g, b, a;
+	double r, g, b, a;
 };
 //===============================================
 struct _sGPoint {
-    sGVertex vertex;
-    sGColor color;
-    double size;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	sGVertex vertex;
+	sGColor color;
+	double size;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGLine {
-    sGVertex vertex[2];
-    sGColor color;
-    double width;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	sGVertex vertex[2];
+	sGColor color;
+	double width;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGTriangle {
-    sGVertex vertex[3];
-    sGColor color;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	sGVertex vertex[3];
+	sGColor color;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGGrid {
-    double width;
-    double hight;
-    double gridDiv;
-    double gridLine;
-    sGColor gridColor;
-    double axisLine;
-    sGColor axisColor;
+	double width;
+	double hight;
+	double gridDiv;
+	double gridLine;
+	sGColor gridColor;
+	double axisLine;
+	sGColor axisColor;
 };
 //===============================================
 struct _sGFunction {
-    double xMin;
-    double xMax;
-    int nMax;
-    sGColor pointColor;
-    sGColor lineColor;
-    double pointSize;
-    double lineWidth;
-    GFUNCTION func;
-    void* params;
-    sGVertex* data;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	double xMin;
+	double xMax;
+	int nMax;
+	sGColor pointColor;
+	sGColor lineColor;
+	double pointSize;
+	double lineWidth;
+	GFUNCTION func;
+	void* params;
+	sGVertex* data;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGFunctionData {
-    double xMin;
-    double xMax;
-    int nMax;
-    sGColor pointColor;
-    sGColor lineColor;
-    double pointSize;
-    double lineWidth;
-    GFUNCTION func;
-    void* params;
-    sGVertex* data;
-    double* tab;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	double xMin;
+	double xMax;
+	int nMax;
+	sGColor pointColor;
+	sGColor lineColor;
+	double pointSize;
+	double lineWidth;
+	GFUNCTION func;
+	void* params;
+	sGVertex* data;
+	double* tab;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGFunction2D {
-    double xMin;
-    double xMax;
-    double yMin;
-    double yMax;
-    int xNmax;
-    int yNmax;
-    double alpha;
-    sGColor pointColor;
-    sGColor lineColor;
-    double pointSize;
-    double lineWidth;
-    GFUNCTION_2D func;
-    void* params;
-    sGVertex* data;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	double xMin;
+	double xMax;
+	double yMin;
+	double yMax;
+	int xNmax;
+	int yNmax;
+	double alpha;
+	sGColor pointColor;
+	sGColor lineColor;
+	double pointSize;
+	double lineWidth;
+	GFUNCTION_2D func;
+	void* params;
+	sGVertex* data;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGSinus {
-    double yMax;
-    double freq;
-    double phi0;
+	double yMax;
+	double freq;
+	double phi0;
 };
 //===============================================
 struct _sGGaussian {
-    double sigma;
-    double mu;
+	double sigma;
+	double mu;
 };
 //===============================================
 struct _sGGaussian2D {
-    double sigmaX;
-    double sigmaY;
-    double x0;
-    double y0;
+	double sigmaX;
+	double sigmaY;
+	double x0;
+	double y0;
 };
 //===============================================
 struct _sGData {
-    sGVertex* data;
-    sGColor pointColor;
-    sGColor lineColor;
-    int nMax;
-    double pointSize;
-    double lineWidth;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	sGVertex* data;
+	sGColor pointColor;
+	sGColor lineColor;
+	int nMax;
+	double pointSize;
+	double lineWidth;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGDataTab {
-    double* data;
-    int nMax;
-    double xMin;
-    double xMax;
-    double yOffset;
-    sGColor pointColor;
-    sGColor lineColor;
-    double pointSize;
-    double lineWidth;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	double* data;
+	int nMax;
+	double xMin;
+	double xMax;
+	double yOffset;
+	sGColor pointColor;
+	sGColor lineColor;
+	double pointSize;
+	double lineWidth;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGData2D {
-    sGVertex* data;
-    double pointSize;
-    double alpha;
-    int xNmax;
-    int yNmax;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	sGVertex* data;
+	double pointSize;
+	double alpha;
+	int xNmax;
+	int yNmax;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGVertexDiv {
-    sGVertex vertex;
-    double divGrid;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	sGVertex vertex;
+	double divGrid;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGKey {
@@ -296,6 +302,12 @@ struct _sGCamera {
 	double zFar;
 };
 //===============================================
+struct _sGCameraView {
+	vec3 eye;
+	vec3 center;
+	vec3 up;
+};
+//===============================================
 struct _sGMCML {
 	double* data;
 	sGVertex* vertex;
@@ -312,10 +324,10 @@ struct _sGMCML {
 	int sliceZ;
 	double sliceAlpha;
 	double sliceSize;
-    double gridDiv;
-    double xDiv;
-    double yDiv;
-    double zDiv;
+	double gridDiv;
+	double xDiv;
+	double yDiv;
+	double zDiv;
 };
 //===============================================
 struct _sGHeat {
@@ -333,9 +345,15 @@ struct _sGShaderItem {
 };
 //===============================================
 struct _sGShaderFrag {
-	uint programId;
+	uint* programId;
 	int colorNumber;
 	char* colorName;
+};
+//===============================================
+struct _sGShaderUniform {
+	uint programId;
+	uint uniformId;
+	char* uniformName;
 };
 //===============================================
 struct _sGShaderVAO {
@@ -351,7 +369,7 @@ struct _sGShaderVBO {
 };
 //===============================================
 struct _sGShaderAttrib {
-	uint programId;
+	uint* programId;
 	char* attribName;
 	uint attribId;
 	int attribSize;
@@ -366,8 +384,8 @@ struct _sGShaderArray {
 //===============================================
 struct _sGShader {
 	uint programId;
-	sGShaderItem vert;
-	sGShaderItem frag;
+	sGShaderItem* vert;
+	sGShaderItem* frag;
 };
 //===============================================
 struct _sGTextureImage {
@@ -378,15 +396,34 @@ struct _sGTextureImage {
 	int imageChannel;
 };
 //===============================================
-struct _sGTextureItem {
+struct _sGTextureActive {
+	uint textureId;
+	uint uniformId;
+};
+//===============================================
+struct _sGTexture {
+	sGTextureImage textureImage;
 	int nTexture;
 	uint textureId;
 	int textureFormat;
 };
 //===============================================
-struct _sGTexture {
-	sGTextureImage textureImage;
-	sGTextureItem textureItem;
+struct _sGProjection {
+	mat4 projection;
+	mat4 view;
+	mat4 model;
+};
+//===============================================
+struct _sGTime {
+	double lastTime;
+	double currentTime;
+	double diffTime;
+};
+//===============================================
+struct _sGMovement {
+	vec3 direction;
+	vec3 up;
+	vec3 position;
 };
 //===============================================
 #endif

@@ -8,12 +8,13 @@ typedef struct _GTextureO GTextureO;
 //===============================================
 struct _GTextureO {
     void (*Delete)();
-    void (*LoadImage)(sGTexture* texture);
+    void (*LoadImage)(sGTextureImage* texture);
     void (*CreateTexture)(sGTexture* texture);
     void (*BindTexture)(sGTexture* texture);
-    void (*FreeImage)(sGTexture* texture);
-    void (*UpdateTexture)(sGTexture* texture);
+    void (*FreeImage)(sGTextureImage* texture);
     void (*LoadTexture)(sGTexture* texture);
+    void (*UpdateTexture)(sGTexture* texture);
+    void (*ActiveTexture)(sGTextureActive* texture);
 };
 //===============================================
 GTextureO* GTexture_New();

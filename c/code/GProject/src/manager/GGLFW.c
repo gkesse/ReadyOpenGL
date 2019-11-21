@@ -2,7 +2,7 @@
 #include "GGLFW.h"
 #include "GConsole.h"
 //===============================================
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 typedef char* GCHAR_PTR;
 typedef GLFWwindow* GGLFWWINDOW_PTR;
 //===============================================
@@ -15,6 +15,7 @@ static GGLFWO* m_GGLFWO = 0;
 static void GGLFW_Init();
 static void GGLFW_WindowHint(int hint, int value);
 static void GGLFW_CreateWindow(char* windowName, int w, int h, char* title);
+static void GGLFW_CreateWindow2(sGWindow* window);
 static void GGLFW_KeyCallback(char* windowName, GGLFW_KEY_CALLBACK callback);
 static void GGLFW_FrameCallback(char* windowName, GGLFW_FRAME_CALLBACK callback);
 static void GGLFW_MouseCallback(char* windowName, GGLFW_MOUSE_CALLBACK callback);
@@ -31,7 +32,7 @@ static void GGLFW_PollEvents();
 static void GGLFW_DestroyWindow(char* windowName);
 static void GGLFW_Terminate();
 //===============================================
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 static int GGLFW_MapEqual(char* key1, char* key2) ;
 #endif
 //===============================================
@@ -41,6 +42,7 @@ GGLFWO* GGLFW_New() {
 	lObj->Init = GGLFW_Init;
 	lObj->WindowHint = GGLFW_WindowHint;
 	lObj->CreateWindow = GGLFW_CreateWindow;
+	lObj->CreateWindow2 = GGLFW_CreateWindow2;
 	lObj->KeyCallback = GGLFW_KeyCallback;
 	lObj->FrameCallback = GGLFW_FrameCallback;
 	lObj->MouseCallback = GGLFW_MouseCallback;
@@ -56,7 +58,7 @@ GGLFWO* GGLFW_New() {
 	lObj->PollEvents = GGLFW_PollEvents;
 	lObj->DestroyWindow = GGLFW_DestroyWindow;
 	lObj->Terminate = GGLFW_Terminate;
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
     lObj->m_windowMap = GMap_New_GGLFW_GCHAR_PTR_GGLFWWINDOW_PTR();
 #endif
 	return lObj;
@@ -78,20 +80,20 @@ GGLFWO* GGLFW() {
 }
 //===============================================
 static void GGLFW_Init() {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
     int lRes = glfwInit();
     if(lRes == 0) {GConsole()->Print("Error GGLFW_Init\n"); exit(0);}
 #endif
 }
 //===============================================
 static void GGLFW_WindowHint(int hint, int value) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	glfwWindowHint(hint, value);
 #endif
 }
 //===============================================
 static void GGLFW_CreateWindow(char* windowName, int w, int h, char* title) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = glfwCreateWindow(w, h, title, NULL, NULL);
     if(lWindow == 0) {GConsole()->Print("Error GGLFW_CreateWindow\n"); exit(0);}
@@ -99,8 +101,14 @@ static void GGLFW_CreateWindow(char* windowName, int w, int h, char* title) {
 #endif
 }
 //===============================================
+static void GGLFW_CreateWindow2(sGWindow* window) {
+#if defined(G_USE_GLFW_ON)
+	GGLFW_CreateWindow(window->name, window->width, window->height, window->title);
+#endif
+}
+//===============================================
 static void GGLFW_KeyCallback(char* windowName, GGLFW_KEY_CALLBACK callback) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwSetKeyCallback(lWindow, callback);
@@ -108,7 +116,7 @@ static void GGLFW_KeyCallback(char* windowName, GGLFW_KEY_CALLBACK callback) {
 }
 //===============================================
 static void GGLFW_FrameCallback(char* windowName, GGLFW_FRAME_CALLBACK callback) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwSetFramebufferSizeCallback(lWindow, callback);
@@ -116,7 +124,7 @@ static void GGLFW_FrameCallback(char* windowName, GGLFW_FRAME_CALLBACK callback)
 }
 //===============================================
 static void GGLFW_MouseCallback(char* windowName, GGLFW_MOUSE_CALLBACK callback) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwSetMouseButtonCallback(lWindow, callback);
@@ -124,7 +132,7 @@ static void GGLFW_MouseCallback(char* windowName, GGLFW_MOUSE_CALLBACK callback)
 }
 //===============================================
 static void GGLFW_CursorCallback(char* windowName, GGLFW_CURSOR_CALLBACK callback) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwSetCursorPosCallback(lWindow, callback);
@@ -132,7 +140,7 @@ static void GGLFW_CursorCallback(char* windowName, GGLFW_CURSOR_CALLBACK callbac
 }
 //===============================================
 static void GGLFW_ScrollCallback(char* windowName, GGLFW_SCROLL_CALLBACK callback) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwSetScrollCallback(lWindow, callback);
@@ -140,7 +148,7 @@ static void GGLFW_ScrollCallback(char* windowName, GGLFW_SCROLL_CALLBACK callbac
 }
 //===============================================
 static void GGLFW_MakeContext(char* windowName) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwMakeContextCurrent(lWindow);
@@ -148,13 +156,13 @@ static void GGLFW_MakeContext(char* windowName) {
 }
 //===============================================
 static void GGLFW_SwapInterval(int interval) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
     glfwSwapInterval(interval);
 #endif
 }
 //===============================================
 static int GGLFW_WindowClose(char* windowName) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     int lRes = glfwWindowShouldClose(lWindow);
@@ -163,7 +171,7 @@ static int GGLFW_WindowClose(char* windowName) {
 }
 //===============================================
 static void GGLFW_FrameSize(char* windowName, int* w, int* h) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwGetFramebufferSize(lWindow, w, h);
@@ -171,7 +179,7 @@ static void GGLFW_FrameSize(char* windowName, int* w, int* h) {
 }
 //===============================================
 static double GGLFW_Ratio(char* windowName) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     int lWidth;
@@ -183,14 +191,14 @@ static double GGLFW_Ratio(char* windowName) {
 }
 //===============================================
 static double GGLFW_GetTime() {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	double lTime = glfwGetTime();
     return lTime;
 #endif
 }
 //===============================================
 static void GGLFW_SwapBuffers(char* windowName) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwSwapBuffers(lWindow);
@@ -198,13 +206,13 @@ static void GGLFW_SwapBuffers(char* windowName) {
 }
 //===============================================
 static void GGLFW_PollEvents() {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
     glfwPollEvents();
 #endif
 }
 //===============================================
 static void GGLFW_DestroyWindow(char* windowName) {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	GMapO(GGLFW, GCHAR_PTR, GGLFWWINDOW_PTR)* lWindowMap = m_GGLFWO->m_windowMap;
     GLFWwindow* lWindow = lWindowMap->GetData(lWindowMap, windowName, GGLFW_MapEqual);
     glfwDestroyWindow(lWindow);
@@ -212,12 +220,12 @@ static void GGLFW_DestroyWindow(char* windowName) {
 }
 //===============================================
 static void GGLFW_Terminate() {
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 	glfwTerminate();
 #endif
 }
 //===============================================
-#if defined(__WIN32)
+#if defined(G_USE_GLFW_ON)
 static int GGLFW_MapEqual(char* key1, char* key2) {
 	int lStrcmp = strcmp(key1, key2);
 	if(lStrcmp == 0) return TRUE;

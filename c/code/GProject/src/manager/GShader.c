@@ -15,6 +15,7 @@ static void GShader_CheckLinkProgram(sGShader* shader);
 static void GShader_DeleteShader(sGShader* shader);
 static void GShader_UseProgram(sGShader* shader);
 static void GShader_BindFragDataLocation(sGShaderFrag* shaderFrag);
+static void GShader_GetUniformLocation(sGShaderUniform* shader);
 static void GShader_BindVertexArray(sGShaderVAO* shader);
 static void GShader_BindBuffer(sGShaderVBO* shader);
 static void GShader_EnableVertexAttribArray(sGShaderAttrib* shader);
@@ -33,6 +34,7 @@ GShaderO* GShader_New() {
 	lObj->DeleteShader = GShader_DeleteShader;
 	lObj->UseProgram = GShader_UseProgram;
 	lObj->BindFragDataLocation = GShader_BindFragDataLocation;
+	lObj->GetUniformLocation = GShader_GetUniformLocation;
 	lObj->BindVertexArray = GShader_BindVertexArray;
 	lObj->BindBuffer = GShader_BindBuffer;
 	lObj->EnableVertexAttribArray = GShader_EnableVertexAttribArray;
@@ -96,8 +98,8 @@ static void GShader_CreateProgram(sGShader* shader) {
 }
 //===============================================
 static void GShader_LinkProgram(sGShader* shader) {
-	glAttachShader(shader->programId, shader->vert.shaderId);
-	glAttachShader(shader->programId, shader->frag.shaderId);
+	glAttachShader(shader->programId, shader->vert->shaderId);
+	glAttachShader(shader->programId, shader->frag->shaderId);
 	glLinkProgram(shader->programId);
 }
 //===============================================
@@ -115,10 +117,10 @@ static void GShader_CheckLinkProgram(sGShader* shader) {
 }
 //===============================================
 static void GShader_DeleteShader(sGShader* shader) {
-	glDeleteShader(shader->vert.shaderId);
-	glDeleteShader(shader->frag.shaderId);
-	free(shader->vert.shaderCode);
-	free(shader->frag.shaderCode);
+	glDeleteShader(shader->vert->shaderId);
+	glDeleteShader(shader->frag->shaderId);
+	free(shader->vert->shaderCode);
+	free(shader->frag->shaderCode);
 }
 //===============================================
 static void GShader_UseProgram(sGShader* shader) {
@@ -126,7 +128,11 @@ static void GShader_UseProgram(sGShader* shader) {
 }
 //===============================================
 static void GShader_BindFragDataLocation(sGShaderFrag* shaderFrag) {
-	glBindFragDataLocation(shaderFrag->programId, shaderFrag->colorNumber, shaderFrag->colorName);
+	glBindFragDataLocation(*shaderFrag->programId, shaderFrag->colorNumber, shaderFrag->colorName);
+}
+//===============================================
+static void GShader_GetUniformLocation(sGShaderUniform* shader) {
+	shader->uniformId = glGetUniformLocation(shader->programId, shader->uniformName);
 }
 //===============================================
 static void GShader_BindVertexArray(sGShaderVAO* shaderVAO) {
@@ -141,21 +147,21 @@ static void GShader_BindBuffer(sGShaderVBO* shaderVBO) {
 }
 //===============================================
 static void GShader_EnableVertexAttribArray(sGShaderAttrib* shader) {
-	shader->attribId = glGetAttribLocation(shader->programId, shader->attribName);
+	shader->attribId = glGetAttribLocation(*shader->programId, shader->attribName);
 	glEnableVertexAttribArray(shader->attribId);
 	glBindBuffer(GL_ARRAY_BUFFER, shader->vboId);
 	glVertexAttribPointer(shader->attribId, shader->attribSize, GL_DOUBLE, GL_FALSE, 0, GPOINTER_NULL);
 }
 //===============================================
 static void GShader_LoadShader(sGShader* shader) {
-	GShader()->LoadCode(&shader->vert);
-	GShader()->LoadCode(&shader->frag);
-	GShader()->CreateShader(&shader->vert);
-	GShader()->CreateShader(&shader->frag);
-	GShader()->CompileCode(&shader->vert);
-	GShader()->CompileCode(&shader->frag);
-	GShader()->CheckCompileCode(&shader->vert);
-	GShader()->CheckCompileCode(&shader->frag);
+	GShader()->LoadCode(shader->vert);
+	GShader()->LoadCode(shader->frag);
+	GShader()->CreateShader(shader->vert);
+	GShader()->CreateShader(shader->frag);
+	GShader()->CompileCode(shader->vert);
+	GShader()->CompileCode(shader->frag);
+	GShader()->CheckCompileCode(shader->vert);
+	GShader()->CheckCompileCode(shader->frag);
 	GShader()->CreateProgram(shader);
 	GShader()->LinkProgram(shader);
 	GShader()->CheckLinkProgram(shader);

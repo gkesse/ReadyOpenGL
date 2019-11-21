@@ -85,13 +85,13 @@ static void GProcessOpenGLShader_Init() {
 	};
 	sGShader lShader = {
 			0,
-			lVertexShader,
-			lFragmentShader
+			&lVertexShader,
+			&lFragmentShader
 	};
 	GShader()->LoadShader(&lShader);
 
 	sGShaderFrag lColorFrag = {
-			lShader.programId, 0, "color_out"
+			&lShader.programId, 0, "color_out"
 	};
 	GShader()->BindFragDataLocation(&lColorFrag);
 
@@ -126,12 +126,12 @@ static void GProcessOpenGLShader_Init() {
 	GShader()->BindBuffer(&lColorVBO);
 
 	sGShaderAttrib lPositionAttrib = {
-			lShader.programId,
+			&lShader.programId,
 			"position",
 			0, 3, lVertexVBO.vboId
 	};
 	sGShaderAttrib lColorAttrib = {
-			lShader.programId,
+			&lShader.programId,
 			"color_in",
 			0, 3, lColorVBO.vboId
 	};

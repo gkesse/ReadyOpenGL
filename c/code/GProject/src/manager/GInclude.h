@@ -8,6 +8,9 @@
 #define _USE_MATH_DEFINES
 #define GLEW_STATIC
 //===============================================
+#define G_USE_GML_ON
+#define G_USE_GLFW_ON
+//===============================================
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +20,9 @@
 //===============================================
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cglm/call.h>
 #include <SOIL.h>
+#include <gsl/gsl_sf.h>
 //===============================================
 #elif defined(__unix)
 #define G_PLATEFORM_OS "UNIX"
@@ -40,6 +45,9 @@ typedef unsigned char uchar;
 typedef unsigned int uint;
 typedef unsigned long ulong;
 typedef unsigned long int ulint;
+//===============================================
+typedef char* GCHAR_PTR;
+typedef void* GVOID_PTR;
 //===============================================
 #include "GDefine.h"
 #include "GCallback.h"

@@ -1,21 +1,18 @@
 //===============================================
-#ifndef _GProcessOpenGLTexture_
-#define _GProcessOpenGLTexture_
+#ifndef _GProcessGlmTest_
+#define _GProcessGlmTest_
 //===============================================
 #include "GProcess.h"
 //===============================================
-typedef struct _GProcessOpenGLTextureO GProcessOpenGLTextureO;
+typedef struct _GProcessGlmTestO GProcessGlmTestO;
 //===============================================
-struct _GProcessOpenGLTextureO {
+struct _GProcessGlmTestO {
     GProcessO* m_parent;
-    sGWindow m_window;
-    sGCamera m_camera;
-    sGCameraView m_cameraView;
 };
 //===============================================
-GProcessO* GProcessOpenGLTexture_New();
-void GProcessOpenGLTexture_Delete();
-GProcessO* GProcessOpenGLTexture();
+GProcessO* GProcessGlmTest_New();
+void GProcessGlmTest_Delete();
+GProcessO* GProcessGlmTest();
 //===============================================
 #endif
 //===============================================

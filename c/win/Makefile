@@ -9,12 +9,16 @@ GINCS = \
     -I$(GREADYLIB)\glfw\c\3.3\include \
     -I$(GREADYLIB)\glew\c\2.1.0\include \
     -I$(GREADYLIB)\soil\c\1.16\include \
+    -I$(GREADYLIB)\glm\c\0.6.0\include \
+    -I$(GREADYLIB)\gsl\c\2.2.1\include \
 
 GLIBS = \
     -L$(GREADYLIB)\glfw\c\3.3\mingw64\lib \
     -L$(GREADYLIB)\glew\c\2.1.0\mingw64\lib \
     -L$(GREADYLIB)\soil\c\1.16\mingw64\lib \
-    -lglfw3 -lglew32 -lSOIL -lglu32 -lopengl32 -lgdi32 \
+    -L$(GREADYLIB)\glm\c\0.6.0\mingw64\lib \
+    -L$(GREADYLIB)\gsl\c\2.2.1\mingw64\lib \
+    -lgsl -lglm -lglfw3 -lglew32 -lSOIL -lglu32 -lopengl32 -lgdi32 \
     
 GOBJS = \
     $(patsubst $(GSRC)/%.c, $(GBUILD)/%.o, $(wildcard $(GSRC)/*.c)) \

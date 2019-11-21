@@ -19,6 +19,7 @@ struct _GGLFWO {
     void (*Init)();
     void (*WindowHint)(int hint, int value);
     void (*CreateWindow)(char* windowName, int w, int h, char* title);
+    void (*CreateWindow2)(sGWindow* window);
     void (*KeyCallback)(char* windowName, GGLFW_KEY_CALLBACK callback);
     void (*FrameCallback)(char* windowName, GGLFW_FRAME_CALLBACK callback);
     void (*MouseCallback)(char* windowName, GGLFW_MOUSE_CALLBACK callback);
