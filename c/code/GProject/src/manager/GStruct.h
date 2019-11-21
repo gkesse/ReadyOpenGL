@@ -373,7 +373,7 @@ struct _sGShaderAttrib {
 	char* attribName;
 	uint attribId;
 	int attribSize;
-	uint vboId;
+	uint* vboId;
 };
 //===============================================
 struct _sGShaderArray {

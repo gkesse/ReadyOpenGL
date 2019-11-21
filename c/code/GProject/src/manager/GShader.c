@@ -149,7 +149,7 @@ static void GShader_BindBuffer(sGShaderVBO* shaderVBO) {
 static void GShader_EnableVertexAttribArray(sGShaderAttrib* shader) {
 	shader->attribId = glGetAttribLocation(*shader->programId, shader->attribName);
 	glEnableVertexAttribArray(shader->attribId);
-	glBindBuffer(GL_ARRAY_BUFFER, shader->vboId);
+	glBindBuffer(GL_ARRAY_BUFFER, *shader->vboId);
 	glVertexAttribPointer(shader->attribId, shader->attribSize, GL_DOUBLE, GL_FALSE, 0, GPOINTER_NULL);
 }
 //===============================================

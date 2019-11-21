@@ -170,12 +170,12 @@ static void GProcessOpenGLTexture_Init() {
 	sGShaderAttrib lVertexAttrib = {
 			&lShader.programId,
 			"vertexPosition_modelspace",
-			0, 3, lVertexVBO.vboId
+			0, 3, &lVertexVBO.vboId
 	};
 	sGShaderAttrib lTextureAttrib = {
 			&lShader.programId,
 			"vertexUV",
-			0, 2, lTextureVBO.vboId
+			0, 2, &lTextureVBO.vboId
 	};
 
 	GShader()->EnableVertexAttribArray(&lVertexAttrib);

@@ -88,18 +88,12 @@ static void GProcessOpenGLShader_Init() {
 			&lVertexShader,
 			&lFragmentShader
 	};
-	GShader()->LoadShader(&lShader);
-
 	sGShaderFrag lColorFrag = {
 			&lShader.programId, 0, "color_out"
 	};
-	GShader()->BindFragDataLocation(&lColorFrag);
-
 	sGShaderVAO lShaderVAO = {
 			1, 0
 	};
-	GShader()->BindVertexArray(&lShaderVAO);
-
 	double lVertexData[] = {
 			-0.5, -0.5, 0.0,
 			0.5, -0.5, 0.0,
@@ -122,19 +116,22 @@ static void GProcessOpenGLShader_Init() {
 	sGShaderVBO lColorVBO = {
 			1, 0, lColorData, sizeof(lColorData)
 	};
-	GShader()->BindBuffer(&lVertexVBO);
-	GShader()->BindBuffer(&lColorVBO);
-
 	sGShaderAttrib lPositionAttrib = {
 			&lShader.programId,
 			"position",
-			0, 3, lVertexVBO.vboId
+			0, 3, &lVertexVBO.vboId
 	};
 	sGShaderAttrib lColorAttrib = {
 			&lShader.programId,
 			"color_in",
-			0, 3, lColorVBO.vboId
+			0, 3, &lColorVBO.vboId
 	};
+
+	GShader()->LoadShader(&lShader);
+	GShader()->BindFragDataLocation(&lColorFrag);
+	GShader()->BindVertexArray(&lShaderVAO);
+	GShader()->BindBuffer(&lVertexVBO);
+	GShader()->BindBuffer(&lColorVBO);
 	GShader()->EnableVertexAttribArray(&lPositionAttrib);
 	GShader()->EnableVertexAttribArray(&lColorAttrib);
 	GShader()->UseProgram(&lShader);
