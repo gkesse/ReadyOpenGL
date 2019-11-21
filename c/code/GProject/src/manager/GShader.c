@@ -19,6 +19,7 @@ static void GShader_GetUniformLocation(sGShaderUniform* shader);
 static void GShader_BindVertexArray(sGShaderVAO* shader);
 static void GShader_BindBuffer(sGShaderVBO* shader);
 static void GShader_EnableVertexAttribArray(sGShaderAttrib* shader);
+static void GShader_DisableVertexAttribArray(sGShaderAttrib* shader);
 static void GShader_LoadShader(sGShader* shader);
 //===============================================
 GShaderO* GShader_New() {
@@ -38,6 +39,7 @@ GShaderO* GShader_New() {
 	lObj->BindVertexArray = GShader_BindVertexArray;
 	lObj->BindBuffer = GShader_BindBuffer;
 	lObj->EnableVertexAttribArray = GShader_EnableVertexAttribArray;
+	lObj->DisableVertexAttribArray = GShader_DisableVertexAttribArray;
 	lObj->LoadShader = GShader_LoadShader;
 	return lObj;
 }
@@ -151,6 +153,10 @@ static void GShader_EnableVertexAttribArray(sGShaderAttrib* shader) {
 	glEnableVertexAttribArray(shader->attribId);
 	glBindBuffer(GL_ARRAY_BUFFER, *shader->vboId);
 	glVertexAttribPointer(shader->attribId, shader->attribSize, GL_DOUBLE, GL_FALSE, 0, GPOINTER_NULL);
+}
+//===============================================
+static void GShader_DisableVertexAttribArray(sGShaderAttrib* shader) {
+	glDisableVertexAttribArray(shader->attribId);
 }
 //===============================================
 static void GShader_LoadShader(sGShader* shader) {

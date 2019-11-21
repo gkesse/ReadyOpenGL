@@ -22,6 +22,7 @@ struct _GShaderO {
 	void (*BindVertexArray)(sGShaderVAO* shader);
 	void (*BindBuffer)(sGShaderVBO* shader);
 	void (*EnableVertexAttribArray)(sGShaderAttrib* shader);
+	void (*DisableVertexAttribArray)(sGShaderAttrib* shader);
 	void (*LoadShader)(sGShader* shader);
 };
 //===============================================
