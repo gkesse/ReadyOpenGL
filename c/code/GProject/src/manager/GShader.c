@@ -17,6 +17,7 @@ static void GShader_UseProgram(sGShader* shader);
 static void GShader_DeleteProgram(sGShader* shader);
 static void GShader_BindFragDataLocation(sGShaderFrag* shaderFrag);
 static void GShader_GetUniformLocation(sGShaderUniform* shader);
+static void GShader_UniformMatrix4(sGUniformMatrix* shader);
 static void GShader_BindVertexArray(sGShaderVAO* shader);
 static void GShader_DeleteVertexArray(sGShaderVAO* shader);
 static void GShader_BindBuffer(sGShaderVBO* shader);
@@ -40,6 +41,7 @@ GShaderO* GShader_New() {
 	lObj->DeleteProgram = GShader_DeleteProgram;
 	lObj->BindFragDataLocation = GShader_BindFragDataLocation;
 	lObj->GetUniformLocation = GShader_GetUniformLocation;
+	lObj->UniformMatrix4 = GShader_UniformMatrix4;
 	lObj->BindVertexArray = GShader_BindVertexArray;
 	lObj->DeleteVertexArray = GShader_DeleteVertexArray;
 	lObj->BindBuffer = GShader_BindBuffer;
@@ -145,6 +147,10 @@ static void GShader_BindFragDataLocation(sGShaderFrag* shaderFrag) {
 //===============================================
 static void GShader_GetUniformLocation(sGShaderUniform* shader) {
 	shader->uniformId = glGetUniformLocation(*shader->programId, shader->uniformName);
+}
+//===============================================
+static void GShader_UniformMatrix4(sGUniformMatrix* shader) {
+	glUniformMatrix4fv(*shader->uniformId, 1, GL_FALSE, (float*)shader->data);
 }
 //===============================================
 static void GShader_BindVertexArray(sGShaderVAO* shader) {

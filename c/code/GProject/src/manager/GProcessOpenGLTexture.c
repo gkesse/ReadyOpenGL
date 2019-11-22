@@ -7,6 +7,7 @@
 #include "GShader.h"
 #include "GTexture.h"
 #include "GProjection.h"
+#include "GCamera.h"
 //===============================================
 static GProcessO* m_GProcessOpenGLTextureO = 0;
 //===============================================
@@ -30,19 +31,11 @@ GProcessO* GProcessOpenGLTexture_New() {
 	};
 	sGCameraView* lCameraView = &lChild->m_cameraView;
 	*lCameraView = (sGCameraView){
-		{0.0, 0.0, 0.2},
+		{0.0, 0.0, 2.0},
 		{0.0, 0.0, 0.0},
-		{0.0, 0.0, 0.0}
+		{0.0, -1.0, 0.0},
+		{0.0, 0.0, -1.0}
 	};
-
-	sGDirection* lDirection = GOpenGL()->GetDirection();
-	*lDirection = (sGDirection){
-		{0.0, 0.0, -2.5},
-		{-60.0, 0.0, 220.0},
-		{10.0, 10.0, 10.0}
-	};
-
-	GOpenGL()->SetDirection(*lDirection);
 
 	lChild->m_parent = lParent;
 
@@ -130,19 +123,19 @@ static void GProcessOpenGLTexture_Init() {
 			"../data/shader/texture.frag", 0, 0, GL_FRAGMENT_SHADER
 	};
 	*lShader = (sGShader){
-			0,
-			&lVertexShader,
-			&lFragmentShader
+		0,
+		&lVertexShader,
+		&lFragmentShader
 	};
 	sGTextureImage lTextureImage = {
 			"../data/texture/texture.png", 0, 0, 0, SOIL_LOAD_RGBA
 	};
 	*lTexture = (sGTexture){
-			lTextureImage,
-			1, 0, GL_RGBA
+		lTextureImage,
+		1, 0, GL_RGBA
 	};
 	*lShaderVAO = (sGShaderVAO){
-			1, 0
+		1, 0
 	};
 	sGShaderUniform lMatrixUniform = {
 			&lShader->programId, 0, "MVP"
@@ -167,23 +160,23 @@ static void GProcessOpenGLTexture_Init() {
 			1.0, 1.0
 	};
 	*lVertexVBO = (sGShaderVBO){
-			1, 0, lVertexData, sizeof(lVertexData)
+		1, 0, lVertexData, sizeof(lVertexData)
 	};
 	*lTextureVBO = (sGShaderVBO){
-			1, 0, lTextureData, sizeof(lTextureData)
+		1, 0, lTextureData, sizeof(lTextureData)
 	};
 	sGTextureActive lTextureActive = {
 			&lTexture->textureId, &lTextureUniform.uniformId
 	};
 	*lVertexAttrib = (sGShaderAttrib){
-			&lShader->programId,
-			"vertexPosition_modelspace",
-			0, 3, &lVertexVBO->vboId
+		&lShader->programId,
+		"vertexPosition_modelspace",
+		0, 3, &lVertexVBO->vboId
 	};
 	*lTextureAttrib = (sGShaderAttrib){
-			&lShader->programId,
-			"vertexUV",
-			0, 2, &lTextureVBO->vboId
+		&lShader->programId,
+		"vertexUV",
+		0, 2, &lTextureVBO->vboId
 	};
 
 	GShader()->LoadShader(lShader);
@@ -215,10 +208,15 @@ static void GProcessOpenGLTexture_Update() {
 static void GProcessOpenGLTexture_UpdateView() {
 	GProcessOpenGLTextureO* lProcess = m_GProcessOpenGLTextureO->m_child;
 	sGWindow* lWindow = &lProcess->m_window;
-	sGCamera* lCamara = &lProcess->m_camera;
+	sGCamera* lCamera = &lProcess->m_camera;
 	sGCameraView* lCameraView = &lProcess->m_cameraView;
+	sGProjection* lProjection = &lProcess->m_projection;
 
-	GProjection()->SetProjection(lWindow->name, lCamara);
-	GProjection()->SetView(lCameraView);
+	GCamera()->SetRatio(lWindow->name, lCamera);
+	GCamera()->SetCenter(lCameraView);
+	GProjection()->SetModel(lProjection, GLM_MAT4_IDENTITY);
+	GProjection()->SetProjection(lProjection, lCamera);
+	GProjection()->SetView(lProjection, lCameraView);
+	GProjection()->SetMVP(lProjection);
 }
 //===============================================

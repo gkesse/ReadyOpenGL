@@ -21,6 +21,8 @@ struct _GProcessOpenGLTextureO {
     sGShaderAttrib m_textureAttrib;
 
     sGTexture m_texture;
+
+    sGProjection m_projection;
 };
 //===============================================
 GProcessO* GProcessOpenGLTexture_New();

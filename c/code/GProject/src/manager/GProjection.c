@@ -5,11 +5,11 @@
 //===============================================
 static GProjectionO* m_GProjectionO = 0;
 //===============================================
-static void GProjection_SetModel(mat4 data);
-static void GProjection_SetView(sGCameraView* camera);
-static void GProjection_SetProjection(char* windowName, sGCamera* camera);
-static void GProjection_RotateModel(double angle, vec3 vecUp);
-static void GProjection_GetMVP(mat4 mvp);
+static void GProjection_SetModel(sGProjection* MVP, mat4 data);
+static void GProjection_SetView(sGProjection* MVP, sGCameraView* camera);
+static void GProjection_SetProjection(sGProjection* MVP, sGCamera* camera);
+static void GProjection_RotateModel(sGProjection* MVP, double angle, vec3 vecUp);
+static void GProjection_SetMVP(sGProjection* MVP);
 //===============================================
 GProjectionO* GProjection_New() {
 	GProjectionO* lObj = (GProjectionO*)malloc(sizeof(GProjectionO));
@@ -18,7 +18,7 @@ GProjectionO* GProjection_New() {
 	lObj->SetView = GProjection_SetView;
 	lObj->SetProjection = GProjection_SetProjection;
 	lObj->RotateModel = GProjection_RotateModel;
-	lObj->GetMVP = GProjection_GetMVP;
+	lObj->SetMVP = GProjection_SetMVP;
 	return lObj;
 }
 //===============================================
@@ -37,35 +37,29 @@ GProjectionO* GProjection() {
 	return m_GProjectionO;
 }
 //===============================================
-static void GProjection_SetModel(mat4 data) {
-	sGProjection* lProjection = &m_GProjectionO->m_projection;
-	glm_mat4_copy(data, lProjection->model);
+static void GProjection_SetModel(sGProjection* MVP, mat4 data) {
+	glm_mat4_copy(data, MVP->model);
 }
 //===============================================
-static void GProjection_SetProjection(char* windowName, sGCamera* camera) {
-	sGProjection* lProjection = &m_GProjectionO->m_projection;
-	int lWidth;
-	int lHeight;
-	GGLFW()->FrameSize(windowName, &lWidth, &lHeight);
-	double lRatio = (double)lWidth/lHeight;
+static void GProjection_SetProjection(sGProjection* MVP, sGCamera* camera) {
 	double lFovY = glm_rad(camera->fovY);
-	glm_perspective(lFovY, lRatio, camera->zNear, camera->zFar, lProjection->projection);
+	double lRatio = camera->ratio;
+	double lzNear = camera->zNear;
+	double lzFar = camera->zFar;
+	glm_perspective(lFovY, lRatio, lzNear, lzFar, MVP->projection);
 }
 //===============================================
-static void GProjection_SetView(sGCameraView* camera) {
-	sGProjection* lProjection = &m_GProjectionO->m_projection;
-	glm_lookat(camera->eye, camera->center, camera->up, lProjection->view);
+static void GProjection_SetView(sGProjection* MVP, sGCameraView* camera) {
+	glm_lookat(camera->position, camera->center, camera->up, MVP->view);
 }
 //===============================================
-static void GProjection_RotateModel(double angle, vec3 vecUp) {
-	sGProjection* lProjection = &m_GProjectionO->m_projection;
+static void GProjection_RotateModel(sGProjection* MVP, double angle, vec3 vecUp) {
 	double lAngle = glm_rad(angle);
-	glm_rotate(lProjection->model, lAngle, vecUp);
+	glm_rotate(MVP->model, lAngle, vecUp);
 }
 //===============================================
-static void GProjection_GetMVP(mat4 mvp) {
-	sGProjection* lProjection = &m_GProjectionO->m_projection;
-	glm_mat4_mul(lProjection->projection, lProjection->view, mvp);
-	glm_mat4_mul(mvp, lProjection->model, mvp);
+static void GProjection_SetMVP(sGProjection* MVP) {
+	glm_mat4_mul(MVP->projection, MVP->view, MVP->mvp);
+	glm_mat4_mul(MVP->mvp, MVP->model, MVP->mvp);
 }
 //===============================================

@@ -20,6 +20,7 @@ struct _GShaderO {
 	void (*DeleteProgram)(sGShader* shader);
 	void (*BindFragDataLocation)(sGShaderFrag* shaderFrag);
 	void (*GetUniformLocation)(sGShaderUniform* shader);
+	void (*UniformMatrix4)(sGUniformMatrix* shader);
 	void (*BindVertexArray)(sGShaderVAO* shader);
 	void (*DeleteVertexArray)(sGShaderVAO* shader);
 	void (*BindBuffer)(sGShaderVBO* shader);

@@ -36,6 +36,7 @@ typedef struct _sGHeat sGHeat;
 typedef struct _sGShaderItem sGShaderItem;
 typedef struct _sGShaderFrag sGShaderFrag;
 typedef struct _sGShaderUniform sGShaderUniform;
+typedef struct _sGUniformMatrix sGUniformMatrix;
 typedef struct _sGShaderVAO sGShaderVAO;
 typedef struct _sGShaderVBO sGShaderVBO;
 typedef struct _sGShaderAttrib sGShaderAttrib;
@@ -298,14 +299,16 @@ struct _sGDirection {
 //===============================================
 struct _sGCamera {
 	double fovY;
+	double ratio;
 	double zNear;
 	double zFar;
 };
 //===============================================
 struct _sGCameraView {
-	vec3 eye;
+	vec3 position;
 	vec3 center;
 	vec3 up;
+	vec3 direction;
 };
 //===============================================
 struct _sGMCML {
@@ -354,6 +357,11 @@ struct _sGShaderUniform {
 	uint* programId;
 	uint uniformId;
 	char* uniformName;
+};
+//===============================================
+struct _sGUniformMatrix {
+	uint* uniformId;
+	double* data;
 };
 //===============================================
 struct _sGShaderVAO {
@@ -409,9 +417,10 @@ struct _sGTexture {
 };
 //===============================================
 struct _sGProjection {
-	mat4 projection;
-	mat4 view;
 	mat4 model;
+	mat4 view;
+	mat4 projection;
+	mat4 mvp;
 };
 //===============================================
 struct _sGTime {
