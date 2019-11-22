@@ -36,7 +36,7 @@ typedef struct _sGHeat sGHeat;
 typedef struct _sGShaderItem sGShaderItem;
 typedef struct _sGShaderFrag sGShaderFrag;
 typedef struct _sGShaderUniform sGShaderUniform;
-typedef struct _sGUniformMatrix sGUniformMatrix;
+typedef struct _sGUniformMatrix4 sGUniformMatrix4;
 typedef struct _sGShaderVAO sGShaderVAO;
 typedef struct _sGShaderVBO sGShaderVBO;
 typedef struct _sGShaderAttrib sGShaderAttrib;
@@ -359,7 +359,7 @@ struct _sGShaderUniform {
 	char* uniformName;
 };
 //===============================================
-struct _sGUniformMatrix {
+struct _sGUniformMatrix4 {
 	uint* uniformId;
 	double* data;
 };

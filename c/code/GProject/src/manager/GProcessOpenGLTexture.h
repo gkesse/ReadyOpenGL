@@ -23,6 +23,9 @@ struct _GProcessOpenGLTextureO {
     sGTexture m_texture;
 
     sGProjection m_projection;
+
+    sGShaderUniform m_mvpUniform;
+    sGUniformMatrix4 m_mvpData;
 };
 //===============================================
 GProcessO* GProcessOpenGLTexture_New();

@@ -11,7 +11,7 @@ GCameraO* GCamera_New() {
     GCameraO* lObj = (GCameraO*)malloc(sizeof(GCameraO));
     lObj->Delete = GCamera_Delete;
     lObj->SetRatio = GCamera_SetRatio;
-    lObj->SetRatio = GCamera_SetRatio;
+    lObj->SetCenter = GCamera_SetCenter;
     return lObj;
 }
 //===============================================

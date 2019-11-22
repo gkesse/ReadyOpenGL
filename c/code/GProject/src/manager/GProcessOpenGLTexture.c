@@ -115,6 +115,9 @@ static void GProcessOpenGLTexture_Init() {
 	sGShaderAttrib* lVertexAttrib = &lProcess->m_vertexAttrib;
 	sGShaderAttrib* lTextureAttrib = &lProcess->m_textureAttrib;
 	sGTexture* lTexture = &lProcess->m_texture;
+	sGProjection* lProjection = &lProcess->m_projection;
+	sGShaderUniform* lMvpUniform = &lProcess->m_mvpUniform;
+	sGUniformMatrix4* lMvpData = &lProcess->m_mvpData;
 
 	sGShaderItem lVertexShader = {
 			"../data/shader/transform.vert", 0, 0, GL_VERTEX_SHADER
@@ -137,7 +140,7 @@ static void GProcessOpenGLTexture_Init() {
 	*lShaderVAO = (sGShaderVAO){
 		1, 0
 	};
-	sGShaderUniform lMatrixUniform = {
+	*lMvpUniform = (sGShaderUniform){
 			&lShader->programId, 0, "MVP"
 	};
 	sGShaderUniform lTextureUniform = {
@@ -178,10 +181,14 @@ static void GProcessOpenGLTexture_Init() {
 		"vertexUV",
 		0, 2, &lTextureVBO->vboId
 	};
+	*lMvpData = (sGUniformMatrix4){
+		&lMvpUniform->programId,
+		&lProjection->mvp,
+	};
 
 	GShader()->LoadShader(lShader);
 	GTexture()->LoadTexture(lTexture);
-	GShader()->GetUniformLocation(&lMatrixUniform);
+	GShader()->GetUniformLocation(lMvpUniform);
 	GShader()->GetUniformLocation(&lTextureUniform);
 	GShader()->BindVertexArray(lShaderVAO);
 	GShader()->BindBuffer(lVertexVBO);
@@ -211,12 +218,15 @@ static void GProcessOpenGLTexture_UpdateView() {
 	sGCamera* lCamera = &lProcess->m_camera;
 	sGCameraView* lCameraView = &lProcess->m_cameraView;
 	sGProjection* lProjection = &lProcess->m_projection;
+	sGUniformMatrix4* lMvpData = &lProcess->m_mvpData;
 
 	GCamera()->SetRatio(lWindow->name, lCamera);
 	GCamera()->SetCenter(lCameraView);
 	GProjection()->SetModel(lProjection, GLM_MAT4_IDENTITY);
-	GProjection()->SetProjection(lProjection, lCamera);
 	GProjection()->SetView(lProjection, lCameraView);
+	GProjection()->SetProjection(lProjection, lCamera);
 	GProjection()->SetMVP(lProjection);
+
+	GShader()->UniformMatrix4(lMvpData);
 }
 //===============================================
