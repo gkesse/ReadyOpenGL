@@ -13,6 +13,7 @@ struct _GTextureO {
     void (*BindTexture)(sGTexture* texture);
     void (*FreeImage)(sGTextureImage* texture);
     void (*LoadTexture)(sGTexture* texture);
+    void (*DeleteTexture)(sGTexture* texture);
     void (*UpdateTexture)(sGTexture* texture);
     void (*ActiveTexture)(sGTextureActive* texture);
 };

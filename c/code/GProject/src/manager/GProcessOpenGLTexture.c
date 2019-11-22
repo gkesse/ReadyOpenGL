@@ -67,6 +67,13 @@ GProcessO* GProcessOpenGLTexture() {
 static void GProcessOpenGLTexture_Run(int argc, char** argv) {
 	GProcessOpenGLTextureO* lProcess = m_GProcessOpenGLTextureO->m_child;
 	sGWindow* lWindow = &lProcess->m_window;
+	sGShader* lShader = &lProcess->m_shader;
+	sGShaderVAO* lShaderVAO = &lProcess->m_shaderVAO;
+	sGShaderVBO* lVertexVBO = &lProcess->m_vertexVBO;
+	sGShaderVBO* lTextureVBO = &lProcess->m_textureVBO;
+	sGShaderAttrib* lVertexAttrib = &lProcess->m_vertexAttrib;
+	sGShaderAttrib* lTextureAttrib = &lProcess->m_textureAttrib;
+	sGTexture* lTexture = &lProcess->m_texture;
 
 	GGLFW()->Init();
 	GGLFW()->CreateWindow2(lWindow);
@@ -93,6 +100,14 @@ static void GProcessOpenGLTexture_Run(int argc, char** argv) {
 		GGLFW()->SwapBuffers(lWindow->name);
 		GGLFW()->PollEvents();
 	}
+
+	GShader()->DisableVertexAttribArray(lVertexAttrib);
+	GShader()->DisableVertexAttribArray(lTextureAttrib);
+	GShader()->DeleteBuffer(lVertexVBO);
+	GShader()->DeleteBuffer(lTextureVBO);
+	GShader()->DeleteVertexArray(lShaderVAO);
+	GShader()->DeleteProgram(lShader);
+	GTexture()->DeleteTexture(lTexture);
 
 	GGLFW()->DestroyWindow(lWindow->name);
 	GGLFW()->Terminate();
@@ -178,10 +193,10 @@ static void GProcessOpenGLTexture_Init() {
 	GShader()->BindVertexArray(lShaderVAO);
 	GShader()->BindBuffer(lVertexVBO);
 	GShader()->BindBuffer(lTextureVBO);
-	GShader()->UseProgram(lShader);
 	GTexture()->ActiveTexture(&lTextureActive);
 	GShader()->EnableVertexAttribArray(lVertexAttrib);
 	GShader()->EnableVertexAttribArray(lTextureAttrib);
+	GShader()->UseProgram(lShader);
 }
 //===============================================
 static void GProcessOpenGLTexture_Update() {

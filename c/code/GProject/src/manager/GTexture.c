@@ -9,6 +9,7 @@ static void GTexture_CreateTexture(sGTexture* texture);
 static void GTexture_BindTexture(sGTexture* texture);
 static void GTexture_FreeImage(sGTextureImage* texture);
 static void GTexture_LoadTexture(sGTexture* texture);
+static void GTexture_DeleteTexture(sGTexture* texture);
 static void GTexture_UpdateTexture(sGTexture* texture);
 static void GTexture_ActiveTexture(sGTextureActive* texture);
 //===============================================
@@ -20,6 +21,7 @@ GTextureO* GTexture_New() {
 	lObj->BindTexture = GTexture_BindTexture;
 	lObj->FreeImage = GTexture_FreeImage;
 	lObj->LoadTexture = GTexture_LoadTexture;
+	lObj->DeleteTexture = GTexture_DeleteTexture;
 	lObj->UpdateTexture = GTexture_UpdateTexture;
 	lObj->ActiveTexture = GTexture_ActiveTexture;
 	return lObj;
@@ -78,6 +80,10 @@ static void GTexture_LoadTexture(sGTexture* texture) {
 	GTexture()->CreateTexture(texture);
 	GTexture()->BindTexture(texture);
 	GTexture()->FreeImage(&texture->textureImage);
+}
+//===============================================
+static void GTexture_DeleteTexture(sGTexture* texture) {
+	glDeleteTextures(texture->nTexture, &texture->textureId);
 }
 //===============================================
 static void GTexture_UpdateTexture(sGTexture* texture) {
