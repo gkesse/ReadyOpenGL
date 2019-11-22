@@ -351,7 +351,7 @@ struct _sGShaderFrag {
 };
 //===============================================
 struct _sGShaderUniform {
-	uint programId;
+	uint* programId;
 	uint uniformId;
 	char* uniformName;
 };
@@ -397,8 +397,8 @@ struct _sGTextureImage {
 };
 //===============================================
 struct _sGTextureActive {
-	uint textureId;
-	uint uniformId;
+	uint* textureId;
+	uint* uniformId;
 };
 //===============================================
 struct _sGTexture {

@@ -96,7 +96,7 @@ static void GTexture_UpdateTexture(sGTexture* texture) {
 //===============================================
 static void GTexture_ActiveTexture(sGTextureActive* texture) {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->textureId);
-	glUniform1i(texture->textureId, 0);
+	glBindTexture(GL_TEXTURE_2D, *texture->textureId);
+	glUniform1i(*texture->textureId, 0);
 }
 //===============================================

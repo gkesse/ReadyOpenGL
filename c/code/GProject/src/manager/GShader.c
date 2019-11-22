@@ -144,7 +144,7 @@ static void GShader_BindFragDataLocation(sGShaderFrag* shaderFrag) {
 }
 //===============================================
 static void GShader_GetUniformLocation(sGShaderUniform* shader) {
-	shader->uniformId = glGetUniformLocation(shader->programId, shader->uniformName);
+	shader->uniformId = glGetUniformLocation(*shader->programId, shader->uniformName);
 }
 //===============================================
 static void GShader_BindVertexArray(sGShaderVAO* shader) {

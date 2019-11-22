@@ -99,42 +99,42 @@ static void GProcessOpenGLTexture_Run(int argc, char** argv) {
 }
 //===============================================
 static void GProcessOpenGLTexture_Init() {
+	GProcessOpenGLTextureO* lProcess = m_GProcessOpenGLTextureO->m_child;
+	sGShader* lShader = &lProcess->m_shader;
+	sGShaderVAO* lShaderVAO = &lProcess->m_shaderVAO;
+	sGShaderVBO* lVertexVBO = &lProcess->m_vertexVBO;
+	sGShaderVBO* lTextureVBO = &lProcess->m_textureVBO;
+	sGShaderAttrib* lVertexAttrib = &lProcess->m_vertexAttrib;
+	sGShaderAttrib* lTextureAttrib = &lProcess->m_textureAttrib;
+	sGTexture* lTexture = &lProcess->m_texture;
+
 	sGShaderItem lVertexShader = {
 			"../data/shader/transform.vert", 0, 0, GL_VERTEX_SHADER
 	};
 	sGShaderItem lFragmentShader = {
 			"../data/shader/texture.frag", 0, 0, GL_FRAGMENT_SHADER
 	};
-	sGShader lShader = {
+	*lShader = (sGShader){
 			0,
 			&lVertexShader,
 			&lFragmentShader
 	};
-	GShader()->LoadShader(&lShader);
-
 	sGTextureImage lTextureImage = {
 			"../data/texture/texture.png", 0, 0, 0, SOIL_LOAD_RGBA
 	};
-	sGTexture lTexture = {
+	*lTexture = (sGTexture){
 			lTextureImage,
 			1, 0, GL_RGBA
 	};
-	GTexture()->LoadTexture(&lTexture);
-
-	sGShaderUniform lMatrixUniform = {
-			lShader.programId, 0, "MVP"
-	};
-	sGShaderUniform lTextureUniform = {
-			lShader.programId, 0, "textureSampler"
-	};
-	GShader()->GetUniformLocation(&lMatrixUniform);
-	GShader()->GetUniformLocation(&lTextureUniform);
-
-	sGShaderVAO lShaderVAO = {
+	*lShaderVAO = (sGShaderVAO){
 			1, 0
 	};
-	GShader()->BindVertexArray(&lShaderVAO);
-
+	sGShaderUniform lMatrixUniform = {
+			&lShader->programId, 0, "MVP"
+	};
+	sGShaderUniform lTextureUniform = {
+			&lShader->programId, 0, "textureSampler"
+	};
 	double lVertexData[] = {
 			-0.5, -0.5, 0.0,
 			0.5, -0.5, 0.0,
@@ -151,35 +151,37 @@ static void GProcessOpenGLTexture_Init() {
 			0.0, 1.0,
 			1.0, 1.0
 	};
-	sGShaderVBO lVertexVBO = {
+	*lVertexVBO = (sGShaderVBO){
 			1, 0, lVertexData, sizeof(lVertexData)
 	};
-	sGShaderVBO lTextureVBO = {
+	*lTextureVBO = (sGShaderVBO){
 			1, 0, lTextureData, sizeof(lTextureData)
 	};
-	GShader()->BindBuffer(&lVertexVBO);
-	GShader()->BindBuffer(&lTextureVBO);
-
-	GShader()->UseProgram(&lShader);
-
 	sGTextureActive lTextureActive = {
-			lTextureActive.textureId, lTextureActive.uniformId
+			&lTexture->textureId, &lTextureUniform.uniformId
 	};
-	GTexture()->ActiveTexture(&lTextureActive);
-
-	sGShaderAttrib lVertexAttrib = {
-			&lShader.programId,
+	*lVertexAttrib = (sGShaderAttrib){
+			&lShader->programId,
 			"vertexPosition_modelspace",
-			0, 3, &lVertexVBO.vboId
+			0, 3, &lVertexVBO->vboId
 	};
-	sGShaderAttrib lTextureAttrib = {
-			&lShader.programId,
+	*lTextureAttrib = (sGShaderAttrib){
+			&lShader->programId,
 			"vertexUV",
-			0, 2, &lTextureVBO.vboId
+			0, 2, &lTextureVBO->vboId
 	};
 
-	GShader()->EnableVertexAttribArray(&lVertexAttrib);
-	GShader()->EnableVertexAttribArray(&lTextureAttrib);
+	GShader()->LoadShader(lShader);
+	GTexture()->LoadTexture(lTexture);
+	GShader()->GetUniformLocation(&lMatrixUniform);
+	GShader()->GetUniformLocation(&lTextureUniform);
+	GShader()->BindVertexArray(lShaderVAO);
+	GShader()->BindBuffer(lVertexVBO);
+	GShader()->BindBuffer(lTextureVBO);
+	GShader()->UseProgram(lShader);
+	GTexture()->ActiveTexture(&lTextureActive);
+	GShader()->EnableVertexAttribArray(lVertexAttrib);
+	GShader()->EnableVertexAttribArray(lTextureAttrib);
 }
 //===============================================
 static void GProcessOpenGLTexture_Update() {

@@ -14,6 +14,8 @@ struct _GProcessOpenGLShaderO {
     sGShaderVBO m_colorVBO;
     sGShaderAttrib m_positionAttrib;
     sGShaderAttrib m_colorAttrib;
+
+    sGTexture m_texture;
 };
 //===============================================
 GProcessO* GProcessOpenGLShader_New();
