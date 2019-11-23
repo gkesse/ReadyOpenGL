@@ -49,6 +49,7 @@ typedef struct _sGTexture sGTexture;
 typedef struct _sGProjection sGProjection;
 typedef struct _sGTime sGTime;
 typedef struct _sGMoveModel sGMoveModel;
+typedef struct _sGMoveModelItem sGMoveModelItem;
 //===============================================
 typedef void (*GOPENGL_UPDATE_CALLBACK)(sGWindow* sWindow);
 typedef void (*GOPENGL_INIT_CALLBACK)(sGWindow* sWindow);
@@ -429,9 +430,14 @@ struct _sGTime {
 	double diffTime;
 };
 //===============================================
-struct _sGMoveModel {
+struct _sGMoveModelItem {
 	vec3 translate;
 	vec3 rotate;
+};
+//===============================================
+struct _sGMoveModel {
+	sGMoveModelItem move;
+	sGMoveModelItem init;
 };
 //===============================================
 #endif

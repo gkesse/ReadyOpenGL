@@ -37,10 +37,11 @@ GProcessO* GProcessOpenGLTexture_New() {
 		{0.0, -1.0, 0.0},
 		{0.0, 0.0, -1.0}
 	};
-	*lMoveModel = (sGMoveModel){
+	lMoveModel->init = (sGMoveModelItem){
 		{0.0, 0.0, 0.0},
 		{0.0, 0.0, 0.0}
 	};
+	lMoveModel->move = lMoveModel->init;
 
 	lChild->m_parent = lParent;
 

@@ -53,6 +53,7 @@ static void GProjection_InitModel(sGProjection* MVP) {
 //===============================================
 static void GProjection_MoveModel(sGProjection* MVP, sGMoveModel* direction) {
 	sGEvent* lEvent = GEvent()->GetEvent();
+	sGMoveModelItem* lDirection = &direction->move;
 
 	if(lEvent->key.onFlag == TRUE) {
 		//GConsole()->Print("[ KEY ] : %d\n", lEvent->key.key);
@@ -61,87 +62,99 @@ static void GProjection_MoveModel(sGProjection* MVP, sGMoveModel* direction) {
 			switch(lEvent->key.key ) {
 			// Rotation suivant -x
 			case GLFW_KEY_UP:
-				direction->rotate[0] -= 10.0;
-				if(direction->rotate[0] <= -360.0) direction->rotate[0] = 0.0;
+				lDirection->rotate[0] -= 10.0;
+				if(lDirection->rotate[0] <= -360.0) lDirection->rotate[0] = 0.0;
 				break;
 				// Rotation suivant +x
 			case GLFW_KEY_DOWN:
-				direction->rotate[0] += 10.0;
-				if(direction->rotate[0] >= 360.0) direction->rotate[0] = 0.0;
+				lDirection->rotate[0] += 10.0;
+				if(lDirection->rotate[0] >= 360.0) lDirection->rotate[0] = 0.0;
 				break;
 				// Rotation suivant -y
 			case GLFW_KEY_LEFT:
-				direction->rotate[1] -= 10.0;
-				if(direction->rotate[1] <= -360.0) direction->rotate[1] = 0.0;
+				lDirection->rotate[1] -= 10.0;
+				if(lDirection->rotate[1] <= -360.0) lDirection->rotate[1] = 0.0;
 				break;
 				// Rotation suivant +y
 			case GLFW_KEY_RIGHT:
-				direction->rotate[1] += 10.0;
-				if(direction->rotate[1] >= 360.0) direction->rotate[1] = 0.0;
+				lDirection->rotate[1] += 10.0;
+				if(lDirection->rotate[1] >= 360.0) lDirection->rotate[1] = 0.0;
 				break;
 				// Rotation suivant -z
 			case GLFW_KEY_RIGHT_ALT:
-				direction->rotate[2] -= 10.0;
-				if(direction->rotate[2] <= -360.0) direction->rotate[2] = 0.0;
+				lDirection->rotate[2] -= 10.0;
+				if(lDirection->rotate[2] <= -360.0) lDirection->rotate[2] = 0.0;
 				break;
 				// Rotation suivant +z
 			case GLFW_KEY_RIGHT_CONTROL:
-				direction->rotate[2] += 10.0;
-				if(direction->rotate[2] >= 360.0) direction->rotate[2] = 0.0;
+				lDirection->rotate[2] += 10.0;
+				if(lDirection->rotate[2] >= 360.0) lDirection->rotate[2] = 0.0;
 				break;
 				// Translation suivant -x
 			case GLFW_KEY_A:
-				direction->translate[0] -= 0.02;
-				if(direction->translate[0] <= -10.0) direction->translate[0] = -10.0;
+				lDirection->translate[0] -= 0.02;
+				if(lDirection->translate[0] <= -10.0) lDirection->translate[0] = -10.0;
 				break;
 				// Translation suivant +x
 			case GLFW_KEY_S:
-				direction->translate[0] += 0.02;
-				if(direction->translate[0] >= 10.0) direction->translate[0] = 10.0;
+				lDirection->translate[0] += 0.02;
+				if(lDirection->translate[0] >= 10.0) lDirection->translate[0] = 10.0;
 				break;
 				// Translation suivant -y
 			case GLFW_KEY_Z:
-				direction->translate[1] -= 0.02;
-				if(direction->translate[1] <= -10.0) direction->translate[1] = -10.0;
+				lDirection->translate[1] -= 0.02;
+				if(lDirection->translate[1] <= -10.0) lDirection->translate[1] = -10.0;
 				break;
 				// Translation suivant +y
 			case GLFW_KEY_W:
-				direction->translate[1] += 0.02;
-				if(direction->translate[1] >= 10.0) direction->translate[1] = 10.0;
+				lDirection->translate[1] += 0.02;
+				if(lDirection->translate[1] >= 10.0) lDirection->translate[1] = 10.0;
 				break;
 				// Translation suivant -z
 			case GLFW_KEY_X:
-				direction->translate[2] -= 0.02;
-				if(direction->translate[2] <= -100.0) direction->translate[2] = -100.0;
+				lDirection->translate[2] -= 0.02;
+				if(lDirection->translate[2] <= -100.0) lDirection->translate[2] = -100.0;
 				break;
 				// Translation suivant +z
 			case GLFW_KEY_Q:
-				direction->translate[2] += 0.02;
-				if(direction->translate[2] >= 100.0) direction->translate[2] = 100.0;
+				lDirection->translate[2] += 0.02;
+				if(lDirection->translate[2] >= 100.0) lDirection->translate[2] = 100.0;
+				break;
+				// Initialisation de la lDirection
+			case GLFW_KEY_MENU:
+				*lDirection = direction->init;
 				break;
 			}
+
 			GConsole()->Print("//===============================================\n");
-			GConsole()->Print("// Direction\n");
+			GConsole()->Print("// Deplacement du modele\n");
 			GConsole()->Print("//===============================================\n");
 			GConsole()->Print("Rotation......[x, y, z] : [%.2lf , %.2lf , %.2lf]\n",
-					direction->rotate[0],
-					direction->rotate[1],
-					direction->rotate[2]);
+					lDirection->rotate[0],
+					lDirection->rotate[1],
+					lDirection->rotate[2]);
 			GConsole()->Print("Translation...[x, y, z] : [%.2lf , %.2lf , %.2lf]\n",
-					direction->translate[0],
-					direction->translate[1],
-					direction->translate[2]);
+					lDirection->translate[0],
+					lDirection->translate[1],
+					lDirection->translate[2]);
 		}
 	}
 }
 //===============================================
 static void GProjection_UpdateModel(sGProjection* MVP, sGMoveModel* direction) {
-	glm_translate(MVP->model, direction->translate);
-	vec3 lAngle;
-	GGlm()->RadVec3(direction->rotate, lAngle);
-	glm_rotate(MVP->model, lAngle[0], GLM_XUP);
-	glm_rotate(MVP->model, lAngle[1], GLM_YUP);
-	glm_rotate(MVP->model, lAngle[2], GLM_ZUP);
+	sGMoveModelItem* lDirection = &direction->move;
+	vec3 lTranslate;
+	vec3 lRotate;
+
+	GGlm()->RadVec3(lDirection->rotate, lRotate);
+
+	glm_vec3_scale(lDirection->translate, -1.0, lTranslate);
+	glm_vec3_scale(lRotate, -1.0, lRotate);
+
+	glm_translate(MVP->model, lTranslate);
+	glm_rotate(MVP->model, lRotate[0], GLM_XUP);
+	glm_rotate(MVP->model, lRotate[1], GLM_YUP);
+	glm_rotate(MVP->model, lRotate[2], GLM_ZUP);
 }
 //===============================================
 static void GProjection_SetProjection(sGProjection* MVP, sGCamera* camera) {
