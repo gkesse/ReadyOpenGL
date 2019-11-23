@@ -4,6 +4,8 @@
 //===============================================
 static GGlmO* m_GGlmO = 0;
 //===============================================
+static void GGlm_RadVec3(vec3 deg, vec3 rad);
+//===============================================
 static void GGlm_ShowVec3(vec3 v1);
 static void GGlm_ShowMat4(mat4 m1);
 static void GGlm_RotateMatrix(mat4 m1, double angle, vec3 axis);
@@ -11,6 +13,7 @@ static void GGlm_RotateMatrix(mat4 m1, double angle, vec3 axis);
 GGlmO* GGlm_New() {
 	GGlmO* lObj = (GGlmO*)malloc(sizeof(GGlmO));
 	lObj->Delete = GGlm_Delete;
+	lObj->RadVec3 = GGlm_RadVec3;
 	lObj->ShowVec3 = GGlm_ShowVec3;
 	lObj->ShowMat4 = GGlm_ShowMat4;
 	lObj->RotateMatrix = GGlm_RotateMatrix;
@@ -30,6 +33,12 @@ GGlmO* GGlm() {
 		m_GGlmO = GGlm_New();
 	}
 	return m_GGlmO;
+}
+//===============================================
+static void GGlm_RadVec3(vec3 deg, vec3 rad) {
+	rad[0] = glm_rad(deg[0]);
+	rad[1] = glm_rad(deg[1]);
+	rad[2] = glm_rad(deg[2]);
 }
 //===============================================
 static void GGlm_ShowVec3(vec3 v1) {

@@ -742,13 +742,6 @@ static void GOpenGL_MainLoop(sGWindow* sWindow) {
 	char* lTitle = sWindow->title;
 
 	GGLFW()->Init();
-
-	//GGLFW()->WindowHint(GLFW_SAMPLES, 4);
-	//GGLFW()->WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	//GGLFW()->WindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-	//GGLFW()->WindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-	//GGLFW()->WindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
 	GGLFW()->CreateWindow(lWindowName, lWidth, lHeight, lTitle);
 
 	GGLFW()->KeyCallback(lWindowName, GEvent()->KeyCallBack);

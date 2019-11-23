@@ -182,8 +182,8 @@ static void GProcessOpenGLTexture_Init() {
 		0, 2, &lTextureVBO->vboId
 	};
 	*lMvpData = (sGUniformMatrix4){
-		&lMvpUniform->programId,
-		&lProjection->mvp,
+		&lMvpUniform->uniformId,
+		(double*)&lProjection->mvp,
 	};
 
 	GShader()->LoadShader(lShader);
@@ -219,10 +219,15 @@ static void GProcessOpenGLTexture_UpdateView() {
 	sGCameraView* lCameraView = &lProcess->m_cameraView;
 	sGProjection* lProjection = &lProcess->m_projection;
 	sGUniformMatrix4* lMvpData = &lProcess->m_mvpData;
+	sGMoveModel lDirection = {
+			{0.0, 0.0, 0.0},
+			{0.0, 45.0, 0.0}
+	};
 
 	GCamera()->SetRatio(lWindow->name, lCamera);
 	GCamera()->SetCenter(lCameraView);
-	GProjection()->SetModel(lProjection, GLM_MAT4_IDENTITY);
+	GProjection()->InitModel(lProjection);
+	GProjection()->MoveModel(lProjection, &lDirection);
 	GProjection()->SetView(lProjection, lCameraView);
 	GProjection()->SetProjection(lProjection, lCamera);
 	GProjection()->SetMVP(lProjection);

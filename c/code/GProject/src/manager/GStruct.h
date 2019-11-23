@@ -48,7 +48,7 @@ typedef struct _sGTextureItem sGTextureItem;
 typedef struct _sGTexture sGTexture;
 typedef struct _sGProjection sGProjection;
 typedef struct _sGTime sGTime;
-typedef struct _sGMovement sGMovement;
+typedef struct _sGMoveModel sGMoveModel;
 //===============================================
 typedef void (*GOPENGL_UPDATE_CALLBACK)(sGWindow* sWindow);
 typedef void (*GOPENGL_INIT_CALLBACK)(sGWindow* sWindow);
@@ -299,9 +299,9 @@ struct _sGDirection {
 //===============================================
 struct _sGCamera {
 	double fovY;
-	double ratio;
 	double zNear;
 	double zFar;
+	double ratio;
 };
 //===============================================
 struct _sGCameraView {
@@ -429,10 +429,9 @@ struct _sGTime {
 	double diffTime;
 };
 //===============================================
-struct _sGMovement {
-	vec3 direction;
-	vec3 up;
-	vec3 position;
+struct _sGMoveModel {
+	vec3 translate;
+	vec3 rotate;
 };
 //===============================================
 #endif
