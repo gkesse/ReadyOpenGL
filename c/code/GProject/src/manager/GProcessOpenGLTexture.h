@@ -12,6 +12,7 @@ struct _GProcessOpenGLTextureO {
     sGWindow m_window;
     sGCamera m_camera;
     sGCameraView m_cameraView;
+    sGMoveModel m_moveModel;
 
     sGShader m_shader;
     sGShaderVAO m_shaderVAO;

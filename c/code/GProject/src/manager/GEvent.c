@@ -27,6 +27,7 @@ GEventO* GEvent_New() {
 
 	lObj->InitEvent = GEvent_InitEvent;
 	lObj->GetEvent = GEvent_GetEvent;
+	lObj->CleanEvent = GEvent_CleanEvent;
 	lObj->KeyCallBack = GEvent_KeyCallBack;
 	lObj->FrameCallBack = GEvent_FrameCallBack;
 	lObj->MouseCallBack = GEvent_MouseCallBack;

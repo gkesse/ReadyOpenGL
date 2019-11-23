@@ -21,20 +21,25 @@ GProcessO* GProcessOpenGLTexture_New() {
 	GProcessOpenGLTextureO* lChild = (GProcessOpenGLTextureO*)malloc(sizeof(GProcessOpenGLTextureO));
 
 	sGWindow* lWindow = &lChild->m_window;
+	sGCamera* lCamera = &lChild->m_camera;
+	sGCameraView* lCameraView = &lChild->m_cameraView;
+	sGMoveModel* lMoveModel = &lChild->m_moveModel;
+
 	*lWindow = (sGWindow){
 		"WINDOW", "OpenGL | ReadyDev", 400, 400, 0, 0
 	};
-
-	sGCamera* lCamera = &lChild->m_camera;
 	*lCamera = (sGCamera){
 		45.0, 0.1, 100.0
 	};
-	sGCameraView* lCameraView = &lChild->m_cameraView;
 	*lCameraView = (sGCameraView){
 		{0.0, 0.0, 2.0},
 		{0.0, 0.0, 0.0},
 		{0.0, -1.0, 0.0},
 		{0.0, 0.0, -1.0}
+	};
+	*lMoveModel = (sGMoveModel){
+		{0.0, 0.0, 0.0},
+		{0.0, 45.0, 0.0}
 	};
 
 	lChild->m_parent = lParent;
@@ -84,12 +89,15 @@ static void GProcessOpenGLTexture_Run(int argc, char** argv) {
 
 	GProcessOpenGLTexture_Init();
 
+	GEvent()->InitEvent(lWindow->name);
+
 	while(1) {
 		int lRes = GGLFW()->WindowClose(lWindow->name);
 		if(lRes == 1) break;
 
 		GProcessOpenGLTexture_Update();
 
+		GEvent()->CleanEvent();
 		GGLFW()->SwapBuffers(lWindow->name);
 		GGLFW()->PollEvents();
 	}
@@ -141,7 +149,7 @@ static void GProcessOpenGLTexture_Init() {
 		1, 0
 	};
 	*lMvpUniform = (sGShaderUniform){
-			&lShader->programId, 0, "MVP"
+		&lShader->programId, 0, "MVP"
 	};
 	sGShaderUniform lTextureUniform = {
 			&lShader->programId, 0, "textureSampler"
@@ -217,17 +225,15 @@ static void GProcessOpenGLTexture_UpdateView() {
 	sGWindow* lWindow = &lProcess->m_window;
 	sGCamera* lCamera = &lProcess->m_camera;
 	sGCameraView* lCameraView = &lProcess->m_cameraView;
+	sGMoveModel* lMoveModel = &lProcess->m_moveModel;
 	sGProjection* lProjection = &lProcess->m_projection;
 	sGUniformMatrix4* lMvpData = &lProcess->m_mvpData;
-	sGMoveModel lDirection = {
-			{0.0, 0.0, 0.0},
-			{0.0, 45.0, 0.0}
-	};
 
 	GCamera()->SetRatio(lWindow->name, lCamera);
 	GCamera()->SetCenter(lCameraView);
 	GProjection()->InitModel(lProjection);
-	GProjection()->MoveModel(lProjection, &lDirection);
+	GProjection()->MoveModel(lProjection, lMoveModel);
+	GProjection()->UpdateModel(lProjection, lMoveModel);
 	GProjection()->SetView(lProjection, lCameraView);
 	GProjection()->SetProjection(lProjection, lCamera);
 	GProjection()->SetMVP(lProjection);
