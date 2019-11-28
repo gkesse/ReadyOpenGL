@@ -223,18 +223,17 @@ static void GProcessOpenGLTexture_Update() {
 //===============================================
 static void GProcessOpenGLTexture_UpdateView() {
 	GProcessOpenGLTextureO* lProcess = m_GProcessOpenGLTextureO->m_child;
-	sGWindow* lWindow = &lProcess->m_window;
 	sGCamera* lCamera = &lProcess->m_camera;
 	sGCameraView* lCameraView = &lProcess->m_cameraView;
 	sGMoveModel* lMoveModel = &lProcess->m_moveModel;
 	sGProjection* lProjection = &lProcess->m_projection;
 	sGUniformMatrix4* lMvpData = &lProcess->m_mvpData;
 
-	GCamera()->SetRatio(lWindow->name, lCamera);
+	GCamera()->UpdateRatio(lCamera);
 	GCamera()->SetCenter(lCameraView);
 	GProjection()->InitModel(lProjection);
-	GProjection()->MoveModel(lProjection, lMoveModel);
 	GProjection()->UpdateModel(lProjection, lMoveModel);
+	GProjection()->MoveModel(lProjection, lMoveModel);
 	GProjection()->SetView(lProjection, lCameraView);
 	GProjection()->SetProjection(lProjection, lCamera);
 	GProjection()->SetMVP(lProjection);

@@ -9,8 +9,8 @@ static GProjectionO* m_GProjectionO = 0;
 //===============================================
 static void GProjection_SetModel(sGProjection* MVP, mat4 data);
 static void GProjection_InitModel(sGProjection* MVP);
-static void GProjection_MoveModel(sGProjection* MVP, sGMoveModel* direction);
 static void GProjection_UpdateModel(sGProjection* MVP, sGMoveModel* direction);
+static void GProjection_MoveModel(sGProjection* MVP, sGMoveModel* direction);
 static void GProjection_SetView(sGProjection* MVP, sGCameraView* camera);
 static void GProjection_SetProjection(sGProjection* MVP, sGCamera* camera);
 static void GProjection_SetMVP(sGProjection* MVP);
@@ -20,8 +20,8 @@ GProjectionO* GProjection_New() {
 	lObj->Delete = GProjection_Delete;
 	lObj->SetModel = GProjection_SetModel;
 	lObj->InitModel = GProjection_InitModel;
-	lObj->MoveModel = GProjection_MoveModel;
 	lObj->UpdateModel = GProjection_UpdateModel;
+	lObj->MoveModel = GProjection_MoveModel;
 	lObj->SetView = GProjection_SetView;
 	lObj->SetProjection = GProjection_SetProjection;
 	lObj->SetMVP = GProjection_SetMVP;
@@ -51,7 +51,7 @@ static void GProjection_InitModel(sGProjection* MVP) {
 	GProjection()->SetModel(MVP, GLM_MAT4_IDENTITY);
 }
 //===============================================
-static void GProjection_MoveModel(sGProjection* MVP, sGMoveModel* direction) {
+static void GProjection_UpdateModel(sGProjection* MVP, sGMoveModel* direction) {
 	sGEvent* lEvent = GEvent()->GetEvent();
 	sGMoveModelItem* lDirection = &direction->move;
 
@@ -141,7 +141,7 @@ static void GProjection_MoveModel(sGProjection* MVP, sGMoveModel* direction) {
 	}
 }
 //===============================================
-static void GProjection_UpdateModel(sGProjection* MVP, sGMoveModel* direction) {
+static void GProjection_MoveModel(sGProjection* MVP, sGMoveModel* direction) {
 	sGMoveModelItem* lDirection = &direction->move;
 	vec3 lTranslate;
 	vec3 lRotate;

@@ -9,6 +9,7 @@ typedef struct _GCameraO GCameraO;
 struct _GCameraO {
     void (*Delete)();
     void (*SetRatio)(char* windowName, sGCamera* camera);
+    void (*UpdateRatio)(sGCamera* camera);
     void (*SetCenter)(sGCameraView* camera);
 };
 //===============================================
